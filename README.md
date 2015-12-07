@@ -83,3 +83,7 @@ The code above logs the following:
 ## Performance
 
 This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
+
+## Contributions
+
+The original code was taken from [here](https://groups.google.com/forum/#!searchin/getseq/enhance%2420exception/getseq/rsAL4u3JpLM/PrszbPbtEb0J) and then improved for better performance and to support more exception types without using reflection by [Muhammad Rehan Saeed](http://rehansaeed.com).
