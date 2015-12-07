@@ -79,3 +79,7 @@ The code above logs the following:
   }
 }
 ```
+
+## Performance
+
+This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
