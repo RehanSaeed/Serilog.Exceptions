@@ -25,6 +25,8 @@ ILogger logger = new LoggerConfiguration()
     .CreateLogger();
 ```
 
+What Does It Do?
+
 Your JSON logs will now be supplemented with detailed exception information and even custom exception properties. Here is an example of what happens when you log a DbEntityValidationException from EntityFramework (This exception is notorious for having deeply nested custom properties which are not included in the `.ToString()`).
 
 ```
