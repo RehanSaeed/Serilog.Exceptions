@@ -1,0 +1,104 @@
+﻿{
+  "version": "1.0.0-*",
+  "title": "Serilog Exceptions",
+  "description": "Log exception details and custom properties that are not output in Exception.ToString().",
+  "authors": [ "Muhammad Rehan Saeed" ],
+  "owners": [ "Muhammad Rehan Saeed" ],
+  "copyright": "@ Muhammad Rehan Saeed. All rights Reserved",
+  "tags": [ "Serilog", "Exception", "Log", "Logging", "Detail", "Details" ],
+  "iconUrl": "https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png",
+  "projectUrl": "https://github.com/RehanSaeed/Serilog.Exceptions",
+  "licenseUrl": "https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/LICENSE",
+
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+
+  "dependencies": {
+    "Serilog": "1.5.14"
+  },
+
+  "frameworks": {
+    "net40": {
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Runtime": {
+          "type": "build",
+          "version": ""
+        }
+      }
+    },
+    "net45": {
+      "dependencies": {
+        "Serilog.Sinks.EventLog": "1.5.11"
+      },
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Runtime": {
+          "type": "build",
+          "version": ""
+        }
+      }
+    },
+    "net451": {
+      "dependencies": {
+        "Serilog.Sinks.EventLog": "1.5.11"
+      },
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Runtime": {
+          "type": "build",
+          "version": ""
+        }
+      }
+    },
+    "net452": {
+      "dependencies": {
+        "Serilog.Sinks.EventLog": "1.5.11"
+      },
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Runtime": {
+          "type": "build",
+          "version": ""
+        }
+      }
+    },
+    "net46": {
+      "dependencies": {
+        "Serilog.Sinks.EventLog": "1.5.11"
+      },
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Runtime": {
+          "type": "build",
+          "version": ""
+        }
+      }
+    },
+    "net461": {
+      "dependencies": {
+        "Serilog.Sinks.EventLog": "1.5.11"
+      },
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": "",
+        "System.Runtime": {
+          "type": "build",
+          "version": ""
+        }
+      }
+    }
+  }
+}
