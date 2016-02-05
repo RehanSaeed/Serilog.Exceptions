@@ -92,9 +92,9 @@ You may want to add support for destructuring your own exceptions without relyin
 using Serilog;
 using Serilog.Exceptions;
 
- var exceptionDestructurers = new List<IExceptionDestructurer>();
-exceptionDestructurers.AddRange(ExceptionEnricher.DefaultDestructurers);
-exceptionDestructurers.Add(new MyCustomExceptionDestructurer());
+var exceptionDestructurers = new List<IExceptionDestructurer>();
+exceptionDestructurers.AddRange(ExceptionEnricher.DefaultDestructurers);  // Add built in destructurers.
+exceptionDestructurers.Add(new MyCustomExceptionDestructurer());          // Add your custom destructurer.
 
 ILogger logger = new LoggerConfiguration()
     .Enrich.WithExceptionDetails(exceptionDestructurers)
