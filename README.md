@@ -84,6 +84,26 @@ The code above logs the following:
 
 This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
 
+## Custom Exception Destructurers
+
+You may want to add support for destructuring your own exceptions without relying on reflection. To do this, create your own destructuring class implementing `ExceptionDestructurer` (You can take a look at [this](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/Source/Serilog.Exceptions/Destructurers/ArgumentExceptionDestructurer.cs) for `ArgumentException`), then simply add it like so:
+
+```
+using Serilog;
+using Serilog.Exceptions;
+
+ var exceptionDestructurers = new List<IExceptionDestructurer>();
+exceptionDestructurers.AddRange(ExceptionEnricher.DefaultDestructurers);
+exceptionDestructurers.Add(new MyCustomExceptionDestructurer());
+
+ILogger logger = new LoggerConfiguration()
+    .Enrich.WithExceptionDetails(exceptionDestructurers)
+    .WriteTo.Sink(new RollingFileSink(
+        @"C:\logs",
+        new JsonFormatter(renderMessage: true))
+    .CreateLogger();
+```
+
 ## Contributions
 
 The original code was taken from [here](https://groups.google.com/forum/#!searchin/getseq/enhance%2420exception/getseq/rsAL4u3JpLM/PrszbPbtEb0J) and then improved for better performance and to support more exception types without using reflection by [Muhammad Rehan Saeed](http://rehansaeed.com).
