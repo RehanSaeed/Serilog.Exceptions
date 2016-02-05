@@ -13,6 +13,20 @@
             return loggerEnrichmentConfiguration.With(new ExceptionEnricher());
         }
 
+        public static Serilog.LoggerConfiguration WithExceptionDetails(
+            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
+            params IExceptionDestructurer[] destructurers)
+        {
+            return loggerEnrichmentConfiguration.With(new ExceptionEnricher(destructurers));
+        }
+
+        public static Serilog.LoggerConfiguration WithExceptionDetails(
+            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
+            IEnumerable<IExceptionDestructurer> destructurers)
+        {
+            return loggerEnrichmentConfiguration.With(new ExceptionEnricher(destructurers));
+        }
+
         public static Serilog.LoggerConfiguration WithProperties(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IDictionary<string, object> properties)
