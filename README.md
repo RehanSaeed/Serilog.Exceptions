@@ -5,7 +5,7 @@ Serilog.Exceptions is an add-on to [Serilog](http://serilog.net/) to log excepti
 
 ## Getting Started
 
-Add the Serilog.Exceptions NuGet package to your project using the NuGet Package Manager or run the following command in the Package Console Window:
+Add the [Serilog.Exceptions](https://www.nuget.org/packages/Serilog.Exceptions/) NuGet package to your project using the NuGet Package Manager or run the following command in the Package Console Window:
 
 ```
 Install-Package Serilog.Exceptions
