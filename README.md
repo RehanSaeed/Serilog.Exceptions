@@ -3,28 +3,6 @@
 </h1>
 Serilog.Exceptions is an add-on to [Serilog](http://serilog.net/) to log exception details and custom properties that are not output in Exception.ToString().
 
-## Getting Started
-
-Add the [Serilog.Exceptions](https://www.nuget.org/packages/Serilog.Exceptions/) NuGet package to your project using the NuGet Package Manager or run the following command in the Package Console Window:
-
-```
-Install-Package Serilog.Exceptions
-```
-
-When setting up your logger, add the `With.ExceptionDetails()` line like so:
-
-```
-using Serilog;
-using Serilog.Exceptions;
-
-ILogger logger = new LoggerConfiguration()
-    .Enrich.WithExceptionDetails()
-    .WriteTo.Sink(new RollingFileSink(
-        @"C:\logs",
-        new JsonFormatter(renderMessage: true))
-    .CreateLogger();
-```
-
 ## What Does It Do?
 
 Your JSON logs will now be supplemented with detailed exception information and even custom exception properties. Here is an example of what happens when you log a DbEntityValidationException from EntityFramework (This exception is notorious for having deeply nested custom properties which are not included in the `.ToString()`).
@@ -80,6 +58,28 @@ The code above logs the following:
 }
 ```
 
+## Getting Started
+
+Add the [Serilog.Exceptions](https://www.nuget.org/packages/Serilog.Exceptions/) NuGet package to your project using the NuGet Package Manager or run the following command in the Package Console Window:
+
+```
+Install-Package Serilog.Exceptions
+```
+
+When setting up your logger, add the `With.ExceptionDetails()` line like so:
+
+```
+using Serilog;
+using Serilog.Exceptions;
+
+ILogger logger = new LoggerConfiguration()
+    .Enrich.WithExceptionDetails()
+    .WriteTo.Sink(new RollingFileSink(
+        @"C:\logs",
+        new JsonFormatter(renderMessage: true))
+    .CreateLogger();
+```
+
 ## Performance
 
 This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
@@ -104,6 +104,10 @@ ILogger logger = new LoggerConfiguration()
     .CreateLogger();
 ```
 
+If you write a destructurer that is not included in this project (even for a third party library), please contribute it.
+
 ## Contributions
 
 The original code was taken from [here](https://groups.google.com/forum/#!searchin/getseq/enhance%2420exception/getseq/rsAL4u3JpLM/PrszbPbtEb0J) and then improved for better performance and to support more exception types without using reflection by [Muhammad Rehan Saeed](http://rehansaeed.com).
+
+If you have created any custom destructurers, please contribute them even if they are for third party libraries. If they are for exceptions from a third party library e.g. EntityFramework, please contribute a Serilog.Exceptions.EntityFramework project containing all the destructurers for the all the exceptions in EntityFramework.
