@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.1.0-*",
+  "version": "1.2.0-*",
   "title": "Serilog Exceptions",
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
   "authors": [ "Muhammad Rehan Saeed" ],
@@ -24,11 +24,7 @@
       "frameworkAssemblies": {
         "System": "",
         "System.Core": "",
-        "System.Data": "",
-        "System.Runtime": {
-          "type": "build",
-          "version": ""
-        }
+        "System.Data": ""
       }
     },
     "net45": {
