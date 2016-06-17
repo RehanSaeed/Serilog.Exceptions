@@ -34,13 +34,14 @@
             }
 
             var valueType = value.GetType();
+            var valueTypeInfo = valueType.GetTypeInfo();
 
-            if (valueType.IsSubclassOf(typeof(MemberInfo)))
+            if (valueTypeInfo.IsSubclassOf(typeof(MemberInfo)))
             {
                 return value;
             }
 
-            if (Type.GetTypeCode(valueType) != TypeCode.Object || valueType.IsValueType)
+            if (valueType.GetTypeCode() != TypeCode.Object || valueTypeInfo.IsValueType)
             {
                 return value;
             }
@@ -50,7 +51,7 @@
                 return value;
             }
 
-            if (typeof(IDictionary).IsAssignableFrom(valueType))
+            if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
                 return ((IDictionary)value)
                     .Cast<DictionaryEntry>()
@@ -58,7 +59,7 @@
                     .ToDictionary(e => (string)e.Key, e => this.DestructureValue(e.Value, level + 1));
             }
 
-            if (typeof(IEnumerable).IsAssignableFrom(valueType))
+            if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
                 return ((IEnumerable)value)
                     .Cast<object>()
@@ -76,11 +77,7 @@
                 .Where(p => p.CanRead)
                 .ToDictionary(
                     p => p.Name,
-#if NET40
-                    p => this.DestructureValue(p.GetValue(value, null),
-#else
                     p => this.DestructureValue(p.GetValue(value),
-#endif
                     level + 1));
 
             values.Add("Type", valueType);

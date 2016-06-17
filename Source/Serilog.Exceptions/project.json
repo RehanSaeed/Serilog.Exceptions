@@ -4,8 +4,18 @@
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
   "authors": [ "Muhammad Rehan Saeed" ],
 
+  "packOptions": {
+    "owners": [ "Muhammad Rehan Saeed" ],
+    "copyright": "@ Muhammad Rehan Saeed. All rights Reserved",
+    "tags": [ "Serilog", "Exception", "Log", "Logging", "Detail", "Details" ],
+    "iconUrl": "https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png",
+    "projectUrl": "https://github.com/RehanSaeed/Serilog.Exceptions",
+    "licenseUrl": "https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/LICENSE",
+    "releaseNotes": "Added support for netstandard1.3 and upgraded to Serilog 2."
+  },
 
   "buildOptions": {
+    "keyFile": "..\\Key.snk",
     "warningsAsErrors": true
   },
 
@@ -14,19 +24,18 @@
   },
 
   "frameworks": {
-    "netstandard1.0": {
+    "net4.5": {
+      "frameworkAssemblies": {
+        "System": "",
+        "System.Core": "",
+        "System.Data": ""
+      }
+    },
+    "netstandard1.3": {
       "dependencies": {
-        "Microsoft.CSharp": "4.0.1-rc2-24027",
-        "System.Collections": "4.0.11-rc2-24027",
-        "System.Dynamic.Runtime": "4.0.11-rc2-24027",
-        "System.Globalization": "4.0.11-rc2-24027",
-        "System.Linq": "4.1.0-rc2-24027",
-        "System.Reflection": "4.1.0-rc2-24027",
-        "System.Reflection.Extensions": "4.0.1-rc2-24027",
-        "System.Runtime": "4.1.0-rc2-24027",
-        "System.Runtime.Extensions": "4.1.0-rc2-24027",
-        "System.Text.RegularExpressions": "4.0.12-rc2-24027",
-        "System.Threading": "4.0.11-rc2-24027"
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Data.SqlClient": "4.1.0-rc2-24027",
+        "System.Reflection.TypeExtensions": "4.1.0-rc2-24027"
       }
     }
   }
