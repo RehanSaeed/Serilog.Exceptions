@@ -20,9 +20,8 @@
             base.Destructure(exception, data, destructureException);
 
             var sqlException = (SqlException)exception;
-#if !NET40
+
             data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
-#endif
             data.Add(nameof(SqlException.Class), sqlException.Class);
             data.Add(nameof(SqlException.LineNumber), sqlException.LineNumber);
             data.Add(nameof(SqlException.Number), sqlException.Number);

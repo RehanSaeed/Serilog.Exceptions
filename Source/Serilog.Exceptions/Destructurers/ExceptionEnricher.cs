@@ -53,7 +53,7 @@
             {
                 logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
                     "ExceptionDetail",
-                    this.DestructureException(logEvent.Exception), 
+                    this.DestructureException(logEvent.Exception),
                     true));
             }
         }

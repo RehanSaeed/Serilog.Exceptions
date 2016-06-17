@@ -1,85 +1,41 @@
 ﻿{
-  "version": "1.2.0-*",
+  "version": "2.0.0-rc-*",
   "title": "Serilog Exceptions",
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
   "authors": [ "Muhammad Rehan Saeed" ],
-  "owners": [ "Muhammad Rehan Saeed" ],
-  "copyright": "@ Muhammad Rehan Saeed. All rights Reserved",
-  "tags": [ "Serilog", "Exception", "Log", "Logging", "Detail", "Details" ],
-  "iconUrl": "https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png",
-  "projectUrl": "https://github.com/RehanSaeed/Serilog.Exceptions",
-  "licenseUrl": "https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/LICENSE",
-  "releaseNotes": "Made it easier to add custom exception destructurers from the WithExceptionDetails extension method.",
 
-  "compilationOptions": {
+  "packOptions": {
+    "owners": [ "Muhammad Rehan Saeed" ],
+    "copyright": "@ Muhammad Rehan Saeed. All rights Reserved",
+    "tags": [ "Serilog", "Exception", "Log", "Logging", "Detail", "Details" ],
+    "iconUrl": "https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png",
+    "projectUrl": "https://github.com/RehanSaeed/Serilog.Exceptions",
+    "licenseUrl": "https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/LICENSE",
+    "releaseNotes": "Added support for netstandard1.3 and upgraded to Serilog 2."
+  },
+
+  "buildOptions": {
+    "keyFile": "..\\Key.snk",
     "warningsAsErrors": true
   },
 
   "dependencies": {
-    "Serilog": "1.5.14"
+    "Serilog": "2.0.0-rc-556"
   },
 
   "frameworks": {
-    "net40": {
+    "net4.5": {
       "frameworkAssemblies": {
         "System": "",
         "System.Core": "",
         "System.Data": ""
       }
     },
-    "net45": {
-      "frameworkAssemblies": {
-        "System": "",
-        "System.Core": "",
-        "System.Data": "",
-        "System.Runtime": {
-          "type": "build",
-          "version": ""
-        }
-      }
-    },
-    "net451": {
-      "frameworkAssemblies": {
-        "System": "",
-        "System.Core": "",
-        "System.Data": "",
-        "System.Runtime": {
-          "type": "build",
-          "version": ""
-        }
-      }
-    },
-    "net452": {
-      "frameworkAssemblies": {
-        "System": "",
-        "System.Core": "",
-        "System.Data": "",
-        "System.Runtime": {
-          "type": "build",
-          "version": ""
-        }
-      }
-    },
-    "net46": {
-      "frameworkAssemblies": {
-        "System": "",
-        "System.Core": "",
-        "System.Data": "",
-        "System.Runtime": {
-          "type": "build",
-          "version": ""
-        }
-      }
-    },
-    "net461": {
-      "frameworkAssemblies": {
-        "System": "",
-        "System.Core": "",
-        "System.Data": "",
-        "System.Runtime": {
-          "type": "build",
-          "version": ""
-        }
+    "netstandard1.3": {
+      "dependencies": {
+        "NETStandard.Library": "1.5.0-rc2-24027",
+        "System.Data.SqlClient": "4.1.0-rc2-24027",
+        "System.Reflection.TypeExtensions": "4.1.0-rc2-24027"
       }
     }
   }
