@@ -35,7 +35,9 @@
                         typeof(System.Configuration.SettingsPropertyNotFoundException),
                         typeof(System.Configuration.SettingsPropertyWrongTypeException),
                         typeof(System.ContextMarshalException),
+#endif
                         typeof(System.Data.Common.DbException),
+#if NET45
                         typeof(System.Data.ConstraintException),
                         typeof(System.Data.DataException),
                         typeof(System.Data.DeletedRowInaccessibleException),
@@ -51,22 +53,27 @@
                         typeof(System.Data.RowNotInTableException),
                         typeof(System.Data.SqlTypes.SqlAlreadyFilledException),
                         typeof(System.Data.SqlTypes.SqlNotFilledException),
+#endif
                         typeof(System.Data.SqlTypes.SqlNullValueException),
                         typeof(System.Data.SqlTypes.SqlTruncateException),
                         typeof(System.Data.SqlTypes.SqlTypeException),
+#if NET45
                         typeof(System.Data.StrongTypingException),
                         typeof(System.Data.SyntaxErrorException),
                         typeof(System.Data.VersionNotFoundException),
+#endif
                         typeof(System.DataMisalignedException),
+#if NET45
                         typeof(System.Diagnostics.Eventing.Reader.EventLogInvalidDataException),
                         typeof(System.Diagnostics.Eventing.Reader.EventLogNotFoundException),
                         typeof(System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException),
                         typeof(System.Diagnostics.Eventing.Reader.EventLogReadingException),
-                        typeof(System.Diagnostics.Tracing.EventSourceException),
 #endif
+
+                        typeof(System.Diagnostics.Tracing.EventSourceException),
                         typeof(System.DivideByZeroException),
-#if NET45
                         typeof(System.DllNotFoundException),
+#if NET45
                         typeof(System.DuplicateWaitObjectException),
                         typeof(System.EntryPointNotFoundException),
 #endif
@@ -105,7 +112,9 @@
                         typeof(System.MethodAccessException),
 #if NET45
                         typeof(System.MulticastNotSupportedException),
+#endif
                         typeof(System.Net.CookieException),
+#if NET45
                         typeof(System.Net.NetworkInformation.PingException),
                         typeof(System.Net.ProtocolViolationException),
 #endif
@@ -119,12 +128,13 @@
                         typeof(System.Reflection.AmbiguousMatchException),
 #if NET45
                         typeof(System.Reflection.CustomAttributeFormatException),
+#endif
+#if !NETSTANDARD1_3
                         typeof(System.Reflection.InvalidFilterCriteriaException),
                         typeof(System.Reflection.TargetException),
 #endif
                         typeof(System.Reflection.TargetInvocationException),
                         typeof(System.Reflection.TargetParameterCountException),
-#if NET45
                         typeof(System.Resources.MissingManifestResourceException),
                         typeof(System.Runtime.InteropServices.COMException),
                         typeof(System.Runtime.InteropServices.InvalidComObjectException),
@@ -133,13 +143,16 @@
                         typeof(System.Runtime.InteropServices.SafeArrayRankMismatchException),
                         typeof(System.Runtime.InteropServices.SafeArrayTypeMismatchException),
                         typeof(System.Runtime.InteropServices.SEHException),
+#if NET45
                         typeof(System.Runtime.Remoting.RemotingException),
                         typeof(System.Runtime.Remoting.RemotingTimeoutException),
                         typeof(System.Runtime.Remoting.ServerException),
                         typeof(System.Runtime.Serialization.SerializationException),
                         typeof(System.Security.Authentication.AuthenticationException),
                         typeof(System.Security.Authentication.InvalidCredentialException),
+#endif
                         typeof(System.Security.Cryptography.CryptographicException),
+#if NET45
                         typeof(System.Security.Cryptography.CryptographicUnexpectedOperationException),
                         typeof(System.Security.Policy.PolicyException),
 #endif

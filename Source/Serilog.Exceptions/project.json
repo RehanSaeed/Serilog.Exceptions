@@ -1,5 +1,5 @@
 ﻿{
-  "version": "2.0.0-rc-*",
+  "version": "2.0.0",
   "title": "Serilog Exceptions",
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
   "authors": [ "Muhammad Rehan Saeed" ],
@@ -20,7 +20,7 @@
   },
 
   "dependencies": {
-    "Serilog": "2.0.0-rc-556"
+    "Serilog": "2.0.0"
   },
 
   "frameworks": {
@@ -33,9 +33,16 @@
     },
     "netstandard1.3": {
       "dependencies": {
-        "NETStandard.Library": "1.5.0-rc2-24027",
-        "System.Data.SqlClient": "4.1.0-rc2-24027",
-        "System.Reflection.TypeExtensions": "4.1.0-rc2-24027"
+        "NETStandard.Library": "1.6.0",
+        "System.Data.SqlClient": "4.1.0",
+        "System.Reflection.TypeExtensions": "4.1.0"
+      }
+    },
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "System.Data.SqlClient": "4.1.0",
+        "System.Reflection.TypeExtensions": "4.1.0"
       }
     }
   }
