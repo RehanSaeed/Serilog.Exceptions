@@ -2,16 +2,21 @@
   "version": "2.0.0",
   "title": "Serilog Exceptions",
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
-  "authors": [ "Muhammad Rehan Saeed" ],
+  "authors": [ "Muhammad Rehan Saeed (RehanSaeed.com)" ],
 
   "packOptions": {
-    "owners": [ "Muhammad Rehan Saeed" ],
+    "owners": [ "Muhammad Rehan Saeed (RehanSaeed.com)" ],
     "copyright": "@ Muhammad Rehan Saeed. All rights Reserved",
     "tags": [ "Serilog", "Exception", "Log", "Logging", "Detail", "Details" ],
     "iconUrl": "https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png",
     "projectUrl": "https://github.com/RehanSaeed/Serilog.Exceptions",
     "licenseUrl": "https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/LICENSE",
-    "releaseNotes": "Added support for netstandard1.3 and upgraded to Serilog 2."
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/RehanSaeed/Serilog.Exceptions.git"
+    },
+    "releaseNotes": "Added support for netstandard1.6 and upgraded to Serilog 2.0.",
+    "requireLicenseAcceptance": true
   },
 
   "buildOptions": {
@@ -45,5 +50,11 @@
         "System.Reflection.TypeExtensions": "4.1.0"
       }
     }
+  },
+
+  "scripts": {
+    "postcompile": [
+      "dotnet pack --no-build --configuration %compile:Configuration%"
+    ]
   }
 }
