@@ -1,6 +1,6 @@
 $currentDirectoryPath = (Get-Item '.\').FullName;
 $artifactsDirectoryPath = [System.IO.Path]::Combine($currentDirectoryPath, 'Artifacts');
-$projectDirectoryPaths = @([System.IO.Path]::Combine($currentDirectoryPath, 'Serilog.Exceptions'));
+$projectFilePaths = @([System.IO.Path]::Combine($currentDirectoryPath, 'Source\Serilog.Exceptions\Serilog.Exceptions.xproj'));
 $testProjectDirectoryPaths = @();
 
 <#  
@@ -62,7 +62,7 @@ EnsurePsbuildInstalled;
 
 Exec { & dotnet restore };
 
-Invoke-MSBuild -configuration Release;
+Invoke-MSBuild $projectFilePaths -configuration Release;
 
 $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 $revision = "{0:D4}" -f [convert]::ToInt32($revision, 10);
@@ -72,7 +72,8 @@ foreach ($testProjectDirectoryPath in $testProjectDirectoryPaths)
     Exec { & dotnet test $testProjectDirectoryPath -c Release };
 }
 
-foreach ($projectDirectoryPaths in $projectDirectoryPaths)
+foreach ($projectFilePath in $projectFilePaths)
 {
-    Exec { & dotnet pack $projectDirectoryPaths -c Release -o $artifactsDirectoryPath --version-suffix=$revision };
+    $projectDirectoryPath = [System.IO.Path]::GetDirectoryName($projectFilePath);
+    Exec { & dotnet pack $projectDirectoryPath -c Release -o $artifactsDirectoryPath --version-suffix=$revision };
 }
