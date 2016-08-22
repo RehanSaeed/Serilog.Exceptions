@@ -73,14 +73,14 @@ foreach ($testProjectDirectoryPath in $testProjectDirectoryPaths)
 {
     $projectDirectoryName = [System.IO.Path]::GetFileName($testProjectDirectoryPath);
     $outputFilePath = [System.IO.Path]::Combine($artifactsDirectoryPath, "$projectDirectoryName.xml");
-    
+
     Exec { & dotnet test $testProjectDirectoryPath -c Release -xml $outputFilePath };
 
     if ($env:APPVEYOR_JOB_ID)
     {
         $wc = New-Object 'System.Net.WebClient';
         $wc.UploadFile(
-            "https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", 
+            "https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)",
             $outputFilePath)
     }
 }
@@ -89,5 +89,5 @@ foreach ($projectFilePath in $projectFilePaths)
 {
     $projectDirectoryPath = [System.IO.Path]::GetDirectoryName($projectFilePath);
     Exec { & dotnet pack $projectDirectoryPath -c Release -o $artifactsDirectoryPath };
-    Exec { & dotnet pack $projectDirectoryPath -c Release -o $artifactsDirectoryPath --version-suffix="beta$revision" };
+    Exec { & dotnet pack $projectDirectoryPath -c Release -o $artifactsDirectoryPath --version-suffix="build$revision" };
 }
