@@ -7,10 +7,10 @@ branches:
 nuget:  
   disable_publish_on_pr: true
 build_script:  
-- ps: .\Build.ps1
+- ps: .\Source\Build.ps1
 test: off  
 artifacts:  
-- path: .\Artifacts\**\*.nupkg
+- path: .\Source\Artifacts\**\*.nupkg
   name: NuGet
 deploy:  
 #- provider: NuGet
