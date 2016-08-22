@@ -1,18 +1,15 @@
-version: '{build}'  
-pull_requests:  
+version: '{build}'
+pull_requests:
   do_not_increment_build_number: true
-branches:  
-  only:
-  - master
-nuget:  
+nuget:
   disable_publish_on_pr: true
-build_script:  
+build_script:
 - ps: .\Source\Build.ps1
-test: off  
-artifacts:  
-- path: .\Source\Artifacts\**\*.nupkg
+test: off
+artifacts:
+- path: .\Artifacts\**\*.nupkg
   name: NuGet
-deploy:  
+deploy:
 #- provider: NuGet
 #  server: https://www.myget.org/F/andrewlock-ci/api/v2/package
 #  api_key:
@@ -26,4 +23,3 @@ deploy:
     secure: 73eFUWSfho6pxCy1VRP1H0AYh/SFiyEREV+/ATcoj0I+sSH9dec/WXs6H2Jy5vlS
   on:
     branch: master
-    appveyor_repo_tag: true
