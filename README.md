@@ -3,6 +3,9 @@
 </h1>
 Serilog.Exceptions is an add-on to [Serilog](http://serilog.net/) to log exception details and custom properties that are not output in Exception.ToString().
 
+[![Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
+[![NuGet](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/)
+
 ## What Does It Do?
 
 Your JSON logs will now be supplemented with detailed exception information and even custom exception properties. Here is an example of what happens when you log a DbEntityValidationException from EntityFramework (This exception is notorious for having deeply nested custom properties which are not included in the `.ToString()`).
