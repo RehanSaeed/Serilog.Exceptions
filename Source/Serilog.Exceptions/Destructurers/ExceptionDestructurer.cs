@@ -11,7 +11,7 @@
         {
             get
             {
-                return new Type[]
+                var targetTypes = new List<Type>
                     {
                         typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException),
                         typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderInternalCompilerException),
@@ -63,12 +63,6 @@
                         typeof(System.Data.VersionNotFoundException),
 #endif
                         typeof(System.DataMisalignedException),
-#if NET45
-                        typeof(System.Diagnostics.Eventing.Reader.EventLogInvalidDataException),
-                        typeof(System.Diagnostics.Eventing.Reader.EventLogNotFoundException),
-                        typeof(System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException),
-                        typeof(System.Diagnostics.Eventing.Reader.EventLogReadingException),
-#endif
 
                         typeof(System.Diagnostics.Tracing.EventSourceException),
                         typeof(System.DivideByZeroException),
@@ -184,7 +178,33 @@
                         typeof(System.UnauthorizedAccessException),
                         typeof(System.UriFormatException)
                     };
+
+#if NET45
+                foreach (var dangerousType in GetDangerousTypes())
+                {
+                    var type = Type.GetType(dangerousType);
+                    if(type != null)
+                    {
+                        targetTypes.Add(type);
+                    }
+                }
+#endif
+                return targetTypes.ToArray();
             }
+        }
+
+        private string[] GetDangerousTypes()
+        {
+            return new[]
+            {
+                "System.Diagnostics.Eventing.Reader.EventLogInvalidDataException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Diagnostics.Eventing.Reader.EventLogNotFoundException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Diagnostics.Eventing.Reader.EventLogReadingException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Management.Instrumentation.InstanceNotFoundException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Management.Instrumentation.InstrumentationBaseException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "System.Management.Instrumentation.InstrumentationException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+            };
         }
 
         public virtual void Destructure(
