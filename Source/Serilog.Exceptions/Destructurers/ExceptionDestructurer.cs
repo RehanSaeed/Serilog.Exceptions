@@ -63,7 +63,6 @@
                         typeof(System.Data.VersionNotFoundException),
 #endif
                         typeof(System.DataMisalignedException),
-
                         typeof(System.Diagnostics.Tracing.EventSourceException),
                         typeof(System.DivideByZeroException),
                         typeof(System.DllNotFoundException),
@@ -97,11 +96,6 @@
                         typeof(System.IO.IsolatedStorage.IsolatedStorageException),
 #endif
                         typeof(System.IO.PathTooLongException),
-#if NET45
-                        typeof(System.Management.Instrumentation.InstanceNotFoundException),
-                        typeof(System.Management.Instrumentation.InstrumentationBaseException),
-                        typeof(System.Management.Instrumentation.InstrumentationException),
-#endif
                         typeof(System.MemberAccessException),
                         typeof(System.MethodAccessException),
 #if NET45
