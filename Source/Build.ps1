@@ -1,4 +1,3 @@
-$prereleaseTag = 'beta';
 $artifactsDirectoryPath = [System.IO.Path]::Combine((Get-Item '.\').FullName, 'Artifacts');
 $projectFileNames = @('Serilog.Exceptions.xproj');
 $testProjectFileNames = @('Serilog.Exceptions.Test.xproj');
@@ -97,5 +96,5 @@ foreach ($testProjectFilePath in $testProjectFilePaths)
 foreach ($projectFilePath in $projectFilePaths)
 {
     $projectDirectoryPath = [System.IO.Path]::GetDirectoryName($projectFilePath);
-    Exec { & dotnet pack $projectDirectoryPath --configuration 'Release' --output $artifactsDirectoryPath --version-suffix="$prereleaseTag$revision" };
+    Exec { & dotnet pack $projectDirectoryPath --configuration 'Release' --output $artifactsDirectoryPath --version-suffix=$revision };
 }
