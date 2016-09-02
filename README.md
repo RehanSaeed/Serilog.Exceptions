@@ -115,3 +115,7 @@ If you write a destructurer that is not included in this project (even for a thi
 The original code was taken from [here](https://groups.google.com/forum/#!searchin/getseq/enhance%2420exception/getseq/rsAL4u3JpLM/PrszbPbtEb0J) and then improved for better performance and to support more exception types without using reflection by [Muhammad Rehan Saeed](http://rehansaeed.com).
 
 If you have created any custom destructurers, please contribute them even if they are for third party libraries. If they are for exceptions from a third party library e.g. EntityFramework, please contribute a Serilog.Exceptions.EntityFramework project containing all the destructurers for the all the exceptions in EntityFramework.
+
+# Thanks To
+
+- [Jérémie Bertrand](https://github.com/laedit) - For making Serilog.Exceptions compatible with Mono.
