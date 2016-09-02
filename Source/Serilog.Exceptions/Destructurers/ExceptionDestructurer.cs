@@ -174,7 +174,7 @@
                     };
 
 #if NET45
-                foreach (var dangerousType in GetDangerousTypes())
+                foreach (var dangerousType in GetNotHandledByMonoTypes())
                 {
                     var type = Type.GetType(dangerousType);
                     if(type != null)
@@ -187,7 +187,11 @@
             }
         }
 
-        private string[] GetDangerousTypes()
+        /// <summary>
+        /// Get types that are currently not handled by mono and could raise a LoadTypeException.
+        /// </summary>
+        /// <returns>List of types.</returns>
+        private string[] GetNotHandledByMonoTypes()
         {
             return new[]
             {
