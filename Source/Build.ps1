@@ -1,7 +1,14 @@
-$currentDirectoryPath = (Get-Item '.\').FullName;
-$artifactsDirectoryPath = [System.IO.Path]::Combine($currentDirectoryPath, 'Artifacts');
-$projectFilePaths = @([System.IO.Path]::Combine($currentDirectoryPath, 'Source\Serilog.Exceptions\Serilog.Exceptions.xproj'));
-$testProjectDirectoryPaths = @([System.IO.Path]::Combine($currentDirectoryPath, 'Source\Serilog.Exceptions.Test'));
+$prereleaseTag = 'beta';
+$artifactsDirectoryPath = [System.IO.Path]::Combine((Get-Item '.\').FullName, 'Artifacts');
+$projectFileNames = @('Serilog.Exceptions.xproj');
+$testProjectFileNames = @('Serilog.Exceptions.Test.xproj');
+
+$ProjectFilePaths = Get-ChildItem '.\' -Recurse |
+	ForEach-Object { $_.FullName } |
+	? { [System.IO.Path]::GetFileName($_) -in $projectFileNames };
+$testProjectFilePaths = Get-ChildItem '.\' -Recurse |
+	ForEach-Object { $_.FullName } |
+	? { [System.IO.Path]::GetFileName($_) -in $testProjectFileNames };
 
 $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BUILD_NUMBER -ne $NULL];
 $revision = "{0:D4}" -f [convert]::ToInt32($revision, 10);
@@ -67,14 +74,16 @@ EnsurePsbuildInstalled;
 
 Exec { & dotnet restore };
 
-Invoke-MSBuild $projectFilePaths -configuration Release;
+Invoke-MSBuild $projectFilePaths -configuration 'Release';
 
-foreach ($testProjectDirectoryPath in $testProjectDirectoryPaths)
+foreach ($testProjectFilePath in $testProjectFilePaths)
 {
-    $projectDirectoryName = [System.IO.Path]::GetFileName($testProjectDirectoryPath);
-    $outputFilePath = [System.IO.Path]::Combine($artifactsDirectoryPath, "$projectDirectoryName.xml");
+	$testProjectDirectoryPath = [System.IO.Path]::GetDirectoryName($testProjectFilePath);
+    $testProjectFileName = [System.IO.Path]::GetFileName($testProjectFilePath);
+	$testProjectFileName = [System.IO.Path]::ChangeExtension($testProjectFileName, '.xml');
+    $outputFilePath = [System.IO.Path]::Combine($artifactsDirectoryPath, $testProjectFileName);
 
-    Exec { & dotnet test $testProjectDirectoryPath -c Release -xml $outputFilePath };
+    Exec { & dotnet test $testProjectDirectoryPath --configuration 'Release' -xml $outputFilePath };
 
     if ($env:APPVEYOR_JOB_ID)
     {
@@ -88,6 +97,5 @@ foreach ($testProjectDirectoryPath in $testProjectDirectoryPaths)
 foreach ($projectFilePath in $projectFilePaths)
 {
     $projectDirectoryPath = [System.IO.Path]::GetDirectoryName($projectFilePath);
-    Exec { & dotnet pack $projectDirectoryPath -c Release -o $artifactsDirectoryPath };
-    Exec { & dotnet pack $projectDirectoryPath -c Release -o $artifactsDirectoryPath --version-suffix="build$revision" };
+    Exec { & dotnet pack $projectDirectoryPath --configuration 'Release' --output $artifactsDirectoryPath --version-suffix="$prereleaseTag$revision" };
 }

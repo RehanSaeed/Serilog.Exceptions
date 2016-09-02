@@ -5,6 +5,7 @@ Serilog.Exceptions is an add-on to [Serilog](http://serilog.net/) to log excepti
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
 [![NuGet](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/)
+[![MyGet](https://img.shields.io/myget/serilog-exceptions/v/Serilog.Exceptions.svg)](http://myget.org/gallery/serilog-exceptions)
 
 ## What Does It Do?
 
