@@ -116,6 +116,6 @@ The original code was taken from [here](https://groups.google.com/forum/#!search
 
 If you have created any custom destructurers, please contribute them even if they are for third party libraries. If they are for exceptions from a third party library e.g. EntityFramework, please contribute a Serilog.Exceptions.EntityFramework project containing all the destructurers for the all the exceptions in EntityFramework.
 
-# Thanks To
+## Thanks To
 
 - [Jérémie Bertrand](https://github.com/laedit) - For making Serilog.Exceptions compatible with Mono.
