@@ -97,5 +97,4 @@ foreach ($projectFilePath in $projectFilePaths)
 {
     $projectDirectoryPath = [System.IO.Path]::GetDirectoryName($projectFilePath);
     Exec { & dotnet pack $projectDirectoryPath --configuration 'Release' --output $artifactsDirectoryPath --version-suffix=$revision };
-    Get-ChildItem $artifactsDirectoryPath -Recurse -Include '*.nupkg' -Exclude '*.symbols.nupkg' | Remove-Item;
 }

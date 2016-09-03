@@ -15,13 +15,14 @@ deploy:
   server: https://www.myget.org/F/serilog-exceptions/api/v2
   api_key:
     secure: aunGGWt32irQiOTX2wIO6e2Y5Ga0girA3xSUsmQv6E9d6ohHdbK5HJpXpmxW9QM3
-  skip_symbols: true
+  skip_symbols: false
   on:
     branch: master
 - provider: NuGet
   name: production
   api_key:
     secure: 73eFUWSfho6pxCy1VRP1H0AYh/SFiyEREV+/ATcoj0I+sSH9dec/WXs6H2Jy5vlS
+  skip_symbols: false
   on:
     branch: master
     appveyor_repo_tag: true
