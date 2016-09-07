@@ -13,63 +13,63 @@
                 return TypeCode.Empty;
             }
 
-            if (type == (typeof(bool)))
+            if (type == typeof(bool))
             {
                 return TypeCode.Boolean;
             }
-            else if (type == (typeof(char)))
+            else if (type == typeof(char))
             {
                 return TypeCode.Char;
             }
-            else if (type == (typeof(sbyte)))
+            else if (type == typeof(sbyte))
             {
                 return TypeCode.SByte;
             }
-            else if (type == (typeof(byte)))
+            else if (type == typeof(byte))
             {
                 return TypeCode.Byte;
             }
-            else if (type == (typeof(short)))
+            else if (type == typeof(short))
             {
                 return TypeCode.Int16;
             }
-            else if (type == (typeof(ushort)))
+            else if (type == typeof(ushort))
             {
                 return TypeCode.UInt16;
             }
-            else if (type == (typeof(int)))
+            else if (type == typeof(int))
             {
                 return TypeCode.Int32;
             }
-            else if (type == (typeof(uint)))
+            else if (type == typeof(uint))
             {
                 return TypeCode.UInt32;
             }
-            else if (type == (typeof(long)))
+            else if (type == typeof(long))
             {
                 return TypeCode.Int64;
             }
-            else if (type == (typeof(ulong)))
+            else if (type == typeof(ulong))
             {
                 return TypeCode.UInt64;
             }
-            else if (type == (typeof(float)))
+            else if (type == typeof(float))
             {
                 return TypeCode.Single;
             }
-            else if (type == (typeof(double)))
+            else if (type == typeof(double))
             {
                 return TypeCode.Double;
             }
-            else if (type == (typeof(decimal)))
+            else if (type == typeof(decimal))
             {
                 return TypeCode.Decimal;
             }
-            else if (type == (typeof(DateTime)))
+            else if (type == typeof(DateTime))
             {
                 return TypeCode.DateTime;
             }
-            else if (type == (typeof(string)))
+            else if (type == typeof(string))
             {
                 return TypeCode.String;
             }

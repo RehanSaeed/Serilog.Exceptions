@@ -74,11 +74,10 @@
         {
             var values = valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead)
+                .Where(x => x.CanRead)
                 .ToDictionary(
-                    p => p.Name,
-                    p => this.DestructureValue(p.GetValue(value),
-                    level + 1));
+                    x => x.Name,
+                    x => this.DestructureValue(x.GetValue(value), level + 1));
 
             values.Add("Type", valueType);
 

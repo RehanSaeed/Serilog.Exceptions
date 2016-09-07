@@ -20,12 +20,14 @@
   },
 
   "buildOptions": {
+    "additionalArguments": [ "/ruleset:../MinimumRecommendedRulesWithStyleCop.ruleset" ],
     "keyFile": "..\\Key.snk",
     "warningsAsErrors": true
   },
 
   "dependencies": {
-    "Serilog": "2.2.1"
+    "Serilog": "2.2.1",
+    "StyleCop.Analyzers": "1.0.0"
   },
 
   "frameworks": {

@@ -9,7 +9,7 @@
         {
             get
             {
-                return new Type[] 
+                return new Type[]
                 {
                     typeof(ArgumentException),
                     typeof(ArgumentNullException)
