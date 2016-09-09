@@ -3,9 +3,10 @@
 </h1>
 Serilog.Exceptions is an add-on to [Serilog](http://serilog.net/) to log exception details and custom properties that are not output in Exception.ToString().
 
-[![Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
-[![NuGet](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/)
-[![MyGet](https://img.shields.io/myget/serilog-exceptions/v/Serilog.Exceptions.svg)](http://myget.org/gallery/serilog-exceptions)
+[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
+[![Travis CI Build Status](https://img.shields.io/travis/RehanSaeed/Serilog.Exceptions.svg?maxAge=3600&label=travis)](https://travis-ci.org/RehanSaeed/Serilog.Exceptions)
+[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/)
+[![MyGet Package](https://img.shields.io/myget/serilog-exceptions/v/Serilog.Exceptions.svg)](http://myget.org/gallery/serilog-exceptions)
 
 ## What Does It Do?
 
