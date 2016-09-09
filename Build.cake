@@ -56,7 +56,19 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
     {
-        var buildNumber = AppVeyor.IsRunningOnAppVeyor ? Convert.ToInt32(AppVeyor.Environment.Build.Number) : 1;
+        int buildNumber;
+        if (AppVeyor.IsRunningOnAppVeyor)
+        {
+            buildNumber = Convert.ToInt32(AppVeyor.Environment.Build.Number);
+        }
+        else if (TravisCI.IsRunningOnTravisCI)
+        {
+            buildNumber = Convert.ToInt32(TravisCI.Environment.Build.BuildNumber);
+        }
+        else
+        {
+            buildNumber = 1;
+        }
         var revision = buildNumber.ToString("D4");
 
         var project = GetFiles("./**/Serilog.Exceptions.xproj").First();
