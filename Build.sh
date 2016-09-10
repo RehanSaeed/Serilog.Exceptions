@@ -23,7 +23,7 @@ else
 fi
 
 # Define default arguments.
-SCRIPT="build.cake"
+SCRIPT="Build.cake"
 TARGET="Default"
 CONFIGURATION="Release"
 VERBOSITY="verbose"
