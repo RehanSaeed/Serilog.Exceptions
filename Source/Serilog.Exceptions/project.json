@@ -21,7 +21,7 @@
 
   "buildOptions": {
     "additionalArguments": [ "/ruleset:../MinimumRecommendedRulesWithStyleCop.ruleset" ],
-    "keyFile": "..\\Key.snk",
+    "keyFile": "../Key.snk",
     "warningsAsErrors": true
   },
 
