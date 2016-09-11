@@ -13,7 +13,7 @@ addons:
     - libunwind8
     - zlib1g
 mono:  
-  - 4.2.3
+  - 4.4.2
 os:  
   - linux
   - osx
