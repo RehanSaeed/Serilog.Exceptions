@@ -7,6 +7,15 @@
 
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {
+#if NET45
+        private readonly bool clientConnectionIdIsAvailable;
+
+        public SqlExceptionDestructurer()
+        {
+            this.clientConnectionIdIsAvailable = typeof(SqlException).GetProperty("ClientConnectionId") != null;
+        }
+#endif
+
         public override Type[] TargetTypes
         {
             get { return new Type[] { typeof(SqlException) }; }
@@ -20,8 +29,14 @@
             base.Destructure(exception, data, destructureException);
 
             var sqlException = (SqlException)exception;
-
-            data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
+#if NET45
+            if (this.clientConnectionIdIsAvailable)
+            {
+#endif
+                data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
+#if NET45
+            }
+#endif
             data.Add(nameof(SqlException.Class), sqlException.Class);
             data.Add(nameof(SqlException.LineNumber), sqlException.LineNumber);
             data.Add(nameof(SqlException.Number), sqlException.Number);
