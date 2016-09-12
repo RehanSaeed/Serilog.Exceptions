@@ -8,11 +8,15 @@
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {
 #if NET45
+        private const string ClientConnectionIdName = "ClientConnectionId";
         private readonly bool clientConnectionIdIsAvailable;
+        private readonly Func<SqlException, Guid> getClientConnectionIdValue;
 
         public SqlExceptionDestructurer()
         {
-            this.clientConnectionIdIsAvailable = typeof(SqlException).GetProperty("ClientConnectionId") != null;
+            var clientConnectionIdProperty = typeof(SqlException).GetProperty(ClientConnectionIdName);
+            this.clientConnectionIdIsAvailable = clientConnectionIdProperty != null;
+            this.getClientConnectionIdValue = (sqlEx) => (Guid)clientConnectionIdProperty.GetValue(sqlEx);
         }
 #endif
 
@@ -32,10 +36,10 @@
 #if NET45
             if (this.clientConnectionIdIsAvailable)
             {
-#endif
-                data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
-#if NET45
+                data.Add(ClientConnectionIdName, this.getClientConnectionIdValue(sqlException));
             }
+#else
+            data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
 #endif
             data.Add(nameof(SqlException.Class), sqlException.Class);
             data.Add(nameof(SqlException.LineNumber), sqlException.LineNumber);
