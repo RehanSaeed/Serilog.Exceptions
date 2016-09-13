@@ -25,7 +25,7 @@ Task("Restore")
         {
             DotNetCoreBuild(
                 project.GetDirectory().FullPath,
-                new DotNetCoreBuildSettings() 
+                new DotNetCoreBuildSettings()
                 {
                     Configuration = configuration
                 });
@@ -40,7 +40,7 @@ Task("Test")
         foreach(var project in projects)
         {
             DotNetCoreTest(
-                project.GetDirectory().FullPath, 
+                project.GetDirectory().FullPath,
                 new DotNetCoreTestSettings()
                 {
                     ArgumentCustomization = args => args
@@ -59,11 +59,11 @@ Task("Pack")
         int buildNumber;
         if (AppVeyor.IsRunningOnAppVeyor)
         {
-            buildNumber = Convert.ToInt32(AppVeyor.Environment.Build.Number);
+            buildNumber = AppVeyor.Environment.Build.Number;
         }
         else if (TravisCI.IsRunningOnTravisCI)
         {
-            buildNumber = Convert.ToInt32(TravisCI.Environment.Build.BuildNumber);
+            buildNumber = TravisCI.Environment.Build.BuildNumber;
         }
         else
         {
@@ -74,7 +74,7 @@ Task("Pack")
         var project = GetFiles("./**/Serilog.Exceptions.xproj").First();
         DotNetCorePack(
             project.GetDirectory().FullPath,
-            new DotNetCorePackSettings() 
+            new DotNetCorePackSettings()
             {
                 Configuration = configuration,
                 OutputDirectory = artifactsDirectory,
