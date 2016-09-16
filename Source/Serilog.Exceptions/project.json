@@ -20,8 +20,8 @@
   },
 
   "buildOptions": {
-    "additionalArguments": [ "/ruleset:../MinimumRecommendedRulesWithStyleCop.ruleset" ],
-    "keyFile": "../Key.snk",
+    "additionalArguments": [ "/ruleset:../../MinimumRecommendedRulesWithStyleCop.ruleset" ],
+    "keyFile": "../../Key.snk",
     "warningsAsErrors": true
   },
 

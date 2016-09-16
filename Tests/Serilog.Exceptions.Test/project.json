@@ -17,6 +17,6 @@
   },
 
   "buildOptions": {
-    "additionalArguments": [ "/ruleset:../MinimumRecommendedRulesWithStyleCop.ruleset" ]
+    "additionalArguments": [ "/ruleset:../../MinimumRecommendedRulesWithStyleCop.ruleset" ]
   }
 }
