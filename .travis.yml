@@ -31,4 +31,6 @@ mono:
 #   - curl -sSL https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.sh | bash /dev/stdin --version "$CLI_VERSION" --install-dir "$DOTNET_INSTALL_DIR"
 #   - export PATH="$DOTNET_INSTALL_DIR:$PATH"
 script:  
+# You must run the following command for Travis to be able to have permissions to execute the shell script below. 
+# git update-index --chmod=+x build.sh
   - ./build.sh
