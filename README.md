@@ -111,12 +111,10 @@ ILogger logger = new LoggerConfiguration()
 
 If you write a destructurer that is not included in this project (even for a third party library), please contribute it.
 
-## Contributions
+## Contributing
 
-The original code was taken from [here](https://groups.google.com/forum/#!searchin/getseq/enhance%2420exception/getseq/rsAL4u3JpLM/PrszbPbtEb0J) and then improved for better performance and to support more exception types without using reflection by [Muhammad Rehan Saeed](http://rehansaeed.com).
+Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/CONTRIBUTING.md).
 
-If you have created any custom destructurers, please contribute them even if they are for third party libraries. If they are for exceptions from a third party library e.g. EntityFramework, please contribute a Serilog.Exceptions.EntityFramework project containing all the destructurers for the all the exceptions in EntityFramework.
-
-## Thanks To
+## Special Thanks
 
 - [Jérémie Bertrand](https://github.com/laedit) - For making Serilog.Exceptions compatible with Mono.
