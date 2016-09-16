@@ -1,3 +1,5 @@
+# AppVeyor documentation https://www.appveyor.com/docs
+
 version: '{build}'
 
 pull_requests:

@@ -1,3 +1,5 @@
+# Travis CI documentation https://docs.travis-ci.com/
+ 
 language: csharp  
 os:  
   - linux
