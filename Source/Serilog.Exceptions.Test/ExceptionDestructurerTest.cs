@@ -1,7 +1,7 @@
 ﻿namespace Serilog.Exceptions.Test
 {
     using System;
-    using Serilog.Exceptions.Destructurers;
+    using Destructurers;
     using Xunit;
 
     public class ExceptionDestructurerTest
@@ -23,6 +23,7 @@
                 Assert.Contains(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstanceNotFoundException");
                 Assert.Contains(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationBaseException");
                 Assert.Contains(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationException");
+                Assert.Contains(targetTypes, t => t.FullName == "System.Diagnostics.Tracing.EventSourceException");
             }
             else
             {
@@ -34,6 +35,7 @@
                 Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstanceNotFoundException");
                 Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationBaseException");
                 Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationException");
+                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Diagnostics.Tracing.EventSourceException");
             }
         }
     }
