@@ -27,7 +27,10 @@
 
   "dependencies": {
     "Serilog": "2.2.1",
-    "StyleCop.Analyzers": "1.0.0"
+    "StyleCop.Analyzers": {
+      "version": "1.0.0",
+      "type": "build"
+    }
   },
 
   "frameworks": {
