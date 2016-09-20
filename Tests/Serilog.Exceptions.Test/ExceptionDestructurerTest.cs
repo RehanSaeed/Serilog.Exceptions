@@ -58,7 +58,7 @@ namespace Serilog.Exceptions.Test
                 .CreateLogger();
 
             // Act
-            var argumentException = new ArgumentException("abc");
+            var argumentException = new ArgumentException("MSG", "testParamName");
             logger.Error(argumentException, "EXCEPTION MESSAGE");
 
             // Assert
@@ -73,6 +73,11 @@ namespace Serilog.Exceptions.Test
             JProperty exceptionTypeProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "Type");
             JValue exceptionTypeValue = Assert.IsType<JValue>(exceptionTypeProperty.Value);
             Assert.Equal("System.ArgumentException", exceptionTypeValue.Value);
+
+            JProperty paramNameProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "ParamName");
+            JValue paramName = Assert.IsType<JValue>(paramNameProperty.Value);
+            Assert.Equal("testParamName", paramName.Value);
+            
         }
 
         class TestTextWriterSink : ILogEventSink
