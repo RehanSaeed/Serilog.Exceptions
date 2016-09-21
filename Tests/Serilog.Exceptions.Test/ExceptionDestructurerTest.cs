@@ -53,10 +53,24 @@ namespace Serilog.Exceptions.Test
         }
 
         [Fact]
-        public void ArgumentNUllException_ParamNameIsAttachedAsProperty()
+        public void ArgumentNullException_ParamNameIsAttachedAsProperty()
         {
             var argumentException = new ArgumentNullException("testParamName", "MSG");
             Test_LoggedExceptionContainsProperty(argumentException, "ParamName", "testParamName");
+        }
+
+        [Fact]
+        public void ArgumentOfOutRangeException_ParamNameIsAttachedAsProperty()
+        {
+            var argumentException = new ArgumentOutOfRangeException("testParamName");
+            Test_LoggedExceptionContainsProperty(argumentException, "ParamName", "testParamName");
+        }
+
+        [Fact]
+        public void ArgumentOfOutRangeException_ActualValueIsAttachedAsProperty()
+        {
+            var argumentException = new ArgumentOutOfRangeException("testParamName", "ACTUAL_VALUE", "MSG");
+            Test_LoggedExceptionContainsProperty(argumentException, "ActualValue", "ACTUAL_VALUE");
         }
 
         private void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string propertyValue)
