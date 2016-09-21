@@ -46,6 +46,55 @@ namespace Serilog.Exceptions.Test
         }
 
         [Fact]
+        public void ApplicationException_ContainsMessage()
+        {
+            var applicationException = new ApplicationException("MSG");
+            Test_LoggedExceptionContainsProperty(applicationException, "Message", "MSG");
+        }
+
+        [Fact]
+        public void ApplicationException_ContainsHelpLink()
+        {
+            var applicationException = new ApplicationException() {HelpLink = "HELP LINK"};
+            Test_LoggedExceptionContainsProperty(applicationException, "HelpLink", "HELP LINK");
+        }
+
+        [Fact]
+        public void ApplicationException_ContainsSource()
+        {
+            var applicationException = new ApplicationException() { Source = "SOURCE" };
+            Test_LoggedExceptionContainsProperty(applicationException, "Source", "SOURCE");
+        }
+
+        [Fact]
+        public void ApplicationException_WithoutStackTrace_ContainsNullStackTrace()
+        {
+            var applicationException = new ApplicationException();
+            Test_LoggedExceptionContainsProperty(applicationException, "StackTrace", null);
+        }
+
+        [Fact]
+        public void ApplicationException_WithtStackTrace_ContainsStackTrace()
+        {
+            try
+            {
+                throw new ApplicationException();
+            }
+            catch (ApplicationException ex)
+            {
+                Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace.ToString());
+            }
+            
+        }
+
+        [Fact]
+        public void ApplicationException_ContainsType()
+        {
+            var applicationException = new ApplicationException();
+            Test_LoggedExceptionContainsProperty(applicationException, "Type", "System.ApplicationException");
+        }
+
+        [Fact]
         public void ArgumentException_ParamNameIsAttachedAsProperty()
         {
             var argumentException = new ArgumentException("MSG", "testParamName");
