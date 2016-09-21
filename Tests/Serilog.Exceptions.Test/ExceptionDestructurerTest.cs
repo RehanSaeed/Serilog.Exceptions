@@ -84,8 +84,8 @@ namespace Serilog.Exceptions.Test
             JArray innerExceptions = ExtractInnerExceptionsProperty(rootObject);
 
             Assert.Equal(2, innerExceptions.Count);
-            Assert_JObjectContainsExceptionDetailsWithProperty(Assert.IsType<JObject>(innerExceptions[0]), "ParamName", "testParamName1");
-            Assert_JObjectContainsExceptionDetailsWithProperty(Assert.IsType<JObject>(innerExceptions[1]), "ParamName", "testParamName2");
+            Assert_ContainsPropertyWithValue(Assert.IsType<JObject>(innerExceptions[0]), "ParamName", "testParamName1");
+            Assert_ContainsPropertyWithValue(Assert.IsType<JObject>(innerExceptions[1]), "ParamName", "testParamName2");
         }
 
         private JObject LogAndDestructureException(Exception exception)
@@ -116,11 +116,7 @@ namespace Serilog.Exceptions.Test
 
         private JArray ExtractInnerExceptionsProperty(JObject jObject)
         {
-            JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
-            JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
-
-            JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == "ExceptionDetail");
-            JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
+            JObject exceptionDetailValue = ExtractExceptionDetails(jObject);
 
             JProperty innerExceptionsProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "InnerExceptions");
             JArray innerExceptionsValue = Assert.IsType<JArray>(innerExceptionsProperty.Value);
@@ -128,8 +124,7 @@ namespace Serilog.Exceptions.Test
             return innerExceptionsValue;
         }
 
-        private void Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(JObject jObject, string propertyKey,
-            string propertyValue)
+        private JObject ExtractExceptionDetails(JObject jObject)
         {
             JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
             JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
@@ -137,13 +132,10 @@ namespace Serilog.Exceptions.Test
             JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == "ExceptionDetail");
             JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
 
-            JProperty paramNameProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == propertyKey);
-            JValue paramName = Assert.IsType<JValue>(paramNameProperty.Value);
-
-            Assert.Equal(propertyValue, paramName.Value);
+            return exceptionDetailValue;
         }
 
-        private void Assert_JObjectContainsExceptionDetailsWithProperty(JObject jObject, string propertyKey,
+        private void Assert_ContainsPropertyWithValue(JObject jObject, string propertyKey,
             string propertyValue)
         {
             JProperty paramNameProperty = Assert.Single(jObject.Properties(), x => x.Name == propertyKey);
@@ -152,7 +144,12 @@ namespace Serilog.Exceptions.Test
             Assert.Equal(propertyValue, paramName.Value);
         }
 
-
+        private void Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(JObject jObject, string propertyKey,
+            string propertyValue)
+        {
+            JObject exceptionDetailValue = ExtractExceptionDetails(jObject);
+            Assert_ContainsPropertyWithValue(exceptionDetailValue, propertyKey, propertyValue);
+        }
 
         class TestTextWriterSink : ILogEventSink
         {
