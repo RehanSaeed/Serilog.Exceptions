@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog.Core;
@@ -47,7 +46,20 @@ namespace Serilog.Exceptions.Test
         }
 
         [Fact]
-        public void ArgumentExceptions_NameIsAttachedAsProperty()
+        public void ArgumentException_ParamNameIsAttachedAsProperty()
+        {
+            var argumentException = new ArgumentException("MSG", "testParamName");
+            Test_LoggedExceptionContainsProperty(argumentException, "ParamName", "testParamName");
+        }
+
+        [Fact]
+        public void ArgumentNUllException_ParamNameIsAttachedAsProperty()
+        {
+            var argumentException = new ArgumentNullException("testParamName", "MSG");
+            Test_LoggedExceptionContainsProperty(argumentException, "ParamName", "testParamName");
+        }
+
+        private void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string propertyValue)
         {
             // Arrange
             var jsonWriter = new StringWriter();
@@ -58,8 +70,7 @@ namespace Serilog.Exceptions.Test
                 .CreateLogger();
 
             // Act
-            var argumentException = new ArgumentException("MSG", "testParamName");
-            logger.Error(argumentException, "EXCEPTION MESSAGE");
+            logger.Error(exception, "EXCEPTION MESSAGE");
 
             // Assert
             var writtenJson = jsonWriter.ToString();
@@ -70,14 +81,13 @@ namespace Serilog.Exceptions.Test
             JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
             JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == "ExceptionDetail");
             JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
-            JProperty exceptionTypeProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "Type");
-            JValue exceptionTypeValue = Assert.IsType<JValue>(exceptionTypeProperty.Value);
-            Assert.Equal("System.ArgumentException", exceptionTypeValue.Value);
+            //JProperty exceptionTypeProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "Type");
+            //JValue exceptionTypeValue = Assert.IsType<JValue>(exceptionTypeProperty.Value);
+            //Assert.Equal("System.ArgumentException", exceptionTypeValue.Value);
 
-            JProperty paramNameProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "ParamName");
+            JProperty paramNameProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == propertyKey);
             JValue paramName = Assert.IsType<JValue>(paramNameProperty.Value);
-            Assert.Equal("testParamName", paramName.Value);
-            
+            Assert.Equal(propertyValue, paramName.Value);
         }
 
         class TestTextWriterSink : ILogEventSink
