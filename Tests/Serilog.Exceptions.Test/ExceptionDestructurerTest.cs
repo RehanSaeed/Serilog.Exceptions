@@ -74,6 +74,23 @@ namespace Serilog.Exceptions.Test
         }
 
         [Fact]
+        public void ApplicationException_ContainsData()
+        {
+            var applicationException = new ApplicationException();
+            applicationException.Data["SOMEKEY"] = "SOMEVALUE";
+
+            JObject rootObject = LogAndDestructureException(applicationException);
+            JObject exceptionDetail = ExtractExceptionDetails(rootObject);
+
+            JProperty dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
+            JObject dataObject = Assert.IsType<JObject>(dataProperty.Value);
+
+            JProperty someKeyProperty = Assert.Single(dataObject.Properties(), x => x.Name == "SOMEKEY");
+            JValue someKeyValue = Assert.IsType<JValue>(someKeyProperty.Value);
+            Assert.Equal("SOMEVALUE", someKeyValue.Value);;
+        }
+
+        [Fact]
         public void ApplicationException_WithtStackTrace_ContainsStackTrace()
         {
             try
