@@ -4,7 +4,7 @@
     using Xunit;
     using static LogJsonOutputUtils;
 
-    public class ArgumentNullExceptionTest
+    public class ArgumentNullExceptionDestructurerTest
     {
         [Fact]
         public void ArgumentNullException_ParamNameIsAttachedAsProperty()

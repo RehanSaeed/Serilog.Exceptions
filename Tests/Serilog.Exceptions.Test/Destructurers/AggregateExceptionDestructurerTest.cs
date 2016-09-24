@@ -5,7 +5,7 @@
     using Xunit;
     using static LogJsonOutputUtils;
 
-    public class AggregateExceptionTest
+    public class AggregateExceptionDestructurerTest
     {
         [Fact]
         public void AggregateException_WithTwoArgumentExceptions_TheyAreSerializedInInnerExceptionsProperty()

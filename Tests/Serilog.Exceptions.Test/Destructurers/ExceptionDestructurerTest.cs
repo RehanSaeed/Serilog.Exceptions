@@ -6,7 +6,7 @@
     using Xunit;
     using static LogJsonOutputUtils;
 
-    public class ExceptionTest
+    public class ExceptionDestructurerTest
     {
         [Fact]
         public void TargetTypes()

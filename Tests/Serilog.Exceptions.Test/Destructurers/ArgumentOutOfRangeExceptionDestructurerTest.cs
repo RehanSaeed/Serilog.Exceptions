@@ -4,7 +4,7 @@
     using Xunit;
     using static LogJsonOutputUtils;
 
-    public class ArgumentOutOfRangeExceptionTest
+    public class ArgumentOutOfRangeExceptionDestructurerTest
     {
         [Fact]
         public void ArgumentOfOutRangeException_ParamNameIsAttachedAsProperty()
