@@ -1,16 +1,16 @@
-﻿using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Serilog.Core;
-using Serilog.Events;
-using Serilog.Formatting;
-using Serilog.Formatting.Json;
-
-namespace Serilog.Exceptions.Test
+﻿namespace Serilog.Exceptions.Test
 {
     using System;
+    using System.IO;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Serilog.Core;
+    using Serilog.Events;
     using Serilog.Exceptions.Destructurers;
+    using Serilog.Formatting;
+    using Serilog.Formatting.Json;
     using Xunit;
+    using static Serilog.Exceptions.Test.Destructurers.LogJsonOutputUtils;
 
     public class ExceptionDestructurerTest
     {
@@ -55,7 +55,7 @@ namespace Serilog.Exceptions.Test
         [Fact]
         public void ApplicationException_ContainsHelpLink()
         {
-            var applicationException = new ApplicationException() {HelpLink = "HELP LINK"};
+            var applicationException = new ApplicationException() { HelpLink = "HELP LINK" };
             Test_LoggedExceptionContainsProperty(applicationException, "HelpLink", "HELP LINK");
         }
 
@@ -87,11 +87,11 @@ namespace Serilog.Exceptions.Test
 
             JProperty someKeyProperty = Assert.Single(dataObject.Properties(), x => x.Name == "SOMEKEY");
             JValue someKeyValue = Assert.IsType<JValue>(someKeyProperty.Value);
-            Assert.Equal("SOMEVALUE", someKeyValue.Value);;
+            Assert.Equal("SOMEVALUE", someKeyValue.Value);
         }
 
         [Fact]
-        public void ApplicationException_WithtStackTrace_ContainsStackTrace()
+        public void ApplicationException_WithStackTrace_ContainsStackTrace()
         {
             try
             {
@@ -101,7 +101,6 @@ namespace Serilog.Exceptions.Test
             {
                 Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace.ToString());
             }
-            
         }
 
         [Fact]
@@ -152,88 +151,6 @@ namespace Serilog.Exceptions.Test
             Assert.Equal(2, innerExceptions.Count);
             Assert_ContainsPropertyWithValue(Assert.IsType<JObject>(innerExceptions[0]), "ParamName", "testParamName1");
             Assert_ContainsPropertyWithValue(Assert.IsType<JObject>(innerExceptions[1]), "ParamName", "testParamName2");
-        }
-
-        private JObject LogAndDestructureException(Exception exception)
-        {
-            // Arrange
-            var jsonWriter = new StringWriter();
-
-            ILogger logger = new LoggerConfiguration()
-                .Enrich.WithExceptionDetails()
-                .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
-                .CreateLogger();
-
-            // Act
-            logger.Error(exception, "EXCEPTION MESSAGE");
-
-            // Assert
-            var writtenJson = jsonWriter.ToString();
-            var jsonObj = JsonConvert.DeserializeObject<object>(writtenJson);
-            JObject rootObject = Assert.IsType<JObject>(jsonObj);
-            return rootObject;
-        }
-
-        private void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string propertyValue)
-        {
-            JObject rootObject = LogAndDestructureException(exception);
-            Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(rootObject, propertyKey, propertyValue);
-        }
-
-        private JArray ExtractInnerExceptionsProperty(JObject jObject)
-        {
-            JObject exceptionDetailValue = ExtractExceptionDetails(jObject);
-
-            JProperty innerExceptionsProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "InnerExceptions");
-            JArray innerExceptionsValue = Assert.IsType<JArray>(innerExceptionsProperty.Value);
-
-            return innerExceptionsValue;
-        }
-
-        private JObject ExtractExceptionDetails(JObject jObject)
-        {
-            JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
-            JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
-
-            JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == "ExceptionDetail");
-            JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
-
-            return exceptionDetailValue;
-        }
-
-        private void Assert_ContainsPropertyWithValue(JObject jObject, string propertyKey,
-            string propertyValue)
-        {
-            JProperty paramNameProperty = Assert.Single(jObject.Properties(), x => x.Name == propertyKey);
-            JValue paramName = Assert.IsType<JValue>(paramNameProperty.Value);
-
-            Assert.Equal(propertyValue, paramName.Value);
-        }
-
-        private void Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(JObject jObject, string propertyKey,
-            string propertyValue)
-        {
-            JObject exceptionDetailValue = ExtractExceptionDetails(jObject);
-            Assert_ContainsPropertyWithValue(exceptionDetailValue, propertyKey, propertyValue);
-        }
-
-        class TestTextWriterSink : ILogEventSink
-        {
-            readonly TextWriter _textWriter;
-            readonly ITextFormatter _textFormatter;
-
-            public TestTextWriterSink(TextWriter textWriter, ITextFormatter textFormatter)
-            {
-                if (textFormatter == null) throw new ArgumentNullException(nameof(textFormatter));
-                _textWriter = textWriter;
-                _textFormatter = textFormatter;
-            }
-
-            public void Emit(LogEvent logEvent)
-            {
-                _textFormatter.Format(logEvent, _textWriter);
-                _textWriter.Flush();
-            }
         }
     }
 }
