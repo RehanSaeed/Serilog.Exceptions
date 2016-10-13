@@ -1,14 +1,14 @@
 # Travis CI documentation https://docs.travis-ci.com/
- 
-language: csharp  
-os:  
+
+language: csharp
+os:
   - linux
   - osx
 
 # .NET CLI require Ubuntu 14.04
-sudo: required  
-dist: trusty  
-addons:  
+sudo: required
+dist: trusty
+addons:
   apt:
     packages:
     - gettext
@@ -30,7 +30,8 @@ env:
   # Set the DOTNET_SKIP_FIRST_TIME_EXPERIENCE environment variable to stop wasting time caching packages
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 
-# You must run the following command for Travis to be able to have permissions to execute the shell script below. 
+# You must run the following command for Travis to be able to have permissions to execute the shell script below.
 # git update-index --chmod=+x build.sh
-script:  
-  - ./build.sh
+script:
+  # Skip running tests due to tooling bug https://github.com/dotnet/cli/issues/3073
+  - ./build.sh -Target Build
