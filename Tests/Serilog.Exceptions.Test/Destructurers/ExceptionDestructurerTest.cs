@@ -42,37 +42,37 @@
         }
 
         [Fact]
-        public void ApplicationException_ContainsMessage()
+        public void ArgumentException_ContainsMessage()
         {
-            var applicationException = new ApplicationException("MSG");
+            var applicationException = new ArgumentException("MSG");
             Test_LoggedExceptionContainsProperty(applicationException, "Message", "MSG");
         }
 
         [Fact]
-        public void ApplicationException_ContainsHelpLink()
+        public void ArgumentException_ContainsHelpLink()
         {
-            var applicationException = new ApplicationException() { HelpLink = "HELP LINK" };
+            var applicationException = new ArgumentException() { HelpLink = "HELP LINK" };
             Test_LoggedExceptionContainsProperty(applicationException, "HelpLink", "HELP LINK");
         }
 
         [Fact]
-        public void ApplicationException_ContainsSource()
+        public void ArgumentException_ContainsSource()
         {
-            var applicationException = new ApplicationException() { Source = "SOURCE" };
+            var applicationException = new ArgumentException() { Source = "SOURCE" };
             Test_LoggedExceptionContainsProperty(applicationException, "Source", "SOURCE");
         }
 
         [Fact]
-        public void ApplicationException_WithoutStackTrace_ContainsNullStackTrace()
+        public void ArgumentException_WithoutStackTrace_ContainsNullStackTrace()
         {
-            var applicationException = new ApplicationException();
+            var applicationException = new ArgumentException();
             Test_LoggedExceptionContainsProperty(applicationException, "StackTrace", null);
         }
 
         [Fact]
-        public void ApplicationException_ContainsData()
+        public void ArgumentException_ContainsData()
         {
-            var applicationException = new ApplicationException();
+            var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
             JObject rootObject = LogAndDestructureException(applicationException);
@@ -87,23 +87,23 @@
         }
 
         [Fact]
-        public void ApplicationException_WithStackTrace_ContainsStackTrace()
+        public void ArgumentException_WithStackTrace_ContainsStackTrace()
         {
             try
             {
-                throw new ApplicationException();
+                throw new ArgumentException();
             }
-            catch (ApplicationException ex)
+            catch (ArgumentException ex)
             {
                 Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace.ToString());
             }
         }
 
         [Fact]
-        public void ApplicationException_ContainsType()
+        public void ArgumentException_ContainsType()
         {
-            var applicationException = new ApplicationException();
-            Test_LoggedExceptionContainsProperty(applicationException, "Type", "System.ApplicationException");
+            var applicationException = new ArgumentException();
+            Test_LoggedExceptionContainsProperty(applicationException, "Type", "System.ArgumentException");
         }
     }
 }

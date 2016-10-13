@@ -26,10 +26,7 @@
           "type": "platform",
           "version": "1.0.1"
         }
-      },
-      "imports": [
-        "dnxcore50"
-      ]
+      }
     }
   },
 
