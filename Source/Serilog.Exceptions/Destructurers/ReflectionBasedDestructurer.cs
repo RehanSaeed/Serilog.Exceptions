@@ -75,11 +75,11 @@
             if (destructuredObjects.ContainsKey(value))
             {
                 var id = destructuredObjects.Keys
-                    .Where(v => v == value)
-                    .Select((v, i) => i)
-                    .Single() + 1;
+                    .Select((v, i) => new { Value = v, Id = i + 1 })
+                    .First(v => v.Value == value)
+                    .Id;
 
-                destructuredObjects[value].Add("$id", id.ToString());
+                destructuredObjects[value]["$id"] = id.ToString();
 
                 return new Dictionary<string, object>
                 {

@@ -137,8 +137,7 @@
             var myObject = (Dictionary<string, object>)result["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
-            Assert.Equal("1", myObject["$id"]);
-            Assert.Equal("1", ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
         }
     }
 }
