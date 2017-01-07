@@ -1,6 +1,7 @@
 ﻿namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
+    using System.Collections.Generic;
     using Newtonsoft.Json.Linq;
     using Serilog.Exceptions.Destructurers;
     using Xunit;
@@ -104,6 +105,39 @@
         {
             var applicationException = new ArgumentException();
             Test_LoggedExceptionContainsProperty(applicationException, "Type", "System.ArgumentException");
+        }
+
+        public class MyObject
+        {
+            public string Foo { get; set; }
+
+            public MyObject Reference { get; set; }
+        }
+
+        public class CyclicException : Exception
+        {
+            public MyObject MyObject { get; set; }
+        }
+
+        [Fact]
+        public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
+        {
+            /// Arrange
+            var exception = new CyclicException();
+            exception.MyObject = new MyObject();
+            exception.MyObject.Foo = "bar";
+            exception.MyObject.Reference = exception.MyObject;
+
+            /// Act
+            var result = new Dictionary<string, object>();
+            var destructurer = new ReflectionBasedDestructurer();
+            destructurer.Destructure(exception, result, null);
+
+            ///// Assert
+            var myObject = (Dictionary<string, object>)result["MyObject"];
+
+            Assert.Equal("bar", myObject["Foo"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
         }
     }
 }
