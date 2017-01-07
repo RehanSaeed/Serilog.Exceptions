@@ -74,7 +74,7 @@
         {
             var values = valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.CanRead)
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
                 .ToDictionary(
                     x => x.Name,
                     x => this.DestructureValue(x.GetValue(value), level + 1));
