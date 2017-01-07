@@ -29,8 +29,10 @@ mono: latest
 env:
   # Set the DOTNET_SKIP_FIRST_TIME_EXPERIENCE environment variable to stop wasting time caching packages
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+  # Disable sending usage data to Microsoft
+  - DOTNET_CLI_TELEMETRY_OPTOUT=true
 
-# You must run the following command for Travis to be able to have permissions to execute the shell script below.
+# You must run the following command for Travis to be able to have permissions to execute the shell script below
 # git update-index --chmod=+x build.sh
 script:
   # Skip running tests due to tooling bug https://github.com/dotnet/cli/issues/3073

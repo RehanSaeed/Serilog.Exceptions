@@ -92,7 +92,7 @@
 
             var properties = valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.CanRead);
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0);
 
             foreach (var property in properties)
             {
