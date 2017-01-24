@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "buildOptions": {
@@ -16,15 +16,15 @@
         "System.Data": ""
       }
     },
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
-          "version": "1.0.0"
+          "version": "1.1.0"
         },
-        "NETStandard.Library": "1.6.0",
-        "System.Data.SqlClient": "4.1.0",
-        "System.Reflection.TypeExtensions": "4.1.0"
+        "NETStandard.Library": "1.6.1",
+        "System.Data.SqlClient": "4.3.0",
+        "System.Reflection.TypeExtensions": "4.3.0"
       }
     }
   }
