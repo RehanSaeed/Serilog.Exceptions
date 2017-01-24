@@ -96,7 +96,14 @@
 
             foreach (var property in properties)
             {
-                values.Add(property.Name, this.DestructureValue(property.GetValue(value), level + 1, destructuredObjects));
+                try
+                {
+                    values.Add(property.Name, this.DestructureValue(property.GetValue(value), level + 1, destructuredObjects));
+                }
+                catch (Exception exception)
+                {
+                    values.Add(property.Name, $"threw {exception.InnerException.GetType().FullName}: {exception.InnerException.Message}");
+                }
             }
 
             values.Add("Type", valueType);

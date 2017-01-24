@@ -107,18 +107,6 @@
             Test_LoggedExceptionContainsProperty(applicationException, "Type", "System.ArgumentException");
         }
 
-        public class MyObject
-        {
-            public string Foo { get; set; }
-
-            public MyObject Reference { get; set; }
-        }
-
-        public class CyclicException : Exception
-        {
-            public MyObject MyObject { get; set; }
-        }
-
         [Fact]
         public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
         {
@@ -138,6 +126,18 @@
 
             Assert.Equal("bar", myObject["Foo"]);
             Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
+        }
+
+        public class MyObject
+        {
+            public string Foo { get; set; }
+
+            public MyObject Reference { get; set; }
+        }
+
+        public class CyclicException : Exception
+        {
+            public MyObject MyObject { get; set; }
         }
     }
 }
