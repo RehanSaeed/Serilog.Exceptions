@@ -100,9 +100,13 @@
                 {
                     values.Add(property.Name, this.DestructureValue(property.GetValue(value), level + 1, destructuredObjects));
                 }
-                catch (Exception exception)
+                catch (TargetInvocationException targetInvocationException)
                 {
-                    values.Add(property.Name, $"threw {exception.InnerException.GetType().FullName}: {exception.InnerException.Message}");
+                    var innerException = targetInvocationException.InnerException;
+                    if (innerException != null)
+                    {
+                        values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
+                    }
                 }
             }
 
