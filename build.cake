@@ -1,5 +1,12 @@
-var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var target = Argument("Target", "Default");
+var configuration =
+    HasArgument("Configuration") ? Argument("Configuration") :
+    EnvironmentVariable("Configuration") != null ? EnvironmentVariable("Configuration") : "Release";
+var buildNumber =
+    HasArgument("BuildNumber") ? Argument<int>("BuildNumber") :
+    AppVeyor.IsRunningOnAppVeyor ? AppVeyor.Environment.Build.Number :
+    TravisCI.IsRunningOnTravisCI ? TravisCI.Environment.Build.BuildNumber :
+    EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) : 0;
 
 var artifactsDirectory = Directory("./Artifacts");
 
@@ -20,8 +27,7 @@ Task("Restore")
     .IsDependentOn("Restore")
     .Does(() =>
     {
-        var projects = GetFiles("./**/*.xproj");
-        foreach(var project in projects)
+        foreach(var project in GetFiles("./**/*.xproj"))
         {
             DotNetCoreBuild(
                 project.GetDirectory().FullPath,
@@ -36,8 +42,7 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var projects = GetFiles("./**/*.Test.xproj");
-        foreach(var project in projects)
+        foreach(var project in GetFiles("./**/*.Test.xproj"))
         {
             DotNetCoreTest(
                 project.GetDirectory().FullPath,
@@ -56,30 +61,18 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
     {
-        int buildNumber;
-        if (AppVeyor.IsRunningOnAppVeyor)
-        {
-            buildNumber = AppVeyor.Environment.Build.Number;
-        }
-        else if (TravisCI.IsRunningOnTravisCI)
-        {
-            buildNumber = TravisCI.Environment.Build.BuildNumber;
-        }
-        else
-        {
-            buildNumber = 1;
-        }
         var revision = buildNumber.ToString("D4");
-
-        var project = GetFiles("./**/Serilog.Exceptions.xproj").First();
-        DotNetCorePack(
-            project.GetDirectory().FullPath,
-            new DotNetCorePackSettings()
-            {
-                Configuration = configuration,
-                OutputDirectory = artifactsDirectory,
-                VersionSuffix = revision
-            });
+        foreach (var project in GetFiles("./Source/**/*.xproj"))
+        {
+			DotNetCorePack(
+				project.GetDirectory().FullPath,
+				new DotNetCorePackSettings()
+				{
+					Configuration = configuration,
+					OutputDirectory = artifactsDirectory,
+					VersionSuffix = revision
+				});
+		}
     });
 
 Task("Default")
