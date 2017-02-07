@@ -1,5 +1,5 @@
 {
-  "version": "2.3.0",
+  "version": "2.4.0",
   "title": "Serilog Exceptions",
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
   "authors": [ "Muhammad Rehan Saeed (RehanSaeed.com)" ],
@@ -15,7 +15,7 @@
       "type": "git",
       "url": "https://github.com/RehanSaeed/Serilog.Exceptions.git"
     },
-    "releaseNotes": "Updated to target Serilog 2.3.0.",
+    "releaseNotes": "Updated to target Serilog 2.4.0.",
     "requireLicenseAcceptance": true
   },
 
@@ -26,7 +26,7 @@
   },
 
   "dependencies": {
-    "Serilog": "2.3.0",
+    "Serilog": "2.4.0",
     "StyleCop.Analyzers": {
       "version": "1.0.0",
       "type": "build"
