@@ -67,7 +67,7 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
     {
-        foreach (var project in GetFiles("./Source/**/*.xproj"))
+        foreach (var project in GetFiles("./Source/**/Serilog.Exceptions.xproj"))
         {
 			bool isTag = AppVeyor.IsRunningOnAppVeyor && AppVeyor.Environment.Repository.Tag.IsTag;
 			var versionSuffix = isTag ? null : releaseStage + "-" + buildNumber.ToString("D4");
