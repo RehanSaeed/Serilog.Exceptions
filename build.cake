@@ -68,14 +68,14 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
     {
+		string versionSuffix = null;
+		if (!string.IsNullOrEmpty(releaseStage))
+		{
+			versionSuffix = releaseStage + "-" + buildNumber.ToString("D4");
+		}
+
         foreach (var project in GetFiles("./Source/**/Serilog.Exceptions.xproj"))
         {
-			string versionSuffix = null;
-			if (!string.IsNullOrEmpty(releaseStage))
-			{
-				versionSuffix = releaseStage + "-" + buildNumber.ToString("D4");
-			}
-
 			DotNetCorePack(
 				project.GetDirectory().FullPath,
 				new DotNetCorePackSettings()
