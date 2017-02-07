@@ -1,5 +1,5 @@
 {
-  "version": "2.4.0",
+  "version": "2.4.0-*",
   "title": "Serilog Exceptions",
   "description": "Log exception details and custom properties that are not output in Exception.ToString().",
   "authors": [ "Muhammad Rehan Saeed (RehanSaeed.com)" ],

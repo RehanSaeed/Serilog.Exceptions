@@ -5,6 +5,7 @@ var configuration =
 	"Release";
 var releaseStage =
     HasArgument("ReleaseStage") ? Argument<string>("ReleaseStage") :
+	(AppVeyor.IsRunningOnAppVeyor && AppVeyor.Environment.Repository.Tag.IsTag) ? null :
     EnvironmentVariable("ReleaseStage") != null ? EnvironmentVariable("ReleaseStage") :
 	"beta";
 var buildNumber =
@@ -69,8 +70,12 @@ Task("Pack")
     {
         foreach (var project in GetFiles("./Source/**/Serilog.Exceptions.xproj"))
         {
-			bool isTag = AppVeyor.IsRunningOnAppVeyor && AppVeyor.Environment.Repository.Tag.IsTag;
-			var versionSuffix = isTag ? null : releaseStage + "-" + buildNumber.ToString("D4");
+			string versionSuffix = null;
+			if (!string.IsNullOrEmpty(releaseStage))
+			{
+				versionSuffix = releaseStage + "-" + buildNumber.ToString("D4");
+			}
+
 			DotNetCorePack(
 				project.GetDirectory().FullPath,
 				new DotNetCorePackSettings()
