@@ -3,10 +3,10 @@ var configuration =
     HasArgument("Configuration") ? Argument<string>("Configuration") :
     EnvironmentVariable("Configuration") != null ? EnvironmentVariable("Configuration") :
 	"Release";
-var releaseStage =
-    HasArgument("ReleaseStage") ? Argument<string>("ReleaseStage") :
+var preReleaseSuffix =
+    HasArgument("PreReleaseSuffix") ? Argument<string>("PreReleaseSuffix") :
 	(AppVeyor.IsRunningOnAppVeyor && AppVeyor.Environment.Repository.Tag.IsTag) ? null :
-    EnvironmentVariable("ReleaseStage") != null ? EnvironmentVariable("ReleaseStage") :
+    EnvironmentVariable("PreReleaseSuffix") != null ? EnvironmentVariable("PreReleaseSuffix") :
 	"beta";
 var buildNumber =
     HasArgument("BuildNumber") ? Argument<int>("BuildNumber") :
@@ -71,7 +71,7 @@ Task("Pack")
 		string versionSuffix = null;
 		if (!string.IsNullOrEmpty(releaseStage))
 		{
-			versionSuffix = releaseStage + "-" + buildNumber.ToString("D4");
+			versionSuffix = preReleaseSuffix + "-" + buildNumber.ToString("D4");
 		}
 
         foreach (var project in GetFiles("./Source/**/Serilog.Exceptions.xproj"))
