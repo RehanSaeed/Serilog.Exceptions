@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76FBEEA2-0F88-487E-99C3-5D865CBE79B6}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,8 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
 		build.cake = build.cake
+		build.ps1 = build.ps1
+		build.sh = build.sh
 		CONTRIBUTING.md = CONTRIBUTING.md
-		global.json = global.json
 		MinimumRecommendedRulesWithStyleCop.ruleset = MinimumRecommendedRulesWithStyleCop.ruleset
 		README.md = README.md
 	EndProjectSection
@@ -19,11 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C55080
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6E871A8-2DFF-4676-BED8-046B164919B9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ExceptionFinderTool", "Source\ExceptionFinderTool\ExceptionFinderTool.xproj", "{4797AFC9-49E5-4FD5-AEDC-DA954D599507}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExceptionFinderTool", "Source\ExceptionFinderTool\ExceptionFinderTool.csproj", "{4797AFC9-49E5-4FD5-AEDC-DA954D599507}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Serilog.Exceptions", "Source\Serilog.Exceptions\Serilog.Exceptions.xproj", "{D8034654-4A6F-4857-9637-62098FC9267A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions", "Source\Serilog.Exceptions\Serilog.Exceptions.csproj", "{D8034654-4A6F-4857-9637-62098FC9267A}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Serilog.Exceptions.Test", "Tests\Serilog.Exceptions.Test\Serilog.Exceptions.Test.xproj", "{7C962929-2138-4787-ABA7-94E8D3F9C20C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Test", "Tests\Serilog.Exceptions.Test\Serilog.Exceptions.Test.csproj", "{7C962929-2138-4787-ABA7-94E8D3F9C20C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
