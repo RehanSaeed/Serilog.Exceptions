@@ -1,7 +1,8 @@
 <h1>
     <img src="https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png" alt="Serilog.Exceptions Logo" width="30px" height="30px" /> <a href="https://github.com/RehanSaeed/ASP.NET-MVC-Boilerplate">Serilog.Exceptions</a>
 </h1>
-Serilog.Exceptions is an add-on to [Serilog](http://serilog.net/) to log exception details and custom properties that are not output in Exception.ToString().
+
+Serilog.Exceptions is an add-on to [Serilog](https://serilog.net) to log exception details and custom properties that are not output in Exception.ToString().
 
 [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
 [![Travis CI Build Status](https://img.shields.io/travis/RehanSaeed/Serilog.Exceptions.svg?maxAge=3600&label=travis)](https://travis-ci.org/RehanSaeed/Serilog.Exceptions)
