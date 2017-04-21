@@ -118,5 +118,6 @@ Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Ex
 
 ## Special Thanks
 
+- [optical](https://github.com/optical) - For a huge VS 2017 upgrade PR.
 - [Jérémie Bertrand](https://github.com/laedit) - For making Serilog.Exceptions compatible with Mono.
 - [krajek](https://github.com/krajek) - For writing some much needed unit tests.
