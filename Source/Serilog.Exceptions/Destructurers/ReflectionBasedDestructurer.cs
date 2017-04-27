@@ -108,6 +108,9 @@
                         values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
                 }
+                catch (Exception exc) {
+                    values.Add(property.Name, $"$$threw {exc.GetType().FullName}: {exc.Message}");
+                }
             }
 
             values.Add("Type", valueType);
