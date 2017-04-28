@@ -108,9 +108,9 @@
                         values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
                 }
-                catch (Exception exc)
+                catch (Exception exception)
                 {
-                    values.Add(property.Name, $"$$threw {exc.GetType().FullName}: {exc.Message}");
+                    values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
                 }
             }
 
