@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
-    <VersionPrefix>2.4.0</VersionPrefix>
+    <VersionPrefix>2.4.1</VersionPrefix>
     <Authors>Muhammad Rehan Saeed (RehanSaeed.com)</Authors>
     <Product>Serilog Exceptions</Product>
     <Description>Log exception details and custom properties that are not output in Exception.ToString().</Description>
@@ -19,7 +19,7 @@
     <RepositoryUrl>https://github.com/RehanSaeed/Serilog.Exceptions.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Serilog;Exception;Log;Logging;Detail;Details</PackageTags>
-    <PackageReleaseNotes>Updated to target Serilog 2.4.0.</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed https://github.com/RehanSaeed/Serilog.Exceptions/issues/17 and https://github.com/RehanSaeed/Serilog.Exceptions/pull/20 </PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Label="Signing">

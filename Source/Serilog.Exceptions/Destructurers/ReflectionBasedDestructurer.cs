@@ -54,9 +54,8 @@
             if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
                 return ((IDictionary)value)
-                    .Cast<DictionaryEntry>()
-                    .Where(e => e.Key is string)
-                    .ToDictionary(e => (string)e.Key, e => this.DestructureValue(e.Value, level + 1, destructuredObjects));
+                    .ToStringObjectDictionary()
+                    .ToDictionary(e => e.Key, e => this.DestructureValue(e.Value, level + 1, destructuredObjects));
             }
 
             if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(valueTypeInfo))

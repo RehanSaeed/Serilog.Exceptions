@@ -195,12 +195,7 @@
 
             if (exception.Data.Count != 0)
             {
-                data.Add(
-                    nameof(Exception.Data),
-                    exception.Data
-                        .Cast<DictionaryEntry>()
-                        .Where(k => k.Key is string)
-                        .ToDictionary(e => (string)e.Key, e => e.Value));
+                data.Add(nameof(Exception.Data), exception.Data.ToStringObjectDictionary());
             }
 
             if (!string.IsNullOrEmpty(exception.HelpLink))
