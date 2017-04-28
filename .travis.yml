@@ -22,7 +22,7 @@ addons:
 osx_image: xcode7.2
 
 # Ensure that .NET Core is installed
-dotnet: 1.0.0-preview2-003121
+dotnet: 1.0.1
 # Ensure Mono is installed
 mono: latest
 
@@ -35,5 +35,5 @@ env:
 # You must run the following command for Travis to be able to have permissions to execute the shell script below
 # git update-index --chmod=+x build.sh
 script:
-  # Skip running tests due to tooling bug https://github.com/dotnet/cli/issues/3073
-  - ./build.sh --target Build
+  # Skip running pack since we cannot build full framework targets on non-windows platform
+  - ./build.sh --target Test
