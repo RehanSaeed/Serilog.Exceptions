@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 var target = Argument("Target", "Default");
@@ -49,13 +49,14 @@ Task("Restore")
     .IsDependentOn("Restore")
     .Does(() =>
     {
-        foreach(var project in GetFiles("./**/*.csproj"))
+        foreach(var project in GetFiles("./Tests/**/*.csproj"))
         {
-            Information(project.ToString());
-            var settings = new DotNetCoreBuildSettings()
-            {
-                Configuration = configuration
-            };
+            var outputFilePath = MakeAbsolute(artifactsDirectory.Path)
+                .CombineWithFilePath(project.GetFilenameWithoutExtension());
+            var arguments = new ProcessArgumentBuilder()
+                .AppendSwitch("-configuration", configuration)
+                .AppendSwitchQuoted("-xml", outputFilePath.AppendExtension(".xml").ToString())
+                .AppendSwitchQuoted("-html", outputFilePath.AppendExtension(".html").ToString());
 
             if (!IsRunningOnWindows())
             {
@@ -68,13 +69,11 @@ Task("Restore")
                 else
                 {
                     Information("Skipping .NET Framework, building " + frameworks.First());
-                    settings.Framework = frameworks.First();
+                    arguments.AppendSwitch("-framework", frameworks.First());
                 }
             }
 
-            DotNetCoreBuild(
-                project.GetDirectory().FullPath,
-                settings);
+            DotNetCoreTool(project, "xunit", arguments);
         }
     });
 
