@@ -60,6 +60,16 @@
 
             if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
+                if (destructuredObjects.ContainsKey(value))
+                {
+                    return new Dictionary<string, object>
+                    {
+                        { "$ref", "cyclic ref" }
+                    };
+                }
+
+                destructuredObjects.Add(value, new Dictionary<string, object>());
+
                 return ((IEnumerable)value)
                     .Cast<object>()
                     .Select(o => this.DestructureValue(o, level + 1, destructuredObjects))

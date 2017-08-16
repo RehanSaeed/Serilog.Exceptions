@@ -1,4 +1,7 @@
-﻿namespace Serilog.Exceptions.Test.Destructurers
+﻿using System.Collections;
+using System.Linq;
+
+namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -110,22 +113,51 @@
         [Fact]
         public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
         {
-            /// Arrange
+            // Arrange
             var exception = new CyclicException();
             exception.MyObject = new MyObject();
             exception.MyObject.Foo = "bar";
             exception.MyObject.Reference = exception.MyObject;
 
-            /// Act
+            // Act
             var result = new Dictionary<string, object>();
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
-            ///// Assert
+            // Assert
             var myObject = (Dictionary<string, object>)result["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
             Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
+        }
+
+        [Fact]
+        public void When_object_contains_cyclic_references_in_list_then_recursive_destructure_is_immediately_stopped()
+        {
+            // Arrange
+            var cyclic = new MyObject2();
+            cyclic.Foo = "Cyclic";
+            cyclic.Reference = cyclic;
+
+            var exception = new CyclicException2();
+            exception.MyObject2 = new MyObject2();
+            exception.MyObject2.Foo = "bar";
+            exception.MyObject2.Reference = cyclic;
+
+            // Act
+            var result = new Dictionary<string, object>();
+            var destructurer = new ReflectionBasedDestructurer();
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (List<object>)result["MyObject2"];
+
+            // exception.MyObject2[0] is still list
+            var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
+
+            // exception.MyObject2[0][0] we notice that we would again destructure "cyclic"
+            var secondLevelList = Assert.IsType<Dictionary<string, object>>(firstLevelList[0]);
+            Assert.Equal("cyclic ref", secondLevelList["$ref"]);
         }
 
         public class MyObject
@@ -138,6 +170,29 @@
         public class CyclicException : Exception
         {
             public MyObject MyObject { get; set; }
+        }
+
+        public class MyObject2 : IEnumerable<MyObject2>
+        {
+            public string Foo { get; set; }
+
+            public MyObject2 Reference { get; set; }
+
+            public IEnumerator<MyObject2> GetEnumerator()
+            {
+                var myObjects = new List<MyObject2> { this.Reference };
+                return myObjects.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        public class CyclicException2 : Exception
+        {
+            public MyObject2 MyObject2 { get; set; }
         }
     }
 }
