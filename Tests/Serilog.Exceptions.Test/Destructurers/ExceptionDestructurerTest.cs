@@ -160,6 +160,36 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal("cyclic ref", secondLevelList["$ref"]);
         }
 
+        [Fact]
+        public void When_object_contains_cyclic_references_in_dict_then_recursive_destructure_is_immediately_stopped()
+        {
+            // Arrange
+            var cyclic = new MyObjectDict();
+            cyclic.Foo = "Cyclic";
+            cyclic.Reference = new Dictionary<string, object>();
+            cyclic.Reference["x"] = cyclic.Reference;
+        
+            var exception = new CyclicExceptionDict();
+            exception.MyObjectDict = cyclic;
+
+            // Act
+            var result = new Dictionary<string, object>();
+            var destructurer = new ReflectionBasedDestructurer();
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (Dictionary<string, object>)result["MyObjectDict"];
+
+            // exception.MyObjectDict is still regular dictionary
+            var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
+
+            var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
+
+            var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
+            var id = firstLevelDict["$id"];
+            Assert.Equal(id, refId);
+        }
+
         public class MyObject
         {
             public string Foo { get; set; }
@@ -193,6 +223,18 @@ namespace Serilog.Exceptions.Test.Destructurers
         public class CyclicException2 : Exception
         {
             public MyObject2 MyObject2 { get; set; }
+        }
+
+        public class CyclicExceptionDict : Exception
+        {
+            public MyObjectDict MyObjectDict { get; set; }
+        }
+
+        public class MyObjectDict
+        {
+            public string Foo { get; set; }
+
+            public Dictionary<string, object> Reference { get; set; }
         }
     }
 }

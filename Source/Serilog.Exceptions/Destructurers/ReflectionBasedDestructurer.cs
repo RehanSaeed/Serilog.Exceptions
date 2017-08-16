@@ -53,9 +53,30 @@
 
             if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
-                return ((IDictionary)value)
-                    .ToStringObjectDictionary()
-                    .ToDictionary(e => e.Key, e => this.DestructureValue(e.Value, level + 1, destructuredObjects));
+                if (destructuredObjects.ContainsKey(value))
+                {
+                    var id = destructuredObjects.Keys
+                        .Select((v, i) => new { Value = v, Id = i + 1 })
+                        .First(v => v.Value == value)
+                        .Id;
+
+                    destructuredObjects[value]["$id"] = id.ToString();
+
+                    return new Dictionary<string, object>
+                    {
+                        { "$ref", id.ToString() }
+                    };
+                }
+
+                var destructuredDictionary = ((IDictionary)value).ToStringObjectDictionary();
+                destructuredObjects.Add(value, destructuredDictionary);
+
+                foreach (var kvp in destructuredDictionary.ToDictionary(k => k.Key, v => v.Value))
+                {
+                    destructuredDictionary[kvp.Key] = this.DestructureValue(kvp.Value, level + 1, destructuredObjects);
+                }
+
+                return destructuredDictionary;
             }
 
             if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
