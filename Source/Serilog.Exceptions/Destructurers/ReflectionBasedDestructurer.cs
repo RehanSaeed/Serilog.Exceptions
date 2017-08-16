@@ -8,6 +8,8 @@
 
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
+        private const string IdLabel = "$id";
+        private const string RefLabel = "$ref";
         private const int MaxRecursiveLevel = 10;
 
         public Type[] TargetTypes
@@ -25,6 +27,24 @@
             {
                 data.Add(p.Key, p.Value);
             }
+        }
+
+        private static string GetOrGenerateRefId(ref int nextCyclicRefId, IDictionary<string, object> destructuredObject)
+        {
+            string refId;
+            if (destructuredObject.ContainsKey(IdLabel))
+            {
+                refId = (string)destructuredObject[IdLabel];
+            }
+            else
+            {
+                var id = nextCyclicRefId;
+                nextCyclicRefId++;
+                refId = id.ToString();
+                destructuredObject[IdLabel] = refId;
+            }
+
+            return refId;
         }
 
         private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
@@ -54,66 +74,73 @@
 
             if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
-                if (destructuredObjects.ContainsKey(value))
-                {
-                    var id = nextCyclicRefId;
-                    nextCyclicRefId++;
-
-                    destructuredObjects[value]["$id"] = id.ToString();
-
-                    return new Dictionary<string, object>
-                    {
-                        { "$ref", id.ToString() }
-                    };
-                }
-
-                var destructuredDictionary = ((IDictionary)value).ToStringObjectDictionary();
-                destructuredObjects.Add(value, destructuredDictionary);
-
-                foreach (var kvp in destructuredDictionary.ToDictionary(k => k.Key, v => v.Value))
-                {
-                    destructuredDictionary[kvp.Key] = this.DestructureValue(kvp.Value, level + 1, destructuredObjects, ref nextCyclicRefId);
-                }
-
-                return destructuredDictionary;
+                return this.DestructureValueDictionary(value, level, destructuredObjects, ref nextCyclicRefId);
             }
 
             if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
-                if (destructuredObjects.ContainsKey(value))
-                {
-                    return new Dictionary<string, object>
-                    {
-                        { "$ref", "cyclic ref" }
-                    };
-                }
-
-                destructuredObjects.Add(value, new Dictionary<string, object>());
-
-                var resultList = new List<object>();
-                foreach (var o in ((IEnumerable)value).Cast<object>())
-                {
-                    resultList.Add(this.DestructureValue(o, level + 1, destructuredObjects, ref nextCyclicRefId));
-                }
-
-                return resultList;
+                return this.DestructureValueEnumerable(value, level, destructuredObjects, ref nextCyclicRefId);
             }
 
             return this.DestructureObject(value, valueType, level, destructuredObjects, ref nextCyclicRefId);
+        }
+
+        private object DestructureValueEnumerable(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        {
+            if (destructuredObjects.ContainsKey(value))
+            {
+                return new Dictionary<string, object>
+                {
+                    { RefLabel, "cyclic ref" }
+                };
+            }
+
+            destructuredObjects.Add(value, new Dictionary<string, object>());
+
+            var resultList = new List<object>();
+            foreach (var o in ((IEnumerable)value).Cast<object>())
+            {
+                resultList.Add(this.DestructureValue(o, level + 1, destructuredObjects, ref nextCyclicRefId));
+            }
+
+            return resultList;
+        }
+
+        private object DestructureValueDictionary(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        {
+            if (destructuredObjects.ContainsKey(value))
+            {
+                IDictionary<string, object> destructuredObject = destructuredObjects[value];
+                var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
+
+                return new Dictionary<string, object>
+                {
+                    { RefLabel, refId }
+                };
+            }
+
+            var destructuredDictionary = ((IDictionary)value).ToStringObjectDictionary();
+            destructuredObjects.Add(value, destructuredDictionary);
+
+            foreach (var kvp in destructuredDictionary.ToDictionary(k => k.Key, v => v.Value))
+            {
+                destructuredDictionary[kvp.Key] =
+                    this.DestructureValue(kvp.Value, level + 1, destructuredObjects, ref nextCyclicRefId);
+            }
+
+            return destructuredDictionary;
         }
 
         private IDictionary<string, object> DestructureObject(object value, Type valueType, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
-                var id = nextCyclicRefId;
-                nextCyclicRefId++;
-
-                destructuredObjects[value]["$id"] = id.ToString();
+                IDictionary<string, object> destructuredObject = destructuredObjects[value];
+                var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
                 return new Dictionary<string, object>
                 {
-                    { "$ref", id.ToString() }
+                    { RefLabel, refId }
                 };
             }
 
