@@ -20,13 +20,14 @@
             IDictionary<string, object> data,
             Func<Exception, IDictionary<string, object>> destructureException)
         {
-            foreach (var p in this.DestructureObject(exception, exception.GetType(), 0, new Dictionary<object, IDictionary<string, object>>()))
+            int nextCyclicRefId = 1;
+            foreach (var p in this.DestructureObject(exception, exception.GetType(), 0, new Dictionary<object, IDictionary<string, object>>(), ref nextCyclicRefId))
             {
                 data.Add(p.Key, p.Value);
             }
         }
 
-        private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects)
+        private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
         {
             if (value == null)
             {
@@ -55,10 +56,8 @@
             {
                 if (destructuredObjects.ContainsKey(value))
                 {
-                    var id = destructuredObjects.Keys
-                        .Select((v, i) => new { Value = v, Id = i + 1 })
-                        .First(v => v.Value == value)
-                        .Id;
+                    var id = nextCyclicRefId;
+                    nextCyclicRefId++;
 
                     destructuredObjects[value]["$id"] = id.ToString();
 
@@ -73,7 +72,7 @@
 
                 foreach (var kvp in destructuredDictionary.ToDictionary(k => k.Key, v => v.Value))
                 {
-                    destructuredDictionary[kvp.Key] = this.DestructureValue(kvp.Value, level + 1, destructuredObjects);
+                    destructuredDictionary[kvp.Key] = this.DestructureValue(kvp.Value, level + 1, destructuredObjects, ref nextCyclicRefId);
                 }
 
                 return destructuredDictionary;
@@ -91,23 +90,24 @@
 
                 destructuredObjects.Add(value, new Dictionary<string, object>());
 
-                return ((IEnumerable)value)
-                    .Cast<object>()
-                    .Select(o => this.DestructureValue(o, level + 1, destructuredObjects))
-                    .ToList();
+                var resultList = new List<object>();
+                foreach (var o in ((IEnumerable)value).Cast<object>())
+                {
+                    resultList.Add(this.DestructureValue(o, level + 1, destructuredObjects, ref nextCyclicRefId));
+                }
+
+                return resultList;
             }
 
-            return this.DestructureObject(value, valueType, level, destructuredObjects);
+            return this.DestructureObject(value, valueType, level, destructuredObjects, ref nextCyclicRefId);
         }
 
-        private IDictionary<string, object> DestructureObject(object value, Type valueType, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects)
+        private IDictionary<string, object> DestructureObject(object value, Type valueType, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
-                var id = destructuredObjects.Keys
-                    .Select((v, i) => new { Value = v, Id = i + 1 })
-                    .First(v => v.Value == value)
-                    .Id;
+                var id = nextCyclicRefId;
+                nextCyclicRefId++;
 
                 destructuredObjects[value]["$id"] = id.ToString();
 
@@ -128,7 +128,7 @@
             {
                 try
                 {
-                    values.Add(property.Name, this.DestructureValue(property.GetValue(value), level + 1, destructuredObjects));
+                    values.Add(property.Name, this.DestructureValue(property.GetValue(value), level + 1, destructuredObjects, ref nextCyclicRefId));
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {

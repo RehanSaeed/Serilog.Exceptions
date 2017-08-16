@@ -180,13 +180,14 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Assert
             var myObject = (Dictionary<string, object>)result["MyObjectDict"];
 
-            // exception.MyObjectDict is still regular dictionary
+            // exception.MyObjectDict["Reference"] is still regular dictionary
             var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
-
-            var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
-
-            var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
             var id = firstLevelDict["$id"];
+            Assert.Equal("1", id);
+
+            // exception.MyObjectDict["Reference"]["x"] we notice that we are destructuring same dictionary
+            var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
+            var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
             Assert.Equal(id, refId);
         }
 
