@@ -1,6 +1,7 @@
-﻿namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using Newtonsoft.Json.Linq;
     using Serilog.Exceptions.Destructurers;
@@ -110,22 +111,85 @@
         [Fact]
         public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
         {
-            /// Arrange
+            // Arrange
             var exception = new CyclicException();
             exception.MyObject = new MyObject();
             exception.MyObject.Foo = "bar";
             exception.MyObject.Reference = exception.MyObject;
+            exception.MyObject.Reference2 = exception.MyObject;
 
-            /// Act
+            // Act
             var result = new Dictionary<string, object>();
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
-            ///// Assert
+            // Assert
             var myObject = (Dictionary<string, object>)result["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
             Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference2"])["$ref"]);
+            Assert.Equal("1", myObject["$id"]);
+        }
+
+        [Fact]
+        public void When_object_contains_cyclic_references_in_list_then_recursive_destructure_is_immediately_stopped()
+        {
+            // Arrange
+            var cyclic = new MyObjectEnumerable();
+            cyclic.Foo = "Cyclic";
+            cyclic.Reference = cyclic;
+
+            var exception = new CyclicException2();
+            exception.MyObjectEnumerable = new MyObjectEnumerable();
+            exception.MyObjectEnumerable.Foo = "bar";
+            exception.MyObjectEnumerable.Reference = cyclic;
+
+            // Act
+            var result = new Dictionary<string, object>();
+            var destructurer = new ReflectionBasedDestructurer();
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (List<object>)result["MyObjectEnumerable"];
+
+            // exception.MyObjectEnumerable[0] is still list
+            var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
+
+            // exception.MyObjectEnumerable[0][0] we notice that we would again destructure "cyclic"
+            var secondLevelList = Assert.IsType<Dictionary<string, object>>(firstLevelList[0]);
+            Assert.Equal("cyclic ref", secondLevelList["$ref"]);
+        }
+
+        [Fact]
+        public void When_object_contains_cyclic_references_in_dict_then_recursive_destructure_is_immediately_stopped()
+        {
+            // Arrange
+            var cyclic = new MyObjectDict();
+            cyclic.Foo = "Cyclic";
+            cyclic.Reference = new Dictionary<string, object>();
+            cyclic.Reference["x"] = cyclic.Reference;
+
+            var exception = new CyclicExceptionDict();
+            exception.MyObjectDict = cyclic;
+
+            // Act
+            var result = new Dictionary<string, object>();
+            var destructurer = new ReflectionBasedDestructurer();
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (Dictionary<string, object>)result["MyObjectDict"];
+
+            // exception.MyObjectDict["Reference"] is still regular dictionary
+            var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
+            var id = firstLevelDict["$id"];
+            Assert.Equal("1", id);
+
+            // exception.MyObjectDict["Reference"]["x"] we notice that we are destructuring same dictionary
+            var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
+            var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
+            Assert.Equal(id, refId);
         }
 
         public class MyObject
@@ -133,11 +197,48 @@
             public string Foo { get; set; }
 
             public MyObject Reference { get; set; }
+
+            public MyObject Reference2 { get; set; }
         }
 
         public class CyclicException : Exception
         {
             public MyObject MyObject { get; set; }
+        }
+
+        public class MyObjectEnumerable : IEnumerable<MyObjectEnumerable>
+        {
+            public string Foo { get; set; }
+
+            public MyObjectEnumerable Reference { get; set; }
+
+            public IEnumerator<MyObjectEnumerable> GetEnumerator()
+            {
+                var myObjects = new List<MyObjectEnumerable> { this.Reference };
+                return myObjects.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        public class CyclicException2 : Exception
+        {
+            public MyObjectEnumerable MyObjectEnumerable { get; set; }
+        }
+
+        public class CyclicExceptionDict : Exception
+        {
+            public MyObjectDict MyObjectDict { get; set; }
+        }
+
+        public class MyObjectDict
+        {
+            public string Foo { get; set; }
+
+            public Dictionary<string, object> Reference { get; set; }
         }
     }
 }
