@@ -163,7 +163,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // exception.MyObjectEnumerable[0][0] we notice that we would again destructure "cyclic"
             var secondLevelList = Assert.IsType<Dictionary<string, object>>(firstLevelList[0]);
-            Assert.Equal("cyclic ref", secondLevelList["$ref"]);
+            Assert.Equal("Cyclic reference", secondLevelList["$ref"]);
         }
 
         [Fact]
