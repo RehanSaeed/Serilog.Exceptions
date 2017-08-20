@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Linq;
-
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using Newtonsoft.Json.Linq;
     using Serilog.Exceptions.Destructurers;
@@ -171,7 +169,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             cyclic.Foo = "Cyclic";
             cyclic.Reference = new Dictionary<string, object>();
             cyclic.Reference["x"] = cyclic.Reference;
-        
+
             var exception = new CyclicExceptionDict();
             exception.MyObjectDict = cyclic;
 

@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections;
@@ -10,20 +10,23 @@
     {
         private const string IdLabel = "$id";
         private const string RefLabel = "$ref";
+        private const string CyclicReferenceMessage = "Cyclic reference";
         private const int MaxRecursiveLevel = 10;
 
-        public Type[] TargetTypes
-        {
-            get { return new Type[] { typeof(Exception) }; }
-        }
+        public Type[] TargetTypes => new Type[] { typeof(Exception) };
 
         public void Destructure(
             Exception exception,
             IDictionary<string, object> data,
             Func<Exception, IDictionary<string, object>> destructureException)
         {
-            int nextCyclicRefId = 1;
-            foreach (var p in this.DestructureObject(exception, exception.GetType(), 0, new Dictionary<object, IDictionary<string, object>>(), ref nextCyclicRefId))
+            var nextCyclicRefId = 1;
+            foreach (var p in this.DestructureObject(
+                exception,
+                exception.GetType(),
+                0,
+                new Dictionary<object, IDictionary<string, object>>(),
+                ref nextCyclicRefId))
             {
                 data.Add(p.Key, p.Value);
             }
@@ -91,7 +94,7 @@
             {
                 return new Dictionary<string, object>
                 {
-                    { RefLabel, "cyclic ref" }
+                    { RefLabel, CyclicReferenceMessage }
                 };
             }
 
@@ -131,14 +134,19 @@
             return destructuredDictionary;
         }
 
-        private IDictionary<string, object> DestructureObject(object value, Type valueType, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private IDictionary<string, object> DestructureObject(
+            object value,
+            Type valueType,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
-                IDictionary<string, object> destructuredObject = destructuredObjects[value];
+                var destructuredObject = destructuredObjects[value];
                 var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
-                return new Dictionary<string, object>
+                return new Dictionary<string, object>()
                 {
                     { RefLabel, refId }
                 };
@@ -155,7 +163,11 @@
             {
                 try
                 {
-                    values.Add(property.Name, this.DestructureValue(property.GetValue(value), level + 1, destructuredObjects, ref nextCyclicRefId));
+                    values.Add(property.Name, this.DestructureValue(
+                        property.GetValue(value),
+                        level + 1,
+                        destructuredObjects,
+                        ref nextCyclicRefId));
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {
