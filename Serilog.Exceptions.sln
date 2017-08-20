@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76FBEEA2-0F88-487E-99C3-5D865CBE79B6}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,9 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build.cake = build.cake
 		build.ps1 = build.ps1
 		build.sh = build.sh
-		CONTRIBUTING.md = CONTRIBUTING.md
 		MinimumRecommendedRulesWithStyleCop.ruleset = MinimumRecommendedRulesWithStyleCop.ruleset
-		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C5508012-7216-4ABE-AB2F-B166ED5FF94F}"
@@ -25,6 +23,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions", "Source\Serilog.Exceptions\Serilog.Exceptions.csproj", "{D8034654-4A6F-4857-9637-62098FC9267A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Test", "Tests\Serilog.Exceptions.Test\Serilog.Exceptions.Test.csproj", "{7C962929-2138-4787-ABA7-94E8D3F9C20C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{D2CAFFAF-CBF6-493A-AA61-4916FE7D586C}"
+	ProjectSection(SolutionItems) = preProject
+		CONTRIBUTING.md = CONTRIBUTING.md
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,5 +57,8 @@ Global
 		{4797AFC9-49E5-4FD5-AEDC-DA954D599507} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{D8034654-4A6F-4857-9637-62098FC9267A} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{7C962929-2138-4787-ABA7-94E8D3F9C20C} = {D6E871A8-2DFF-4676-BED8-046B164919B9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}
 	EndGlobalSection
 EndGlobal

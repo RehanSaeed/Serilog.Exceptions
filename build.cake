@@ -19,23 +19,18 @@ var buildNumber =
     0;
 
 var artifactsDirectory = Directory("./Artifacts");
-
-IList<string> GetCoreFrameworks(string csprojFilePath)
+string versionSuffix = null;
+if (!string.IsNullOrEmpty(preReleaseSuffix))
 {
-    return XDocument
-        .Load(csprojFilePath)
-        .Descendants("TargetFrameworks")
-        .First()
-        .Value
-        .Split(';')
-        .Where(x => Regex.IsMatch(x, @"net[^\d]"))
-        .ToList();
+    versionSuffix = preReleaseSuffix + "-" + buildNumber.ToString("D4");
 }
 
 Task("Clean")
     .Does(() =>
     {
         CleanDirectory(artifactsDirectory);
+        DeleteDirectories(GetDirectories("**/bin"), true);
+        DeleteDirectories(GetDirectories("**/obj"), true);
     });
 
 Task("Restore")
@@ -49,69 +44,29 @@ Task("Restore")
     .IsDependentOn("Restore")
     .Does(() =>
     {
-        foreach(var project in GetFiles("./**/*.csproj"))
-        {
-            Information(project.ToString());
-            var settings = new DotNetCoreBuildSettings()
+        DotNetCoreBuild(
+            ".",
+            new DotNetCoreBuildSettings()
             {
-                Configuration = configuration
-            };
-
-            if (!IsRunningOnWindows())
-            {
-                var frameworks = GetCoreFrameworks(project.ToString());
-                if (frameworks.Count == 0)
-                {
-                    Information("Skipping .NET Framework only project " + project.ToString());
-                    continue;
-                }
-                else
-                {
-                    Information("Skipping .NET Framework, building " + frameworks.First());
-                    settings.Framework = frameworks.First();
-                }
-            }
-
-            DotNetCoreBuild(
-                project.GetDirectory().FullPath,
-                settings);
-        }
+                Configuration = configuration,
+                VersionSuffix = versionSuffix
+            });
     });
 
 Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        foreach(var project in GetFiles("./**/*.Test.csproj"))
+        foreach(var project in GetFiles("./Tests/**/*Test.csproj"))
         {
-            var absoluteXmlPath = MakeAbsolute(artifactsDirectory.Path.CombineWithFilePath(project.GetFilenameWithoutExtension())).FullPath + ".xml";
-            var settings = new DotNetCoreTestSettings()
-                {
-                    ArgumentCustomization = args => args
-                        .Append("--test-adapter-path:.")
-                        .Append("--logger:xunit;LogFilePath=" + absoluteXmlPath),
-                    Configuration = configuration,
-                    NoBuild = true
-                };
-
-            if (!IsRunningOnWindows())
-            {
-                var frameworks = GetCoreFrameworks(project.ToString());
-                if (frameworks.Count == 0)
-                {
-                    Information("Skipping .NET Framework only project " + project.ToString());
-                    continue;
-                }
-                else
-                {
-                    Information("Skipping .NET Framework, building " + frameworks.First());
-                    settings.Framework = frameworks.First();
-                }
-            }
-
-            DotNetCoreTest(
-                project.ToString(),
-                settings);
+            var outputFilePath = MakeAbsolute(artifactsDirectory.Path).CombineWithFilePath(project.GetFilenameWithoutExtension());
+            DotNetCoreTool(
+                project,
+                "xunit",
+                new ProcessArgumentBuilder()
+                    .AppendSwitch("-configuration", configuration)
+                    .AppendSwitchQuoted("-xml", outputFilePath.AppendExtension(".xml").ToString())
+                    .AppendSwitchQuoted("-html", outputFilePath.AppendExtension(".html").ToString()));
         }
     });
 
@@ -119,12 +74,6 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
     {
-        string versionSuffix = null;
-        if (!string.IsNullOrEmpty(preReleaseSuffix))
-        {
-            versionSuffix = preReleaseSuffix + "-" + buildNumber.ToString("D4");
-        }
-
         foreach (var project in GetFiles("./Source/**/Serilog.Exceptions.csproj"))
         {
             DotNetCorePack(

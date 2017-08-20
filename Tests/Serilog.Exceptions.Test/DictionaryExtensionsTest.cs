@@ -18,7 +18,7 @@
 
             var actual = dictionary.ToStringObjectDictionary();
 
-            Assert.Equal(1, actual.Count);
+            Assert.Single(actual);
             Assert.Equal("Key", actual.First().Key);
             Assert.Equal("Value", actual.First().Value);
         }
@@ -33,7 +33,7 @@
 
             var actual = dictionary.ToStringObjectDictionary();
 
-            Assert.Equal(1, actual.Count);
+            Assert.Single(actual);
             Assert.Equal("Key", actual.First().Key);
             Assert.Equal("Value", actual.First().Value);
         }

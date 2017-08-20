@@ -40,7 +40,7 @@
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty"));
             Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
             var data = Assert.IsType<Dictionary<string, object>>(properties[nameof(TestException.Data)]);
-            Assert.Equal(0, data.Count);
+            Assert.Empty(data);
             Assert.Null(properties[nameof(TestException.InnerException)]);
 #if NET461
             Assert.StartsWith("Void Destructure_(", properties[nameof(TestException.TargetSite)].ToString());
