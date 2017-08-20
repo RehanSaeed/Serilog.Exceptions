@@ -112,8 +112,10 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
         {
             // Arrange
-            var exception = new CyclicException();
-            exception.MyObject = new MyObject();
+            var exception = new CyclicException
+            {
+                MyObject = new MyObject()
+            };
             exception.MyObject.Foo = "bar";
             exception.MyObject.Reference = exception.MyObject;
             exception.MyObject.Reference2 = exception.MyObject;
@@ -136,12 +138,15 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void When_object_contains_cyclic_references_in_list_then_recursive_destructure_is_immediately_stopped()
         {
             // Arrange
-            var cyclic = new MyObjectEnumerable();
-            cyclic.Foo = "Cyclic";
+            var cyclic = new MyObjectEnumerable
+            {
+                Foo = "Cyclic"
+            };
             cyclic.Reference = cyclic;
-
-            var exception = new CyclicException2();
-            exception.MyObjectEnumerable = new MyObjectEnumerable();
+            var exception = new CyclicException2
+            {
+                MyObjectEnumerable = new MyObjectEnumerable()
+            };
             exception.MyObjectEnumerable.Foo = "bar";
             exception.MyObjectEnumerable.Reference = cyclic;
 
@@ -165,13 +170,16 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void When_object_contains_cyclic_references_in_dict_then_recursive_destructure_is_immediately_stopped()
         {
             // Arrange
-            var cyclic = new MyObjectDict();
-            cyclic.Foo = "Cyclic";
-            cyclic.Reference = new Dictionary<string, object>();
+            var cyclic = new MyObjectDict
+            {
+                Foo = "Cyclic",
+                Reference = new Dictionary<string, object>()
+            };
             cyclic.Reference["x"] = cyclic.Reference;
-
-            var exception = new CyclicExceptionDict();
-            exception.MyObjectDict = cyclic;
+            var exception = new CyclicExceptionDict
+            {
+                MyObjectDict = cyclic
+            };
 
             // Act
             var result = new Dictionary<string, object>();
