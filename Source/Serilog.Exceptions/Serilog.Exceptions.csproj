@@ -3,6 +3,7 @@
   <PropertyGroup Label="Build">
     <TargetFrameworks>netstandard1.6;netstandard1.3;net45</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
+    <!--TODO: Add <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
