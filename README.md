@@ -118,6 +118,7 @@ Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Ex
 
 ## Special Thanks
 
+- [krajek](https://github.com/krajek) - For helping with cyclic dependencies when using the reflection destructurer.
 - [mraming](https://github.com/mraming) - For logging properties that throw exceptions.
 - [optical](https://github.com/optical) - For a huge VS 2017 upgrade PR.
 - [Jérémie Bertrand](https://github.com/laedit) - For making Serilog.Exceptions compatible with Mono.
