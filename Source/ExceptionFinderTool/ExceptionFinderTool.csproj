@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" PrivateAssets="All" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.0-beta004" />
   </ItemGroup>
 
   <ItemGroup Label="Package References (NetCoreApp 1.0)" Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
