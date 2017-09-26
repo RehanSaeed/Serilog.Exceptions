@@ -11,5 +11,5 @@ jobs:
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
-      - checkout
-      - run: ./build.sh --target Test
+      - checkout
+      - run: ./build.sh --target Test
