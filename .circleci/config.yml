@@ -4,7 +4,7 @@ version: 2.0
 
 jobs:
   build:
-    working_directory: ~/app
+    working_directory: ~/build
     docker:
       - image: microsoft/dotnet:2.0.0-sdk
     environment:
