@@ -1,0 +1,18 @@
+version: 2.0
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: microsoft/dotnet:2.0.0
+    environment:
+      # Set the DOTNET_SKIP_FIRST_TIME_EXPERIENCE environment variable to stop wasting time caching packages
+      - DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      # Disable sending usage data to Microsoft
+      - DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - checkout
+      # You must run the following command for Travis to be able to have permissions to execute the shell script below
+      # git update-index --chmod=+x build.sh
+      # Skip running pack since we cannot build full framework targets on non-windows platform
+      - run: ./build.sh --target Test
