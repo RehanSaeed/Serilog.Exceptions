@@ -1,6 +1,3 @@
-﻿using System.Text.RegularExpressions;
-using System.Xml.Linq;
-
 var target = Argument("Target", "Default");
 var configuration =
     HasArgument("Configuration") ? Argument<string>("Configuration") :
@@ -59,7 +56,8 @@ Task("Test")
     {
         foreach(var project in GetFiles("./Tests/**/*Test.csproj"))
         {
-            var outputFilePath = MakeAbsolute(artifactsDirectory.Path).CombineWithFilePath(project.GetFilenameWithoutExtension());
+            var outputFilePath = MakeAbsolute(artifactsDirectory.Path)
+                .CombineWithFilePath(project.GetFilenameWithoutExtension());
             DotNetCoreTool(
                 project,
                 "xunit",
@@ -74,17 +72,14 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does(() =>
     {
-        foreach (var project in GetFiles("./Source/**/Serilog.Exceptions.csproj"))
-        {
-            DotNetCorePack(
-                project.GetDirectory().FullPath,
-                new DotNetCorePackSettings()
-                {
-                    Configuration = configuration,
-                    OutputDirectory = artifactsDirectory,
-                    VersionSuffix = versionSuffix
-                });
-        }
+        DotNetCorePack(
+            ".",
+            new DotNetCorePackSettings()
+            {
+                Configuration = configuration,
+                OutputDirectory = artifactsDirectory,
+                VersionSuffix = versionSuffix
+            });
     });
 
 Task("Default")
