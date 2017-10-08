@@ -183,9 +183,29 @@ namespace Serilog.Exceptions.Destructurers
                 }
             }
 
-            values.Add("Type", valueType);
+            this.AppendTypeIfPossible(values, valueType);
 
             return values;
+        }
+
+        private void AppendTypeIfPossible(Dictionary<string, object> values, Type valueType)
+        {
+            if (values.ContainsKey("Type"))
+            {
+                if (!values.ContainsKey("$Type"))
+                {
+                    values.Add("$Type", valueType);
+                }
+                else
+                {
+                    // If both "Type" and "$Type" are present
+                    // we just give up appending exception type
+                }
+            }
+            else
+            {
+                values.Add("Type", valueType);
+            }
         }
     }
 }
