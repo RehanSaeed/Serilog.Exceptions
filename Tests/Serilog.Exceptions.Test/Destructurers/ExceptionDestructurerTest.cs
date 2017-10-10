@@ -109,6 +109,13 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void ExceptionWithTypeProperty_StillContainsType_JustWithDollarAsPrefixInLabel()
+        {
+            var exceptionWithTypeProperty = new ExceptionWithTypeProperty() { Type = 13 };
+            Test_LoggedExceptionContainsProperty(exceptionWithTypeProperty, "$Type", "Serilog.Exceptions.Test.Destructurers.ExceptionDestructurerTest+ExceptionWithTypeProperty");
+        }
+
+        [Fact]
         public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
         {
             // Arrange
@@ -247,6 +254,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             public string Foo { get; set; }
 
             public Dictionary<string, object> Reference { get; set; }
+        }
+
+        public class ExceptionWithTypeProperty : Exception
+        {
+            public int Type { get; set; }
         }
     }
 }
