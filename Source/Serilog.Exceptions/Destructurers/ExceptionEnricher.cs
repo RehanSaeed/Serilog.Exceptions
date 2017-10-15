@@ -17,8 +17,7 @@
             new ArgumentExceptionDestructurer(),
             new ArgumentOutOfRangeExceptionDestructurer(),
             new AggregateExceptionDestructurer(),
-            new ReflectionTypeLoadExceptionDestructurer(),
-            new SqlExceptionDestructurer()
+            new ReflectionTypeLoadExceptionDestructurer()
         };
 
         public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
