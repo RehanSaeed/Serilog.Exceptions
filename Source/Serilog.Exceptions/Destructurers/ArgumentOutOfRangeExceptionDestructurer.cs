@@ -1,10 +1,15 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
 
     public class ArgumentOutOfRangeExceptionDestructurer : ArgumentExceptionDestructurer
     {
+        public ArgumentOutOfRangeExceptionDestructurer(List<string> ignoredProperties)
+            : base(ignoredProperties)
+        {
+        }
+
         public override Type[] TargetTypes
         {
             get
@@ -25,7 +30,7 @@
 
             var argumentException = (ArgumentOutOfRangeException)exception;
 
-            data.Add(nameof(ArgumentOutOfRangeException.ActualValue), argumentException.ActualValue);
+            data.AddIfNotIgnored(nameof(ArgumentOutOfRangeException.ActualValue), argumentException.ActualValue, this.IgnoredProperties);
         }
     }
 }

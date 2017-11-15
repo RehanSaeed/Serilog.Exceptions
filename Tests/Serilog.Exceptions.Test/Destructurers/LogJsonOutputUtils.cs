@@ -1,6 +1,7 @@
-﻿namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -19,7 +20,26 @@
             var jsonWriter = new StringWriter();
 
             ILogger logger = new LoggerConfiguration()
-                .Enrich.WithExceptionDetails()
+                .Enrich.WithExceptionDetails(new List<string>())
+                .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
+                .CreateLogger();
+
+            // Act
+            logger.Error(exception, "EXCEPTION MESSAGE");
+
+            // Assert
+            var writtenJson = jsonWriter.ToString();
+            var jsonObj = JsonConvert.DeserializeObject<object>(writtenJson);
+            JObject rootObject = Assert.IsType<JObject>(jsonObj);
+            return rootObject;
+        }
+
+        public static JObject LogAndDestructureException(Exception exception, List<string> ignoredProperties)
+        {
+            var jsonWriter = new StringWriter();
+
+            ILogger logger = new LoggerConfiguration()
+                .Enrich.WithExceptionDetails(ignoredProperties)
                 .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
                 .CreateLogger();
 

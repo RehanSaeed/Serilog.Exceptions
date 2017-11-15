@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +6,11 @@
 
     public class AggregateExceptionDestructurer : ExceptionDestructurer
     {
+        public AggregateExceptionDestructurer(List<string> ignoredProperties)
+            : base(ignoredProperties)
+        {
+        }
+
         public override Type[] TargetTypes
         {
             get { return new Type[] { typeof(AggregateException) }; }
@@ -20,9 +25,10 @@
 
             var aggregateException = (AggregateException)exception;
 
-            data.Add(
+            data.AddIfNotIgnored(
                 nameof(AggregateException.InnerExceptions),
-                aggregateException.InnerExceptions.Select(destructureException).ToList());
+                aggregateException.InnerExceptions.Select(destructureException).ToList(),
+                this.IgnoredProperties);
         }
     }
 }

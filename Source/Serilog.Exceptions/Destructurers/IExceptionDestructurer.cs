@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +6,8 @@
     public interface IExceptionDestructurer
     {
         Type[] TargetTypes { get; }
+
+        List<string> IgnoredProperties { get; set; }
 
         void Destructure(
             Exception exception,

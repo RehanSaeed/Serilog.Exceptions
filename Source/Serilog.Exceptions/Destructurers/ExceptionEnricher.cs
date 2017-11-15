@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -11,23 +11,18 @@
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
-        public static readonly IExceptionDestructurer[] DefaultDestructurers =
-        {
-            new ExceptionDestructurer(),
-            new ArgumentExceptionDestructurer(),
-            new ArgumentOutOfRangeExceptionDestructurer(),
-            new AggregateExceptionDestructurer(),
-            new ReflectionTypeLoadExceptionDestructurer(),
-            new SqlExceptionDestructurer()
-        };
-
-        public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
-
+        private static IExceptionDestructurer reflectionBasedDestructurer;
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
 
         public ExceptionEnricher()
-            : this(DefaultDestructurers)
+            : this(GetDefaultDestructurers(new List<string>()))
         {
+        }
+
+        public ExceptionEnricher(List<string> ignoredProperties)
+            : this(GetDefaultDestructurers(ignoredProperties))
+        {
+            reflectionBasedDestructurer = new ReflectionBasedDestructurer(ignoredProperties);
         }
 
         public ExceptionEnricher(params IExceptionDestructurer[] destructurers)
@@ -58,6 +53,20 @@
             }
         }
 
+        private static IExceptionDestructurer[] GetDefaultDestructurers(List<string> ignoredProperties)
+        {
+            var list = new List<IExceptionDestructurer>
+            {
+                new ExceptionDestructurer(ignoredProperties),
+                new ArgumentExceptionDestructurer(ignoredProperties),
+                new ArgumentOutOfRangeExceptionDestructurer(ignoredProperties),
+                new AggregateExceptionDestructurer(ignoredProperties),
+                new ReflectionTypeLoadExceptionDestructurer(ignoredProperties),
+                new SqlExceptionDestructurer(ignoredProperties)
+            };
+            return list.ToArray();
+        }
+
         private Dictionary<string, object> DestructureException(Exception exception)
         {
             var data = new Dictionary<string, object>();
@@ -67,11 +76,11 @@
             if (this.destructurers.ContainsKey(exceptionType))
             {
                 var destructurer = this.destructurers[exceptionType];
-                destructurer.Destructure(exception, data, this.DestructureException);
+                destructurer.Destructure(exception, data,  this.DestructureException);
             }
             else
             {
-                ReflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
+                reflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
             }
 
             return data;
