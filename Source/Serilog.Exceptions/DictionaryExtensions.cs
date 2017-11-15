@@ -13,19 +13,9 @@ namespace Serilog.Exceptions
             foreach (var key in dictionary.Keys)
             {
                 var value = dictionary[key];
-                if (ignoredProperties.Contains(key.ToString()))
-                {
-                    continue;
-                }
-
                 if (value is KeyValuePair<string, string> parsedKeyValuePair)
                 {
-                    if (ignoredProperties.Contains(parsedKeyValuePair.Key))
-                    {
-                        continue;
-                    }
-
-                    result.AddIfNotIgnored(key.ToString(), value, ignoredProperties);
+                    result.AddIfNotIgnored(parsedKeyValuePair.Key, value, ignoredProperties);
                 }
                 else
                 {
