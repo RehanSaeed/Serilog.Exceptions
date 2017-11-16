@@ -2,7 +2,7 @@
 
   <PropertyGroup Label="Build">
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp1.1;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp1.1;net45</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
@@ -12,8 +12,11 @@
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.0-beta004" />
   </ItemGroup>
 
-  <ItemGroup Label="Package References (NetCoreApp 1.0)" Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
-    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
+  <ItemGroup Label="Package References (NetCoreApp 1.1)" Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Package References (NetCoreApp 2.0)" Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
   </ItemGroup>
 
