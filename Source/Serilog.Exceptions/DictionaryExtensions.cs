@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions
+namespace Serilog.Exceptions
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
     {
         public static Dictionary<string, object> ToStringObjectDictionary(this IDictionary dictionary)
         {
-            var result = new Dictionary<string, object>();
+            var result = new Dictionary<string, object>(dictionary.Count);
 
             foreach (var key in dictionary.Keys)
             {

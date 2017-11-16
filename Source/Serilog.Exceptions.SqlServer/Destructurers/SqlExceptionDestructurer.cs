@@ -1,9 +1,10 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.SqlServer.Destructurers
 {
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Linq;
+    using Serilog.Exceptions.Destructurers;
 
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {
@@ -28,7 +29,7 @@
             data.Add(nameof(SqlException.Number), sqlException.Number);
             data.Add(nameof(SqlException.Server), sqlException.Server);
             data.Add(nameof(SqlException.State), sqlException.State);
-            data.Add(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToList());
+            data.Add(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToArray());
         }
     }
 }
