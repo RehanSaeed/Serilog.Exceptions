@@ -22,8 +22,7 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
 
             var sqlException = (SqlException)exception;
 
-            // Don't log ClientConnectionId because it's not supported on Mono.
-            // data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
+            data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
             data.Add(nameof(SqlException.Class), sqlException.Class);
             data.Add(nameof(SqlException.LineNumber), sqlException.LineNumber);
             data.Add(nameof(SqlException.Number), sqlException.Number);
