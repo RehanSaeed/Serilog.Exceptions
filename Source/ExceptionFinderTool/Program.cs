@@ -1,4 +1,4 @@
-﻿namespace ExceptionFinderTool
+namespace ExceptionFinderTool
 {
     using System;
     using System.Linq;
@@ -13,7 +13,7 @@
 
             foreach (var exceptionType in GetAllAssemblies()
                 .SelectMany(x => x.GetTypes())
-                .Where(x => x.GetTypeInfo().IsPublic && x.Name.EndsWith("Exception"))
+                .Where(x => x.GetTypeInfo().IsPublic && typeof(Exception).IsAssignableFrom(x))
                 .Select(x => x.FullName)
                 .OrderBy(x => x))
             {
@@ -27,9 +27,7 @@
 
         private static Assembly[] GetAllAssemblies()
         {
-#if NET45
-            return AppDomain.CurrentDomain.GetAssemblies();
-#else
+#if NETCOREAPP1_1
             return new Assembly[]
             {
                 Assembly.Load(new AssemblyName("System.AppContext")),
@@ -75,6 +73,8 @@
                 Assembly.Load(new AssemblyName("System.Xml.ReaderWriter")),
                 Assembly.Load(new AssemblyName("System.Xml.XDocument"))
             };
+#else
+            return AppDomain.CurrentDomain.GetAssemblies();
 #endif
         }
     }
