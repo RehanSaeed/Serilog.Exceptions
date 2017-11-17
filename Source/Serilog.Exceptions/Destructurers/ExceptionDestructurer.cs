@@ -36,7 +36,6 @@
                         typeof(System.Configuration.SettingsPropertyWrongTypeException),
                         typeof(System.ContextMarshalException),
 #endif
-                        typeof(System.Data.Common.DbException),
 #if NET45
                         typeof(System.Data.ConstraintException),
                         typeof(System.Data.DataException),
@@ -54,9 +53,6 @@
                         typeof(System.Data.SqlTypes.SqlAlreadyFilledException),
                         typeof(System.Data.SqlTypes.SqlNotFilledException),
 #endif
-                        typeof(System.Data.SqlTypes.SqlNullValueException),
-                        typeof(System.Data.SqlTypes.SqlTruncateException),
-                        typeof(System.Data.SqlTypes.SqlTypeException),
 #if NET45
                         typeof(System.Data.StrongTypingException),
                         typeof(System.Data.SyntaxErrorException),
