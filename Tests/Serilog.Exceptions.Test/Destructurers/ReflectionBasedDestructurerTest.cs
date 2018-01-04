@@ -3,28 +3,23 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
     using Exceptions.Destructurers;
     using Xunit;
 
     public class ReflectionBasedDestructurerTest
     {
-        private readonly ReflectionBasedDestructurer destructurer;
-
-        public ReflectionBasedDestructurerTest()
-        {
-            this.destructurer = new ReflectionBasedDestructurer(new List<string>());
-        }
-
         [Fact]
         public void ReflectionBasedDestructurer_Destructure()
         {
-            var exception = this.GetException();
-
+            // Arrange
+            var exception = GetTestExceptionWithStackTrace();
+            var destructurer = new ReflectionBasedDestructurer();
             var properties = new Dictionary<string, object>();
 
-            this.destructurer.Destructure(exception, properties, null);
+            // Act
+            destructurer.Destructure(exception, properties, null);
 
+            // Assert
             Assert.Equal("PublicValue", properties[nameof(TestException.PublicProperty)]);
             Assert.Equal("threw System.Exception: Exception of type 'System.Exception' was thrown.", properties[nameof(TestException.ExceptionProperty)]);
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "InternalProperty"));
@@ -55,7 +50,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void ReflectionBasedDestructurer_PropertiesCanBeIgnored()
         {
             // Arrange
-            var exception = this.GetException();
+            var exception = GetTestExceptionWithStackTrace();
             var properties = new Dictionary<string, object>();
             var localDestructurer = new ReflectionBasedDestructurer(new List<string> { nameof(TestException.Source) });
 
@@ -70,7 +65,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void ReflectionBasedDestructurer_NestedPropertiesCanBeIgnored()
         {
             // Arrange
-            var exception = this.GetException();
+            var exception = GetTestExceptionWithStackTrace();
             var properties = new Dictionary<string, object>();
             var localDestructurer = new ReflectionBasedDestructurer(new List<string> { "NestedPropertyKey" });
 
@@ -87,7 +82,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ReflectionBasedDestructurer_MultiplePropertiesCanBeIgnored()
         {
-            var exception = this.GetException();
+            var exception = GetTestExceptionWithStackTrace();
             var properties = new Dictionary<string, object>();
             var localDestructurer = new ReflectionBasedDestructurer(new List<string> { nameof(TestException.Message), nameof(TestException.Source) });
             localDestructurer.Destructure(exception, properties, null);
@@ -99,33 +94,34 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ReflectionBasedDestructurer_MultipleNestedPropertiesCanBeIgnored()
         {
-            var exception = this.GetException();
+            // Arrange
+            var exception = GetTestExceptionWithStackTrace();
             var properties = new Dictionary<string, object>();
-            var localDestructurer = new ReflectionBasedDestructurer(new List<string> { nameof(TestException.Source), "NestedPropertyKey" });
+            var ignoredProperties = new List<string> { nameof(TestException.Source), "NestedPropertyKey" };
+            var localDestructurer = new ReflectionBasedDestructurer(ignoredProperties);
+
+            // Act
             localDestructurer.Destructure(exception, properties, null);
 
+            // Assert
             var nestedProperty = properties[nameof(TestException.NestedProperty)];
             var nestedPair = (Dictionary<string, object>)nestedProperty;
 
-            // Assert
             Assert.NotNull(nestedPair);
             Assert.Empty(nestedPair);
             Assert.DoesNotContain(properties.Keys, p => p == nameof(TestException.Source));
         }
 
-        private Exception GetException()
+        private static Exception GetTestExceptionWithStackTrace()
         {
-            Exception exception;
             try
             {
                 throw new TestException();
             }
             catch (Exception e)
             {
-                exception = e;
+                return e;
             }
-
-            return exception;
         }
 
         public class TestException : Exception

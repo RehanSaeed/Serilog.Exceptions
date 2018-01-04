@@ -13,6 +13,11 @@ namespace Serilog.Exceptions.Destructurers
         private const string CyclicReferenceMessage = "Cyclic reference";
         private const int MaxRecursiveLevel = 10;
 
+        public ReflectionBasedDestructurer()
+            : this(new List<string>())
+        {
+        }
+
         public ReflectionBasedDestructurer(List<string> ignoredProperties)
         {
             this.IgnoredProperties = ignoredProperties;
