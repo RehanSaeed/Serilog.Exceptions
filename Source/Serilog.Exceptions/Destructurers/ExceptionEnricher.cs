@@ -61,8 +61,7 @@ namespace Serilog.Exceptions.Destructurers
                 new ArgumentExceptionDestructurer(ignoredProperties),
                 new ArgumentOutOfRangeExceptionDestructurer(ignoredProperties),
                 new AggregateExceptionDestructurer(ignoredProperties),
-                new ReflectionTypeLoadExceptionDestructurer(ignoredProperties),
-                new SqlExceptionDestructurer(ignoredProperties)
+                new ReflectionTypeLoadExceptionDestructurer(ignoredProperties)
             };
             return list.ToArray();
         }
