@@ -1,10 +1,15 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
 
     public class ArgumentExceptionDestructurer : ExceptionDestructurer
     {
+        public ArgumentExceptionDestructurer(List<string> ignoredProperties)
+            : base(ignoredProperties)
+        {
+        }
+
         public override Type[] TargetTypes
         {
             get
@@ -26,7 +31,7 @@
 
             var argumentException = (ArgumentException)exception;
 
-            data.Add(nameof(ArgumentException.ParamName), argumentException.ParamName);
+            data.AddIfNotIgnored(nameof(ArgumentException.ParamName), argumentException.ParamName, this.IgnoredProperties);
         }
     }
 }

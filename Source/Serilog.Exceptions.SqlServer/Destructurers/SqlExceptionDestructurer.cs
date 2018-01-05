@@ -8,10 +8,12 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
 
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {
-        public override Type[] TargetTypes
+        public SqlExceptionDestructurer(List<string> ignoredProperties)
+            : base(ignoredProperties)
         {
-            get { return new Type[] { typeof(SqlException) }; }
         }
+
+        public override Type[] TargetTypes => new[] { typeof(SqlException) };
 
         public override void Destructure(
             Exception exception,
@@ -22,13 +24,14 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
 
             var sqlException = (SqlException)exception;
 
-            data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
-            data.Add(nameof(SqlException.Class), sqlException.Class);
-            data.Add(nameof(SqlException.LineNumber), sqlException.LineNumber);
-            data.Add(nameof(SqlException.Number), sqlException.Number);
-            data.Add(nameof(SqlException.Server), sqlException.Server);
-            data.Add(nameof(SqlException.State), sqlException.State);
-            data.Add(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToArray());
+            // Don't log ClientConnectionId because it's not supported on Mono.
+            // data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
+            data.AddIfNotIgnored(nameof(SqlException.Class), sqlException.Class, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(SqlException.LineNumber), sqlException.LineNumber, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(SqlException.Number), sqlException.Number, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(SqlException.Server), sqlException.Server, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(SqlException.State), sqlException.State, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToList(), this.IgnoredProperties);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions
+namespace Serilog.Exceptions
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +10,14 @@
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
         {
-            return loggerEnrichmentConfiguration.With(new ExceptionEnricher());
+            return loggerEnrichmentConfiguration.With(new ExceptionEnricher(new List<string>()));
+        }
+
+        public static Serilog.LoggerConfiguration WithExceptionDetails(
+            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
+            List<string> ignoredProperties)
+        {
+            return loggerEnrichmentConfiguration.With(new ExceptionEnricher(ignoredProperties));
         }
 
         public static Serilog.LoggerConfiguration WithExceptionDetails(
