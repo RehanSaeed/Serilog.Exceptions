@@ -5,11 +5,12 @@ namespace Serilog.Exceptions
     using System.Collections.Generic;
     using System.Linq;
 
-    internal static class DictionaryExtensions
+    public static class DictionaryExtensions
     {
         public static Dictionary<string, object> ToStringObjectDictionary(this IDictionary dictionary, List<string> ignoredProperties)
         {
-            var result = new Dictionary<string, object>();
+            var result = new Dictionary<string, object>(dictionary.Count);
+
             foreach (var key in dictionary.Keys)
             {
                 var value = dictionary[key];

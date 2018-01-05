@@ -4,6 +4,7 @@
     <TargetFrameworks>netstandard1.6;netstandard1.3;net45</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <!--TODO: Add <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+    <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -30,21 +31,16 @@
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
   </PropertyGroup>
 
-  <ItemGroup Label="Package References">
-    <PackageReference Include="Serilog" Version="2.5.0" />
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.0-beta004" />
-  </ItemGroup>
-
   <ItemGroup Label="Package References (.NET Standard 1.6)" Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup Label="Package References (.NET Standard 1.3)" Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
   </ItemGroup>
 
-  <ItemGroup Label="References (.NET 4.5)" Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="Microsoft.CSharp" />
+  <ItemGroup>
+    <ProjectReference Include="..\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>
