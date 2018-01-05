@@ -13,6 +13,18 @@ namespace Serilog.Exceptions.Destructurers
         private const string CyclicReferenceMessage = "Cyclic reference";
         private const int MaxRecursiveLevel = 10;
 
+        public ReflectionBasedDestructurer()
+            : this(new List<string>())
+        {
+        }
+
+        public ReflectionBasedDestructurer(List<string> ignoredProperties)
+        {
+            this.IgnoredProperties = ignoredProperties;
+        }
+
+        public List<string> IgnoredProperties { get; set; }
+
         public Type[] TargetTypes => new Type[] { typeof(Exception) };
 
         public void Destructure(
@@ -28,7 +40,7 @@ namespace Serilog.Exceptions.Destructurers
                 new Dictionary<object, IDictionary<string, object>>(),
                 ref nextCyclicRefId))
             {
-                data.Add(p.Key, p.Value);
+                data.AddIfNotIgnored(p.Key, p.Value, this.IgnoredProperties);
             }
         }
 
@@ -122,13 +134,13 @@ namespace Serilog.Exceptions.Destructurers
                 };
             }
 
-            var destructuredDictionary = ((IDictionary)value).ToStringObjectDictionary();
+            var destructuredDictionary = ((IDictionary)value).ToStringObjectDictionary(this.IgnoredProperties);
             destructuredObjects.Add(value, destructuredDictionary);
 
             foreach (var kvp in destructuredDictionary.ToDictionary(k => k.Key, v => v.Value))
             {
                 destructuredDictionary[kvp.Key] =
-                    this.DestructureValue(kvp.Value, level + 1, destructuredObjects, ref nextCyclicRefId);
+                        this.DestructureValue(kvp.Value, level + 1, destructuredObjects, ref nextCyclicRefId);
             }
 
             return destructuredDictionary;
@@ -163,28 +175,30 @@ namespace Serilog.Exceptions.Destructurers
             {
                 try
                 {
-                    values.Add(property.Name, this.DestructureValue(
+                    values.AddIfNotIgnored(
+                        property.Name,
+                        this.DestructureValue(
                         property.GetValue(value),
                         level + 1,
                         destructuredObjects,
-                        ref nextCyclicRefId));
+                        ref nextCyclicRefId),
+                        this.IgnoredProperties);
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {
                     var innerException = targetInvocationException.InnerException;
                     if (innerException != null)
                     {
-                        values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
+                        values.AddIfNotIgnored(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}", this.IgnoredProperties);
                     }
                 }
                 catch (Exception exception)
                 {
-                    values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
+                    values.AddIfNotIgnored(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}", this.IgnoredProperties);
                 }
             }
 
             this.AppendTypeIfPossible(values, valueType);
-
             return values;
         }
 
@@ -194,7 +208,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 if (!values.ContainsKey("$Type"))
                 {
-                    values.Add("$Type", valueType);
+                    values.AddIfNotIgnored("$Type", valueType, this.IgnoredProperties);
                 }
                 else
                 {
@@ -204,7 +218,7 @@ namespace Serilog.Exceptions.Destructurers
             }
             else
             {
-                values.Add("Type", valueType);
+                values.AddIfNotIgnored("Type", valueType, this.IgnoredProperties);
             }
         }
     }

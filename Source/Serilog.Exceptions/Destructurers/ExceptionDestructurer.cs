@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections;
@@ -7,6 +7,11 @@
 
     public class ExceptionDestructurer : IExceptionDestructurer
     {
+        public ExceptionDestructurer(List<string> ignoredProperties)
+        {
+            this.IgnoredProperties = ignoredProperties;
+        }
+
         public virtual Type[] TargetTypes
         {
             get
@@ -182,42 +187,44 @@
             }
         }
 
+        public List<string> IgnoredProperties { get; set; }
+
         public virtual void Destructure(
             Exception exception,
             IDictionary<string, object> data,
             Func<Exception, IDictionary<string, object>> innerDestructure)
         {
-            data.Add("Type", exception.GetType().FullName);
+            data.AddIfNotIgnored("Type", exception.GetType().FullName, this.IgnoredProperties);
 
             if (exception.Data.Count != 0)
             {
-                data.Add(nameof(Exception.Data), exception.Data.ToStringObjectDictionary());
+                data.AddIfNotIgnored(nameof(Exception.Data), exception.Data.ToStringObjectDictionary(this.IgnoredProperties), this.IgnoredProperties);
             }
 
             if (!string.IsNullOrEmpty(exception.HelpLink))
             {
-                data.Add(nameof(Exception.HelpLink), exception.HelpLink);
+                data.AddIfNotIgnored(nameof(Exception.HelpLink), exception.HelpLink, this.IgnoredProperties);
             }
 
             if (exception.HResult != 0)
             {
-                data.Add(nameof(Exception.HResult), exception.HResult);
+                data.AddIfNotIgnored(nameof(Exception.HResult), exception.HResult, this.IgnoredProperties);
             }
 
-            data.Add(nameof(Exception.Message), exception.Message);
-            data.Add(nameof(Exception.Source), exception.Source);
-            data.Add(nameof(Exception.StackTrace), exception.StackTrace);
+            data.AddIfNotIgnored(nameof(Exception.Message), exception.Message, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(Exception.Source), exception.Source, this.IgnoredProperties);
+            data.AddIfNotIgnored(nameof(Exception.StackTrace), exception.StackTrace, this.IgnoredProperties);
 
 #if NET45
             if (exception.TargetSite != null)
             {
-                data.Add(nameof(Exception.TargetSite), exception.TargetSite.ToString());
+                data.AddIfNotIgnored(nameof(Exception.TargetSite), exception.TargetSite.ToString(), this.IgnoredProperties);
             }
 #endif
 
             if (exception.InnerException != null)
             {
-                data.Add(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
+                data.AddIfNotIgnored(nameof(Exception.InnerException), innerDestructure(exception.InnerException), this.IgnoredProperties);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -7,6 +7,11 @@
 
     public class ReflectionTypeLoadExceptionDestructurer : ExceptionDestructurer
     {
+        public ReflectionTypeLoadExceptionDestructurer(List<string> ignoredProperties)
+            : base(ignoredProperties)
+        {
+        }
+
         public override Type[] TargetTypes
         {
             get { return new Type[] { typeof(ReflectionTypeLoadException) }; }
@@ -23,9 +28,10 @@
 
             if (reflectionTypeLoadException.LoaderExceptions != null)
             {
-                data.Add(
+                data.AddIfNotIgnored(
                     nameof(ReflectionTypeLoadException.LoaderExceptions),
-                    reflectionTypeLoadException.LoaderExceptions.Select(destructureException).ToList());
+                    reflectionTypeLoadException.LoaderExceptions.Select(destructureException).ToList(),
+                    this.IgnoredProperties);
             }
         }
     }

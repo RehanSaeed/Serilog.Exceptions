@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using Newtonsoft.Json.Linq;

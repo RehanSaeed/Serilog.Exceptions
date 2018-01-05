@@ -3,8 +3,8 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using Exceptions.Destructurers;
     using Newtonsoft.Json.Linq;
-    using Serilog.Exceptions.Destructurers;
     using Xunit;
     using static LogJsonOutputUtils;
 
@@ -13,7 +13,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void TargetTypes()
         {
-            var destructurer = new ExceptionDestructurer();
+            var destructurer = new ExceptionDestructurer(new List<string>());
 
             var targetTypes = destructurer.TargetTypes;
 
@@ -74,10 +74,14 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ArgumentException_ContainsData()
         {
+            // Arrange
             var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
+            // Act
             JObject rootObject = LogAndDestructureException(applicationException);
+
+            // Assert
             JObject exceptionDetail = ExtractExceptionDetails(rootObject);
 
             JProperty dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
@@ -116,6 +120,40 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void ArgumentException_PropertiesCanBeIgnored()
+        {
+            // Arrange
+            var applicationException = new ArgumentException();
+            applicationException.Data["SOMEKEY"] = "SOMEVALUE";
+
+            // Act
+            JObject rootObject = LogAndDestructureException(applicationException, new List<string> { "Data" });
+
+            // Assert
+            JObject exceptionDetail = ExtractExceptionDetails(rootObject);
+            Assert.DoesNotContain(exceptionDetail.Properties(), x => x.Name == "Data");
+        }
+
+        [Fact]
+        public void ArgumentException_NestedPropertiesCanBeIgnored()
+        {
+            // Arrange
+            var applicationException = new ArgumentException();
+            applicationException.Data["SOMEKEY"] = "SOMEVALUE";
+
+            // Act
+            JObject rootObject = LogAndDestructureException(applicationException, new List<string> { "SOMEKEY" });
+
+            // Assert
+            JObject exceptionDetail = ExtractExceptionDetails(rootObject);
+
+            JProperty dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
+            JObject dataObject = Assert.IsType<JObject>(dataProperty.Value);
+
+            Assert.DoesNotContain(dataObject.Properties(), x => x.Name == "SOMEKEY");
+        }
+
+        [Fact]
         public void When_object_contains_cyclic_references_then_no_stackoverflow_exception_is_thrown()
         {
             // Arrange
@@ -129,7 +167,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new Dictionary<string, object>();
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(new List<string>());
             destructurer.Destructure(exception, result, null);
 
             // Assert
@@ -159,7 +197,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new Dictionary<string, object>();
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(new List<string>());
             destructurer.Destructure(exception, result, null);
 
             // Assert
@@ -190,7 +228,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new Dictionary<string, object>();
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(new List<string>());
             destructurer.Destructure(exception, result, null);
 
             // Assert
