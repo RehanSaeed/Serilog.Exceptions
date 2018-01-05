@@ -3,9 +3,8 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Linq;
+    using Exceptions.Destructurers;
     using Newtonsoft.Json.Linq;
-    using Serilog.Exceptions.Destructurers;
     using Xunit;
     using static LogJsonOutputUtils;
 
@@ -75,10 +74,14 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ArgumentException_ContainsData()
         {
+            // Arrange
             var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
+            // Act
             JObject rootObject = LogAndDestructureException(applicationException);
+
+            // Assert
             JObject exceptionDetail = ExtractExceptionDetails(rootObject);
 
             JProperty dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
@@ -119,10 +122,14 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ArgumentException_PropertiesCanBeIgnored()
         {
+            // Arrange
             var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
+            // Act
             JObject rootObject = LogAndDestructureException(applicationException, new List<string> { "Data" });
+
+            // Assert
             JObject exceptionDetail = ExtractExceptionDetails(rootObject);
             Assert.DoesNotContain(exceptionDetail.Properties(), x => x.Name == "Data");
         }
@@ -130,10 +137,14 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ArgumentException_NestedPropertiesCanBeIgnored()
         {
+            // Arrange
             var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
+            // Act
             JObject rootObject = LogAndDestructureException(applicationException, new List<string> { "SOMEKEY" });
+
+            // Assert
             JObject exceptionDetail = ExtractExceptionDetails(rootObject);
 
             JProperty dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");

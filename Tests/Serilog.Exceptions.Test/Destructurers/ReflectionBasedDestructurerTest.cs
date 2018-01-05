@@ -82,11 +82,15 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ReflectionBasedDestructurer_MultiplePropertiesCanBeIgnored()
         {
+            // Arrange
             var exception = GetTestExceptionWithStackTrace();
             var properties = new Dictionary<string, object>();
             var localDestructurer = new ReflectionBasedDestructurer(new List<string> { nameof(TestException.Message), nameof(TestException.Source) });
+
+            // Act
             localDestructurer.Destructure(exception, properties, null);
 
+            // Assert
             Assert.DoesNotContain(properties.Keys, p => p == nameof(TestException.Message));
             Assert.DoesNotContain(properties.Keys, p => p == nameof(TestException.Source));
         }
