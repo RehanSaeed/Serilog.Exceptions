@@ -8,27 +8,23 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
 
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {
-        public override Type[] TargetTypes
-        {
-            get { return new Type[] { typeof(SqlException) }; }
-        }
+        public override Type[] TargetTypes => new[] { typeof(SqlException) };
 
-        public override void Destructure(
-            Exception exception,
-            IDictionary<string, object> data,
-            Func<Exception, IDictionary<string, object>> destructureException)
+        public override void Destructure(Exception exception,
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
-            base.Destructure(exception, data, destructureException);
+            base.Destructure(exception, propertiesBag, destructureException);
 
             var sqlException = (SqlException)exception;
 
-            data.Add(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
-            data.Add(nameof(SqlException.Class), sqlException.Class);
-            data.Add(nameof(SqlException.LineNumber), sqlException.LineNumber);
-            data.Add(nameof(SqlException.Number), sqlException.Number);
-            data.Add(nameof(SqlException.Server), sqlException.Server);
-            data.Add(nameof(SqlException.State), sqlException.State);
-            data.Add(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToArray());
+            propertiesBag.AddProperty(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
+            propertiesBag.AddProperty(nameof(SqlException.Class), sqlException.Class);
+            propertiesBag.AddProperty(nameof(SqlException.LineNumber), sqlException.LineNumber);
+            propertiesBag.AddProperty(nameof(SqlException.Number), sqlException.Number);
+            propertiesBag.AddProperty(nameof(SqlException.Server), sqlException.Server);
+            propertiesBag.AddProperty(nameof(SqlException.State), sqlException.State);
+            propertiesBag.AddProperty(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToArray());
         }
     }
 }

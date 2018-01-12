@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -7,23 +7,20 @@
 
     public class ReflectionTypeLoadExceptionDestructurer : ExceptionDestructurer
     {
-        public override Type[] TargetTypes
-        {
-            get { return new Type[] { typeof(ReflectionTypeLoadException) }; }
-        }
+        public override Type[] TargetTypes => new[] { typeof(ReflectionTypeLoadException) };
 
         public override void Destructure(
             Exception exception,
-            IDictionary<string, object> data,
-            Func<Exception, IDictionary<string, object>> destructureException)
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
-            base.Destructure(exception, data, destructureException);
+            base.Destructure(exception, propertiesBag, destructureException);
 
             var reflectionTypeLoadException = (ReflectionTypeLoadException)exception;
 
             if (reflectionTypeLoadException.LoaderExceptions != null)
             {
-                data.Add(
+                propertiesBag.AddProperty(
                     nameof(ReflectionTypeLoadException.LoaderExceptions),
                     reflectionTypeLoadException.LoaderExceptions.Select(destructureException).ToList());
             }

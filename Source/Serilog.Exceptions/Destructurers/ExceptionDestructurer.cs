@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections;
@@ -184,40 +184,40 @@
 
         public virtual void Destructure(
             Exception exception,
-            IDictionary<string, object> data,
-            Func<Exception, IDictionary<string, object>> innerDestructure)
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
         {
-            data.Add("Type", exception.GetType().FullName);
+            propertiesBag.AddProperty("Type", exception.GetType().FullName);
 
             if (exception.Data.Count != 0)
             {
-                data.Add(nameof(Exception.Data), exception.Data.ToStringObjectDictionary());
+                propertiesBag.AddProperty(nameof(Exception.Data), exception.Data.ToStringObjectDictionary());
             }
 
             if (!string.IsNullOrEmpty(exception.HelpLink))
             {
-                data.Add(nameof(Exception.HelpLink), exception.HelpLink);
+                propertiesBag.AddProperty(nameof(Exception.HelpLink), exception.HelpLink);
             }
 
             if (exception.HResult != 0)
             {
-                data.Add(nameof(Exception.HResult), exception.HResult);
+                propertiesBag.AddProperty(nameof(Exception.HResult), exception.HResult);
             }
 
-            data.Add(nameof(Exception.Message), exception.Message);
-            data.Add(nameof(Exception.Source), exception.Source);
-            data.Add(nameof(Exception.StackTrace), exception.StackTrace);
+            propertiesBag.AddProperty(nameof(Exception.Message), exception.Message);
+            propertiesBag.AddProperty(nameof(Exception.Source), exception.Source);
+            propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
 
 #if NET45
             if (exception.TargetSite != null)
             {
-                data.Add(nameof(Exception.TargetSite), exception.TargetSite.ToString());
+                propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());
             }
 #endif
 
             if (exception.InnerException != null)
             {
-                data.Add(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
+                propertiesBag.AddProperty(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
             }
         }
 

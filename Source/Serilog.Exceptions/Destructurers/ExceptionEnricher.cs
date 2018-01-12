@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
@@ -57,9 +57,9 @@
             }
         }
 
-        private Dictionary<string, object> DestructureException(Exception exception)
+        private IReadOnlyDictionary<string, object> DestructureException(Exception exception)
         {
-            var data = new Dictionary<string, object>();
+            var data = new ExceptionPropertiesBag();
 
             var exceptionType = exception.GetType();
 
@@ -73,7 +73,7 @@
                 ReflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
             }
 
-            return data;
+            return data.ResultDictionary;
         }
     }
 }

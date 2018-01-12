@@ -128,12 +128,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.MyObject.Reference2 = exception.MyObject;
 
             // Act
-            var result = new Dictionary<string, object>();
+            var result = new ExceptionPropertiesBag();
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
             // Assert
-            var myObject = (Dictionary<string, object>)result["MyObject"];
+            var myObject = (Dictionary<string, object>)result.ResultDictionary["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
             Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
@@ -158,12 +158,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.MyObjectEnumerable.Reference = cyclic;
 
             // Act
-            var result = new Dictionary<string, object>();
+            var result = new ExceptionPropertiesBag();
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
             // Assert
-            var myObject = (List<object>)result["MyObjectEnumerable"];
+            var myObject = (List<object>)result.ResultDictionary["MyObjectEnumerable"];
 
             // exception.MyObjectEnumerable[0] is still list
             var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
@@ -189,12 +189,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             };
 
             // Act
-            var result = new Dictionary<string, object>();
+            var result = new ExceptionPropertiesBag();
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
             // Assert
-            var myObject = (Dictionary<string, object>)result["MyObjectDict"];
+            var myObject = (Dictionary<string, object>)result.ResultDictionary["MyObjectDict"];
 
             // exception.MyObjectDict["Reference"] is still regular dictionary
             var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
