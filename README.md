@@ -97,6 +97,7 @@ You may want to add support for destructuring your own exceptions without relyin
 ```
 using Serilog;
 using Serilog.Exceptions;
+using Serilog.Formatting.Json;
 
 var exceptionDestructurers = new List<IExceptionDestructurer>();
 exceptionDestructurers.AddRange(ExceptionEnricher.DefaultDestructurers);  // Add built in destructurers.
@@ -104,9 +105,9 @@ exceptionDestructurers.Add(new MyCustomExceptionDestructurer());          // Add
 
 ILogger logger = new LoggerConfiguration()
     .Enrich.WithExceptionDetails(exceptionDestructurers)
-    .WriteTo.Sink(new RollingFileSink(
-        @"C:\logs",
-        new JsonFormatter(renderMessage: true))
+    .WriteTo.RollingFile(
+        new JsonFormatter(renderMessage: true), 
+        @"C:\logs\log-{Date}.txt")    
     .CreateLogger();
 ```
 
