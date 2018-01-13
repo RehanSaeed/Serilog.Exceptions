@@ -5,6 +5,7 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Serilog.Exceptions.Core;
 
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {

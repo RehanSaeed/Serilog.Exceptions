@@ -4,6 +4,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System.Collections;
     using System.Collections.Generic;
     using Newtonsoft.Json.Linq;
+    using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
     using Xunit;
     using static LogJsonOutputUtils;
@@ -128,7 +129,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.MyObject.Reference2 = exception.MyObject;
 
             // Act
-            var result = new ExceptionPropertiesBag();
+            var result = new ExceptionPropertiesBag(typeof(Exception));
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
@@ -158,7 +159,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.MyObjectEnumerable.Reference = cyclic;
 
             // Act
-            var result = new ExceptionPropertiesBag();
+            var result = new ExceptionPropertiesBag(typeof(Exception));
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
@@ -189,7 +190,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             };
 
             // Act
-            var result = new ExceptionPropertiesBag();
+            var result = new ExceptionPropertiesBag(typeof(Exception));
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 

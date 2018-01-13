@@ -2,6 +2,7 @@ namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
+    using Serilog.Exceptions.Core;
 
     public class ArgumentOutOfRangeExceptionDestructurer : ArgumentExceptionDestructurer
     {

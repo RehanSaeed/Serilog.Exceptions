@@ -1,4 +1,4 @@
-namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Core
 {
     using System.Collections.Generic;
 

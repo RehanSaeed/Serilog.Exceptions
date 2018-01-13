@@ -3,6 +3,7 @@ namespace Serilog.Exceptions.Destructurers
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Serilog.Exceptions.Core;
 
     public class AggregateExceptionDestructurer : ExceptionDestructurer
     {

@@ -1,9 +1,10 @@
-namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Core
 {
     using System;
     using System.Collections.Generic;
     using Serilog.Core;
     using Serilog.Events;
+    using Serilog.Exceptions.Destructurers;
 
     /// <summary>
     /// Enrich a <see cref="LogEvent"/> with details about an <see cref="LogEvent.Exception"/> if present.
@@ -23,19 +24,24 @@ namespace Serilog.Exceptions.Destructurers
         public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
 
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
+        private readonly IExceptionPropertyFilter filter;
 
         public ExceptionEnricher()
             : this(DefaultDestructurers)
         {
         }
 
-        public ExceptionEnricher(params IExceptionDestructurer[] destructurers)
-            : this((IEnumerable<IExceptionDestructurer>)destructurers)
+        public ExceptionEnricher(
+            params IExceptionDestructurer[] destructurers)
+            : this(destructurers, null)
         {
         }
 
-        public ExceptionEnricher(IEnumerable<IExceptionDestructurer> destructurers)
+        public ExceptionEnricher(
+            IEnumerable<IExceptionDestructurer> destructurers,
+            IExceptionPropertyFilter filter = null)
         {
+            this.filter = filter;
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
             foreach (var destructurer in destructurers)
             {
@@ -59,7 +65,7 @@ namespace Serilog.Exceptions.Destructurers
 
         private IReadOnlyDictionary<string, object> DestructureException(Exception exception)
         {
-            var data = new ExceptionPropertiesBag();
+            var data = new ExceptionPropertiesBag(exception.GetType(), this.filter);
 
             var exceptionType = exception.GetType();
 

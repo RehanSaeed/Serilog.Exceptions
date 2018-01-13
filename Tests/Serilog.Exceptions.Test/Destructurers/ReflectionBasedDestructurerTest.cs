@@ -4,6 +4,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Serilog.Exceptions.Core;
     using Exceptions.Destructurers;
     using Xunit;
 
@@ -29,7 +30,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 exception = e;
             }
 
-            var propertiesBag = new ExceptionPropertiesBag();
+            var propertiesBag = new ExceptionPropertiesBag(typeof(Exception));
 
             this.destructurer.Destructure(exception, propertiesBag, null);
 

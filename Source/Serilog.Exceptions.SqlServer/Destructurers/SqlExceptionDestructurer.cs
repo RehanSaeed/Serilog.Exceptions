@@ -5,6 +5,7 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
     using System.Data.SqlClient;
     using System.Linq;
     using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Core;
 
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {

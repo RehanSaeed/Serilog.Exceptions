@@ -1,8 +1,9 @@
-﻿namespace Serilog.Exceptions
+namespace Serilog.Exceptions
 {
     using System;
     using System.Collections.Generic;
     using Serilog.Configuration;
+    using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
 
     public static class LoggerEnrichmentConfigurationExtensions
