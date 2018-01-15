@@ -112,6 +112,22 @@ ILogger logger = new LoggerConfiguration()
 
 If you write a destructurer that is not included in this project (even for a third party library), please contribute it.
 
+## Filtering properties
+
+You may want to skip some properties of all or part your exception classes without directly creating or modyfying custom destructurers. Serilog.Exceptions supports this functionality using filter.
+
+Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog is already reporting them so you may want Serilog.Exceptions to skip them to save space and processing time. To do that you just need to modify a line in configuration:
+
+```
+.Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, ExceptionEnricher.FilterIgnoringStackTraceAndTargetId)
+```
+
+Filtering for other scenarios is also supported:
+
+ * use `ExceptionFilterIgnoringByName` if you need to filter some other set of named properties
+ * implement custom `IExceptionPropertyFilter` if you need some different filtering logic
+ * use `CompositeExceptionPropertyFilter` to combine multiple filters
+
 ## Contributing
 
 Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/CONTRIBUTING.md).

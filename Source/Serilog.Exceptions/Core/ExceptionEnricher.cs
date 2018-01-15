@@ -22,6 +22,17 @@ namespace Serilog.Exceptions.Core
             new ReflectionTypeLoadExceptionDestructurer()
         };
 
+        public static readonly IExceptionPropertyFilter FilterIgnoringStackTraceAndTargetId =
+
+#if NET45
+            new ExceptionFilterIgnoringByName(
+                nameof(Exception.StackTrace),
+                nameof(Exception.TargetSite));
+#else
+            new ExceptionFilterIgnoringByName(
+                nameof(Exception.StackTrace));
+#endif
+
         public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
 
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;

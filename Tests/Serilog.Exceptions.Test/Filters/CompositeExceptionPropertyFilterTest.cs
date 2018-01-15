@@ -93,6 +93,5 @@ namespace Serilog.Exceptions.Test.Filters
             // Assert
             Assert.False(shouldFilter);
         }
-
     }
 }
