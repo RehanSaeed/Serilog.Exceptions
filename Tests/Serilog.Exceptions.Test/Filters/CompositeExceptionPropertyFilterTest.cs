@@ -5,13 +5,13 @@ namespace Serilog.Exceptions.Test.Filters
     using Serilog.Exceptions.Filters;
     using Xunit;
 
-    public class CompositeFilterTest
+    public class CompositeExceptionPropertyFilterTest
     {
         [Fact]
         public void CreationOfCompositeFilter_ForNullFilters_Throws()
         {
             // Arrange
-            Action act = () => new CompositeFilter(null);
+            Action act = () => new CompositeExceptionPropertyFilter(null);
 
             // Act & Assert
             Assert.Throws<ArgumentNullException>(act);
@@ -21,7 +21,7 @@ namespace Serilog.Exceptions.Test.Filters
         public void CreationOfCompositeFilter_ForEmptyFilters_Throws()
         {
             // Arrange
-            Action act = () => new CompositeFilter(new IExceptionPropertyFilter[] { });
+            Action act = () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { });
 
             // Act & Assert
             Assert.Throws<ArgumentException>(act);
@@ -31,7 +31,7 @@ namespace Serilog.Exceptions.Test.Filters
         public void CreationOfCompositeFilter_ForOneNullFilter_Throws()
         {
             // Arrange
-            Action act = () => new CompositeFilter(new IExceptionPropertyFilter[] { null });
+            Action act = () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null });
 
             // Act
             var ex = Assert.Throws<ArgumentException>(act);
@@ -46,7 +46,7 @@ namespace Serilog.Exceptions.Test.Filters
             // Arrange
             var filterA = new ExceptionFilterIgnoringByName("A");
             var filterB = new ExceptionFilterIgnoringByName("B");
-            var composite = new CompositeFilter(filterA, filterB);
+            var composite = new CompositeExceptionPropertyFilter(filterA, filterB);
 
             // Act
             var shouldFilter = composite.ShouldPropertyBeFiltered(
@@ -64,7 +64,7 @@ namespace Serilog.Exceptions.Test.Filters
             // Arrange
             var filterA = new ExceptionFilterIgnoringByName("A");
             var filterB = new ExceptionFilterIgnoringByName("B");
-            var composite = new CompositeFilter(filterA, filterB);
+            var composite = new CompositeExceptionPropertyFilter(filterA, filterB);
 
             // Act
             var shouldFilter = composite.ShouldPropertyBeFiltered(
@@ -82,7 +82,7 @@ namespace Serilog.Exceptions.Test.Filters
             // Arrange
             var filterA = new ExceptionFilterIgnoringByName("A");
             var filterB = new ExceptionFilterIgnoringByName("B");
-            var composite = new CompositeFilter(filterA, filterB);
+            var composite = new CompositeExceptionPropertyFilter(filterA, filterB);
 
             // Act
             var shouldFilter = composite.ShouldPropertyBeFiltered(

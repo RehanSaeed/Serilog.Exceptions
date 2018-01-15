@@ -8,11 +8,11 @@ namespace Serilog.Exceptions.Filters
     /// OR over a set of booleans. Executes filters in the order they were
     /// passed to a constructor.
     /// </summary>
-    public class CompositeFilter : IExceptionPropertyFilter
+    public class CompositeExceptionPropertyFilter : IExceptionPropertyFilter
     {
         private readonly IExceptionPropertyFilter[] filters;
 
-        public CompositeFilter(params IExceptionPropertyFilter[] filters)
+        public CompositeExceptionPropertyFilter(params IExceptionPropertyFilter[] filters)
         {
             if (filters == null)
             {
