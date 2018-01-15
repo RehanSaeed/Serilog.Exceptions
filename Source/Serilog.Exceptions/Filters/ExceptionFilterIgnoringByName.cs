@@ -1,4 +1,4 @@
-namespace Serilog.Exceptions.Core
+namespace Serilog.Exceptions.Filters
 {
     using System;
 

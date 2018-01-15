@@ -5,6 +5,7 @@ namespace Serilog.Exceptions
     using Serilog.Configuration;
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Filters;
 
     public static class LoggerEnrichmentConfigurationExtensions
     {

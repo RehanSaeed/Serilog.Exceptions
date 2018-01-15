@@ -5,6 +5,7 @@ namespace Serilog.Exceptions.Core
     using Serilog.Core;
     using Serilog.Events;
     using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Filters;
 
     /// <summary>
     /// Enrich a <see cref="LogEvent"/> with details about an <see cref="LogEvent.Exception"/> if present.

@@ -2,10 +2,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Serilog.Exceptions.Core;
-    using Exceptions.Destructurers;
+    using Serilog.Exceptions.Destructurers;
     using Xunit;
 
     public class ReflectionBasedDestructurerTest

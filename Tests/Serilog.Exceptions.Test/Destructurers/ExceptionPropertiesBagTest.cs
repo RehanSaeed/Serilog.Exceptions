@@ -2,6 +2,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using Serilog.Exceptions.Core;
+    using Serilog.Exceptions.Filters;
     using Xunit;
 
     public class ExceptionPropertiesBagTest
