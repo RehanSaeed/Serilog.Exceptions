@@ -4,7 +4,7 @@ namespace Serilog.Exceptions.Core
 
     /// <summary>
     /// Container for all properties of single exception instance.
-    /// All properties must be added before ResultsDictionary is requested.
+    /// All properties must be added before result dictionary is requested.
     /// </summary>
     public interface IExceptionPropertiesBag
     {
@@ -12,7 +12,10 @@ namespace Serilog.Exceptions.Core
         /// Results should be collected only once, after all the properties
         /// were added using <see cref="AddProperty"/> method.
         /// </summary>
-        IReadOnlyDictionary<string, object> ResultDictionary { get; }
+        /// <returns>
+        /// Dictionary with all the properties names and values that were added.
+        /// </returns>
+        IReadOnlyDictionary<string, object> GetResultDictionary();
 
         void AddProperty(string key, object value);
     }

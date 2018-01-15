@@ -34,7 +34,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             this.destructurer.Destructure(exception, propertiesBag, null);
 
-            var properties = propertiesBag.ResultDictionary;
+            var properties = propertiesBag.GetResultDictionary();
             Assert.Equal("PublicValue", properties[nameof(TestException.PublicProperty)]);
             Assert.Equal("threw System.Exception: Exception of type 'System.Exception' was thrown.", properties[nameof(TestException.ExceptionProperty)]);
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "InternalProperty"));

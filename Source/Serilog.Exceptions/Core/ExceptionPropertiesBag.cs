@@ -16,13 +16,10 @@ namespace Serilog.Exceptions.Core
             this.filter = filter;
         }
 
-        public IReadOnlyDictionary<string, object> ResultDictionary
+        public IReadOnlyDictionary<string, object> GetResultDictionary()
         {
-            get
-            {
-                this.resultsCollected = true;
-                return this.properties;
-            }
+            this.resultsCollected = true;
+            return this.properties;
         }
 
         public void AddProperty(string key, object value)

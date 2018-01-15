@@ -134,7 +134,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, null);
 
             // Assert
-            var myObject = (Dictionary<string, object>)result.ResultDictionary["MyObject"];
+            var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
             Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
@@ -164,7 +164,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, null);
 
             // Assert
-            var myObject = (List<object>)result.ResultDictionary["MyObjectEnumerable"];
+            var myObject = (List<object>)result.GetResultDictionary()["MyObjectEnumerable"];
 
             // exception.MyObjectEnumerable[0] is still list
             var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
@@ -195,7 +195,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, null);
 
             // Assert
-            var myObject = (Dictionary<string, object>)result.ResultDictionary["MyObjectDict"];
+            var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObjectDict"];
 
             // exception.MyObjectDict["Reference"] is still regular dictionary
             var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);

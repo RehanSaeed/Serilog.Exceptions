@@ -16,7 +16,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             properties.AddProperty("key", "value");
 
             // Assert
-            var results = properties.ResultDictionary;
+            var results = properties.GetResultDictionary();
             Assert.Equal(1, results.Count);
             Assert.Contains("key", results.Keys);
             var value = results["key"];
@@ -29,7 +29,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Arrange
             var properties = new ExceptionPropertiesBag(typeof(Exception), null);
             properties.AddProperty("key", "value");
-            var results = properties.ResultDictionary;
+            var results = properties.GetResultDictionary();
 
             // Act
             var ex = Assert.Throws<InvalidOperationException>(() => properties.AddProperty("key2", "value2"));
@@ -64,7 +64,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             properties.AddProperty("key", "value");
 
             // Assert
-            var results = properties.ResultDictionary;
+            var results = properties.GetResultDictionary();
             Assert.Equal(0, results.Count);
         }
 
@@ -80,7 +80,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             properties.AddProperty("key", "value");
 
             // Assert
-            var results = properties.ResultDictionary;
+            var results = properties.GetResultDictionary();
             Assert.Equal(1, results.Count);
             Assert.Contains("key", results.Keys);
             var value = results["key"];

@@ -79,7 +79,7 @@ namespace Serilog.Exceptions.Core
                 ReflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
             }
 
-            return data.ResultDictionary;
+            return data.GetResultDictionary();
         }
     }
 }
