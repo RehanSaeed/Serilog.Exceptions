@@ -39,6 +39,20 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void CannotAddProperty_WhenKeyIsNull()
+        {
+            // Arrange
+            var properties = new ExceptionPropertiesBag(typeof(Exception), null);
+
+            // Act
+            var ex = Assert.Throws<ArgumentNullException>(() => properties.AddProperty(null, "value"));
+
+            // Assert
+            Assert.StartsWith("Cannot add exception property without a key", ex.Message);
+            Assert.Equal("key", ex.ParamName);
+        }
+
+        [Fact]
         public void AddedProperty_WhenFilterIsSetToIgnoreIt_IsSkipped()
         {
             // Arrange

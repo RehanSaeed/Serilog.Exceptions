@@ -16,7 +16,7 @@ namespace Serilog.Exceptions.Core
         /// </summary>
         private readonly string[] propertiesToIgnore;
 
-        public ExceptionFilterIgnoringByName(string[] propertiesToIgnore)
+        public ExceptionFilterIgnoringByName(params string[] propertiesToIgnore)
         {
             this.propertiesToIgnore = propertiesToIgnore;
         }

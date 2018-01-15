@@ -27,6 +27,11 @@ namespace Serilog.Exceptions.Core
 
         public void AddProperty(string key, object value)
         {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key), "Cannot add exception property without a key");
+            }
+
             if (this.resultsCollected)
             {
                 throw new InvalidOperationException($"Cannot add exception property '{key}' to bag, after results were already collected");
