@@ -40,5 +40,59 @@ namespace Serilog.Exceptions.Test.Filters
             Assert.Contains("index 0", ex.Message);
         }
 
+        [Fact]
+        public void ShouldFilterTheProperty_WhenFirstFilterFilters_Filters()
+        {
+            // Arrange
+            var filterA = new ExceptionFilterIgnoringByName("A");
+            var filterB = new ExceptionFilterIgnoringByName("B");
+            var composite = new CompositeFilter(filterA, filterB);
+
+            // Act
+            var shouldFilter = composite.ShouldPropertyBeFiltered(
+                typeof(Exception),
+                "B",
+                1);
+
+            // Assert
+            Assert.True(shouldFilter);
+        }
+
+        [Fact]
+        public void ShouldFilterTheProperty_WhenSecondFilterFilters_Filters()
+        {
+            // Arrange
+            var filterA = new ExceptionFilterIgnoringByName("A");
+            var filterB = new ExceptionFilterIgnoringByName("B");
+            var composite = new CompositeFilter(filterA, filterB);
+
+            // Act
+            var shouldFilter = composite.ShouldPropertyBeFiltered(
+                typeof(Exception),
+                "A",
+                1);
+
+            // Assert
+            Assert.True(shouldFilter);
+        }
+
+        [Fact]
+        public void ShouldFilterTheProperty_WhenNoFilterFilters_NotFilters()
+        {
+            // Arrange
+            var filterA = new ExceptionFilterIgnoringByName("A");
+            var filterB = new ExceptionFilterIgnoringByName("B");
+            var composite = new CompositeFilter(filterA, filterB);
+
+            // Act
+            var shouldFilter = composite.ShouldPropertyBeFiltered(
+                typeof(Exception),
+                "C",
+                1);
+
+            // Assert
+            Assert.False(shouldFilter);
+        }
+
     }
 }
