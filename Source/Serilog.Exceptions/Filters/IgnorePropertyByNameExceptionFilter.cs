@@ -7,7 +7,7 @@ namespace Serilog.Exceptions.Filters
     /// matches any of provided property names, exception property is ignored altogether.
     /// Comparison method is exact case-sensitive.
     /// </summary>
-    public class ExceptionFilterIgnoringByName : IExceptionPropertyFilter
+    public class IgnorePropertyByNameExceptionFilter : IExceptionPropertyFilter
     {
         /// <summary>
         /// The usage of array instead of HashSet is dictated by the assumption
@@ -16,7 +16,7 @@ namespace Serilog.Exceptions.Filters
         /// </summary>
         private readonly string[] propertiesToIgnore;
 
-        public ExceptionFilterIgnoringByName(params string[] propertiesToIgnore)
+        public IgnorePropertyByNameExceptionFilter(params string[] propertiesToIgnore)
         {
             this.propertiesToIgnore = propertiesToIgnore;
         }

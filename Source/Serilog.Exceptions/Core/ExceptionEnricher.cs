@@ -22,14 +22,14 @@ namespace Serilog.Exceptions.Core
             new ReflectionTypeLoadExceptionDestructurer()
         };
 
-        public static readonly IExceptionPropertyFilter FilterIgnoringStackTraceAndTargetId =
+        public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetIdExceptionFilter =
 
 #if NET45
-            new ExceptionFilterIgnoringByName(
+            new IgnorePropertyByNameExceptionFilter(
                 nameof(Exception.StackTrace),
                 nameof(Exception.TargetSite));
 #else
-            new ExceptionFilterIgnoringByName(
+            new IgnorePropertyByNameExceptionFilter(
                 nameof(Exception.StackTrace));
 #endif
 

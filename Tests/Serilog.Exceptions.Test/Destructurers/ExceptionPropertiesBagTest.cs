@@ -59,7 +59,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Arrange
             var properties = new ExceptionPropertiesBag(
                 typeof(Exception),
-                new ExceptionFilterIgnoringByName(new[] { "key" }));
+                new IgnorePropertyByNameExceptionFilter(new[] { "key" }));
 
             // Act
             properties.AddProperty("key", "value");
@@ -75,7 +75,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Arrange
             var properties = new ExceptionPropertiesBag(
                 typeof(Exception),
-                new ExceptionFilterIgnoringByName(new[] { "not key" }));
+                new IgnorePropertyByNameExceptionFilter(new[] { "not key" }));
 
             // Act
             properties.AddProperty("key", "value");

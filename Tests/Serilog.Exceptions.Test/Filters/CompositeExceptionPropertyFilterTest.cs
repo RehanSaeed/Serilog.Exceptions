@@ -44,8 +44,8 @@ namespace Serilog.Exceptions.Test.Filters
         public void ShouldFilterTheProperty_WhenFirstFilterFilters_Filters()
         {
             // Arrange
-            var filterA = new ExceptionFilterIgnoringByName("A");
-            var filterB = new ExceptionFilterIgnoringByName("B");
+            var filterA = new IgnorePropertyByNameExceptionFilter("A");
+            var filterB = new IgnorePropertyByNameExceptionFilter("B");
             var composite = new CompositeExceptionPropertyFilter(filterA, filterB);
 
             // Act
@@ -62,8 +62,8 @@ namespace Serilog.Exceptions.Test.Filters
         public void ShouldFilterTheProperty_WhenSecondFilterFilters_Filters()
         {
             // Arrange
-            var filterA = new ExceptionFilterIgnoringByName("A");
-            var filterB = new ExceptionFilterIgnoringByName("B");
+            var filterA = new IgnorePropertyByNameExceptionFilter("A");
+            var filterB = new IgnorePropertyByNameExceptionFilter("B");
             var composite = new CompositeExceptionPropertyFilter(filterA, filterB);
 
             // Act
@@ -80,8 +80,8 @@ namespace Serilog.Exceptions.Test.Filters
         public void ShouldFilterTheProperty_WhenNoFilterFilters_NotFilters()
         {
             // Arrange
-            var filterA = new ExceptionFilterIgnoringByName("A");
-            var filterB = new ExceptionFilterIgnoringByName("B");
+            var filterA = new IgnorePropertyByNameExceptionFilter("A");
+            var filterB = new IgnorePropertyByNameExceptionFilter("B");
             var composite = new CompositeExceptionPropertyFilter(filterA, filterB);
 
             // Act

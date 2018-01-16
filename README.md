@@ -119,7 +119,7 @@ You may want to skip some properties of all or part your exception classes witho
 Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog is already reporting them so you may want Serilog.Exceptions to skip them to save space and processing time. To do that you just need to modify a line in configuration:
 
 ```
-.Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, ExceptionEnricher.FilterIgnoringStackTraceAndTargetId)
+.Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, ExceptionEnricher.IgnoreStackTraceAndTargetIdExceptionFilter)
 ```
 
 Filtering for other scenarios is also supported:
