@@ -11,7 +11,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void AddedProperty_IsAvailableInReturnedDictionary()
         {
             // Arrange
-            var properties = new ExceptionPropertiesBag(typeof(Exception), null);
+            var properties = new ExceptionPropertiesBag(new Exception(), null);
 
             // Act
             properties.AddProperty("key", "value");
@@ -28,7 +28,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void CannotAddProperty_WhenResultWasAlreadyAquired()
         {
             // Arrange
-            var properties = new ExceptionPropertiesBag(typeof(Exception), null);
+            var properties = new ExceptionPropertiesBag(new Exception(), null);
             properties.AddProperty("key", "value");
             var results = properties.GetResultDictionary();
 
@@ -43,7 +43,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void CannotAddProperty_WhenKeyIsNull()
         {
             // Arrange
-            var properties = new ExceptionPropertiesBag(typeof(Exception), null);
+            var properties = new ExceptionPropertiesBag(new Exception(), null);
 
             // Act
             var ex = Assert.Throws<ArgumentNullException>(() => properties.AddProperty(null, "value"));
@@ -58,7 +58,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             // Arrange
             var properties = new ExceptionPropertiesBag(
-                typeof(Exception),
+                new Exception(),
                 new IgnorePropertyByNameExceptionFilter(new[] { "key" }));
 
             // Act
@@ -74,7 +74,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             // Arrange
             var properties = new ExceptionPropertiesBag(
-                typeof(Exception),
+                new Exception(),
                 new IgnorePropertyByNameExceptionFilter(new[] { "not key" }));
 
             // Act

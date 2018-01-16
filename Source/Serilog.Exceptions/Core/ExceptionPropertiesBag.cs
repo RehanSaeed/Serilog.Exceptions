@@ -6,7 +6,7 @@ namespace Serilog.Exceptions.Core
 
     internal class ExceptionPropertiesBag : IExceptionPropertiesBag
     {
-        private readonly Type exceptionType;
+        private readonly Exception exception;
         private readonly IExceptionPropertyFilter filter;
         private readonly Dictionary<string, object> properties = new Dictionary<string, object>();
 
@@ -14,9 +14,9 @@ namespace Serilog.Exceptions.Core
         // after that there are no changes. This is the application of fail-fast principle.
         private bool resultsCollected = false;
 
-        public ExceptionPropertiesBag(Type exceptionType, IExceptionPropertyFilter filter = null)
+        public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
         {
-            this.exceptionType = exceptionType;
+            this.exception = exception;
             this.filter = filter;
         }
 
@@ -40,7 +40,7 @@ namespace Serilog.Exceptions.Core
 
             if (this.filter != null)
             {
-                if (this.filter.ShouldPropertyBeFiltered(this.exceptionType, key, value))
+                if (this.filter.ShouldPropertyBeFiltered(this.exception, key, value))
                 {
                     return;
                 }

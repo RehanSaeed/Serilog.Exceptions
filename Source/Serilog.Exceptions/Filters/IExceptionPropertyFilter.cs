@@ -13,10 +13,10 @@ namespace Serilog.Exceptions.Filters
         /// Called after the property was discovered and destructured but
         /// just before it is added to results.
         /// </summary>
-        /// <param name="exceptionType">Type of the exception for which properties are filtered</param>
+        /// <param name="exception">Exception for which properties are filtered</param>
         /// <param name="propertyName">Name of the property</param>
         /// <param name="value">Destructured value of the property </param>
         /// <returns>Boolean flag indicating whether property will be rejected</returns>
-        bool ShouldPropertyBeFiltered(Type exceptionType, string propertyName, object value);
+        bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object value);
     }
 }

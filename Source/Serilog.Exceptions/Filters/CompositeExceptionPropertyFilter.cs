@@ -41,11 +41,11 @@ namespace Serilog.Exceptions.Filters
             this.filters = filters;
         }
 
-        public bool ShouldPropertyBeFiltered(Type exceptionType, string propertyName, object value)
+        public bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object value)
         {
             for (int i = 0; i < this.filters.Length; i++)
             {
-                if (this.filters[i].ShouldPropertyBeFiltered(exceptionType, propertyName, value))
+                if (this.filters[i].ShouldPropertyBeFiltered(exception, propertyName, value))
                 {
                     return true;
                 }

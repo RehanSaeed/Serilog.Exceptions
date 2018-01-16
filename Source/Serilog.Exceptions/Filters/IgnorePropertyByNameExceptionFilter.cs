@@ -21,7 +21,7 @@ namespace Serilog.Exceptions.Filters
             this.propertiesToIgnore = propertiesToIgnore;
         }
 
-        public bool ShouldPropertyBeFiltered(Type exceptionType, string propertyName, object value)
+        public bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object value)
         {
             if (this.propertiesToIgnore == null)
             {

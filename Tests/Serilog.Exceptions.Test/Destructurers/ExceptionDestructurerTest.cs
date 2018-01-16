@@ -129,7 +129,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.MyObject.Reference2 = exception.MyObject;
 
             // Act
-            var result = new ExceptionPropertiesBag(typeof(Exception));
+            var result = new ExceptionPropertiesBag(new Exception());
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
@@ -159,7 +159,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.MyObjectEnumerable.Reference = cyclic;
 
             // Act
-            var result = new ExceptionPropertiesBag(typeof(Exception));
+            var result = new ExceptionPropertiesBag(new Exception());
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 
@@ -190,7 +190,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             };
 
             // Act
-            var result = new ExceptionPropertiesBag(typeof(Exception));
+            var result = new ExceptionPropertiesBag(new Exception());
             var destructurer = new ReflectionBasedDestructurer();
             destructurer.Destructure(exception, result, null);
 

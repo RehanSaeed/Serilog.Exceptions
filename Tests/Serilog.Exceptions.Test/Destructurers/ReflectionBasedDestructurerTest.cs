@@ -28,7 +28,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 exception = e;
             }
 
-            var propertiesBag = new ExceptionPropertiesBag(typeof(Exception));
+            var propertiesBag = new ExceptionPropertiesBag(new Exception());
 
             this.destructurer.Destructure(exception, propertiesBag, null);
 

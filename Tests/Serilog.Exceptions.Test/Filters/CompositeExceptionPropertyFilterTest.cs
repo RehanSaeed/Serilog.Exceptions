@@ -50,7 +50,7 @@ namespace Serilog.Exceptions.Test.Filters
 
             // Act
             var shouldFilter = composite.ShouldPropertyBeFiltered(
-                typeof(Exception),
+                new Exception(),
                 "B",
                 1);
 
@@ -68,7 +68,7 @@ namespace Serilog.Exceptions.Test.Filters
 
             // Act
             var shouldFilter = composite.ShouldPropertyBeFiltered(
-                typeof(Exception),
+                new Exception(),
                 "A",
                 1);
 
@@ -86,7 +86,7 @@ namespace Serilog.Exceptions.Test.Filters
 
             // Act
             var shouldFilter = composite.ShouldPropertyBeFiltered(
-                typeof(Exception),
+                new Exception(),
                 "C",
                 1);
 
