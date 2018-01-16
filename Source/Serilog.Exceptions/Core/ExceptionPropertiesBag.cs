@@ -16,6 +16,11 @@ namespace Serilog.Exceptions.Core
 
         public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
         {
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(exception), $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
+            }
+
             this.exception = exception;
             this.filter = filter;
         }

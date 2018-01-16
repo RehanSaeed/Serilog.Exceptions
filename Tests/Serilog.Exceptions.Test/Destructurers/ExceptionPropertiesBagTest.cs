@@ -8,6 +8,19 @@ namespace Serilog.Exceptions.Test.Destructurers
     public class ExceptionPropertiesBagTest
     {
         [Fact]
+        public void Constructor_GivenNullException_Throws()
+        {
+            // Arrange
+            Action act = () => new ExceptionPropertiesBag(null);
+
+            // Act
+            var ex = Assert.Throws<ArgumentNullException>(act);
+
+            // Assert
+            Assert.Equal("exception", ex.ParamName);
+        }
+
+        [Fact]
         public void AddedProperty_IsAvailableInReturnedDictionary()
         {
             // Arrange
