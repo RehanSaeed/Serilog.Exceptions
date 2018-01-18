@@ -161,17 +161,7 @@ namespace Serilog.Exceptions.Destructurers
 
             if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
             {
-                var propertyNames = valueType
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
-                    .Select(p => p.Name)
-                    .ToArray();
-
-                reflectionInfo = new ReflectionInfo()
-                {
-                    Accessor = TypeAccessor.Create(valueType),
-                    PropertyNames = propertyNames
-                };
+                reflectionInfo = GenerateReflectionInfoForType(valueType);
                 this.reflectionInfoCache.Add(valueType, reflectionInfo);
             }
 
@@ -202,6 +192,23 @@ namespace Serilog.Exceptions.Destructurers
             this.AppendTypeIfPossible(values, valueType);
 
             return values;
+        }
+
+        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        {
+            ReflectionInfo reflectionInfo;
+            var propertyNames = valueType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
+                .Select(p => p.Name)
+                .ToArray();
+
+            reflectionInfo = new ReflectionInfo()
+            {
+                Accessor = TypeAccessor.Create(valueType),
+                PropertyNames = propertyNames
+            };
+            return reflectionInfo;
         }
 
         private void AppendTypeIfPossible(Dictionary<string, object> values, Type valueType)
