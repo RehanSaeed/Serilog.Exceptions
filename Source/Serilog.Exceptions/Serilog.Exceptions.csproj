@@ -31,6 +31,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
+    <PackageReference Include="FastMember.Signed" Version="1.1.0" />
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.0-beta004" />
   </ItemGroup>
