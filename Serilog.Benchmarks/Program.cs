@@ -6,7 +6,7 @@ using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
 using Serilog.Exceptions.Filters;
 
-namespace Serilog.Benchmarks
+namespace Serilog.Exceptions.Benchmarks
 {
     public class Program
     {

@@ -34,9 +34,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.SqlServer", "Source\Serilog.Exceptions.SqlServer\Serilog.Exceptions.SqlServer.csproj", "{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Benchmarks", "Serilog.Benchmarks\Serilog.Benchmarks.csproj", "{D25A5400-9760-4099-967F-B22956D74ACE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Exceptions.Benchmarks", "Serilog.Benchmarks\Serilog.Exceptions.Benchmarks.csproj", "{D25A5400-9760-4099-967F-B22956D74ACE}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
