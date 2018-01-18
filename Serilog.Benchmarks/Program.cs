@@ -82,11 +82,12 @@ namespace Serilog.Benchmarks
 
         }
 
-        public class BenchmarkExceptionDestructurer : IExceptionDestructurer
+        public class BenchmarkExceptionDestructurer : ExceptionDestructurer
         {
             public Type[] TargetTypes { get; }
             public void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
             {
+                base.Destructure(exception, propertiesBag, destructureException);
                 BenchmarkException benchmarkException = (BenchmarkException) exception;
                 propertiesBag.AddProperty("ParamString", benchmarkException.ParamString);
                 propertiesBag.AddProperty("ParamInt", benchmarkException.ParamInt);
@@ -151,7 +152,7 @@ namespace Serilog.Benchmarks
                 benchmarkExceptionDestructurer.Destructure(
                     ex,
                     bag,
-                    DestructureUsingOldReflectionDestructurer);
+                    DestructureUsingCustomDestructurer);
 
                 return bag.GetResultDictionary();
             }
@@ -169,7 +170,7 @@ namespace Serilog.Benchmarks
                 fastReflectionBasedDestructurer.Destructure(
                     ex,
                     bag,
-                    DestructureUsingOldReflectionDestructurer);
+                    DestructureUsingFastReflectionDestructurer);
 
                 return bag.GetResultDictionary();
             }
