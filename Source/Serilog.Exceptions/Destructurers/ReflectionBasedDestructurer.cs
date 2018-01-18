@@ -5,6 +5,7 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Serilog.Exceptions.Core;
 
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
@@ -13,12 +14,12 @@ namespace Serilog.Exceptions.Destructurers
         private const string CyclicReferenceMessage = "Cyclic reference";
         private const int MaxRecursiveLevel = 10;
 
-        public Type[] TargetTypes => new Type[] { typeof(Exception) };
+        public Type[] TargetTypes => new[] { typeof(Exception) };
 
         public void Destructure(
             Exception exception,
-            IDictionary<string, object> data,
-            Func<Exception, IDictionary<string, object>> destructureException)
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
             var nextCyclicRefId = 1;
             foreach (var p in this.DestructureObject(
@@ -28,7 +29,7 @@ namespace Serilog.Exceptions.Destructurers
                 new Dictionary<object, IDictionary<string, object>>(),
                 ref nextCyclicRefId))
             {
-                data.Add(p.Key, p.Value);
+                propertiesBag.AddProperty(p.Key, p.Value);
             }
         }
 

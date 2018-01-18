@@ -1,7 +1,8 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
+    using Serilog.Exceptions.Core;
 
     public interface IExceptionDestructurer
     {
@@ -9,7 +10,7 @@
 
         void Destructure(
             Exception exception,
-            IDictionary<string, object> data,
-            Func<Exception, IDictionary<string, object>> destructureException);
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> destructureException);
     }
 }

@@ -1,10 +1,9 @@
-﻿namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Exceptions.Destructurers;
+    using Serilog.Exceptions.Core;
+    using Serilog.Exceptions.Destructurers;
     using Xunit;
 
     public class ReflectionBasedDestructurerTest
@@ -29,10 +28,11 @@
                 exception = e;
             }
 
-            var properties = new Dictionary<string, object>();
+            var propertiesBag = new ExceptionPropertiesBag(new Exception());
 
-            this.destructurer.Destructure(exception, properties, null);
+            this.destructurer.Destructure(exception, propertiesBag, null);
 
+            var properties = propertiesBag.GetResultDictionary();
             Assert.Equal("PublicValue", properties[nameof(TestException.PublicProperty)]);
             Assert.Equal("threw System.Exception: Exception of type 'System.Exception' was thrown.", properties[nameof(TestException.ExceptionProperty)]);
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "InternalProperty"));

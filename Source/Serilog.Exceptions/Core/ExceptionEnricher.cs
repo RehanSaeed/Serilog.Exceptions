@@ -1,9 +1,11 @@
-﻿namespace Serilog.Exceptions.Destructurers
+namespace Serilog.Exceptions.Core
 {
     using System;
     using System.Collections.Generic;
     using Serilog.Core;
     using Serilog.Events;
+    using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Filters;
 
     /// <summary>
     /// Enrich a <see cref="LogEvent"/> with details about an <see cref="LogEvent.Exception"/> if present.
@@ -20,22 +22,38 @@
             new ReflectionTypeLoadExceptionDestructurer()
         };
 
+        public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetIdExceptionFilter =
+
+#if NET45
+            new IgnorePropertyByNameExceptionFilter(
+                nameof(Exception.StackTrace),
+                nameof(Exception.TargetSite));
+#else
+            new IgnorePropertyByNameExceptionFilter(
+                nameof(Exception.StackTrace));
+#endif
+
         public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
 
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
+        private readonly IExceptionPropertyFilter filter;
 
         public ExceptionEnricher()
             : this(DefaultDestructurers)
         {
         }
 
-        public ExceptionEnricher(params IExceptionDestructurer[] destructurers)
-            : this((IEnumerable<IExceptionDestructurer>)destructurers)
+        public ExceptionEnricher(
+            params IExceptionDestructurer[] destructurers)
+            : this(destructurers, null)
         {
         }
 
-        public ExceptionEnricher(IEnumerable<IExceptionDestructurer> destructurers)
+        public ExceptionEnricher(
+            IEnumerable<IExceptionDestructurer> destructurers,
+            IExceptionPropertyFilter filter = null)
         {
+            this.filter = filter;
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
             foreach (var destructurer in destructurers)
             {
@@ -57,9 +75,9 @@
             }
         }
 
-        private Dictionary<string, object> DestructureException(Exception exception)
+        private IReadOnlyDictionary<string, object> DestructureException(Exception exception)
         {
-            var data = new Dictionary<string, object>();
+            var data = new ExceptionPropertiesBag(new Exception(), this.filter);
 
             var exceptionType = exception.GetType();
 
@@ -73,7 +91,7 @@
                 ReflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
             }
 
-            return data;
+            return data.GetResultDictionary();
         }
     }
 }
