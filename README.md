@@ -80,9 +80,9 @@ using Serilog.Exceptions;
 
 ILogger logger = new LoggerConfiguration()
     .Enrich.WithExceptionDetails()
-    .WriteTo.Sink(new RollingFileSink(
-        @"C:\logs",
-        new JsonFormatter(renderMessage: true))
+    .WriteTo.RollingFile(
+        new JsonFormatter(renderMessage: true), 
+        @"C:\logs\log-{Date}.txt")    
     .CreateLogger();
 ```
 
