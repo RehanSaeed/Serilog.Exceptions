@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes.Jobs;
 using BenchmarkDotNet.Running;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
@@ -84,8 +85,8 @@ namespace Serilog.Exceptions.Benchmark
 
         public class BenchmarkExceptionDestructurer : ExceptionDestructurer
         {
-            public Type[] TargetTypes { get; }
-            public void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
+            public override Type[] TargetTypes => new [] { typeof(BenchmarkException) };
+            public override void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
             {
                 base.Destructure(exception, propertiesBag, destructureException);
                 BenchmarkException benchmarkException = (BenchmarkException)exception;
@@ -99,15 +100,17 @@ namespace Serilog.Exceptions.Benchmark
             }
         }
 
+        [ClrJob]
+        [CoreJob]
         public class DestructuringBenchmark
         {
-            private static BenchmarkException _benchmarkException;
-            private static ReflectionBasedDestructurer oldReflectionBasedDestructurer = new ReflectionBasedDestructurer();
-            private static BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new BenchmarkExceptionDestructurer();
-            private static FastReflectionBasedDestructurer fastReflectionBasedDestructurer = new FastReflectionBasedDestructurer();
+            private BenchmarkException _benchmarkException;
+            private ReflectionBasedDestructurer oldReflectionBasedDestructurer = new ReflectionBasedDestructurer();
+            private BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new BenchmarkExceptionDestructurer();
+            private FastReflectionBasedDestructurer fastReflectionBasedDestructurer = new FastReflectionBasedDestructurer();
 
             [GlobalSetup]
-            public static void Setup()
+            public void Setup()
             {
                 try
                 {
@@ -120,19 +123,19 @@ namespace Serilog.Exceptions.Benchmark
                 }
                 catch (BenchmarkException ex)
                 {
-                    _benchmarkException = ex;
+                    this._benchmarkException = ex;
                 }
 
             }
 
-            public static IReadOnlyDictionary<string, object> DestructureUsingOldReflectionDestructurer(Exception ex)
+            public IReadOnlyDictionary<string, object> DestructureUsingOldReflectionDestructurer(Exception ex)
             {
                 ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
 
-                oldReflectionBasedDestructurer.Destructure(
+                this.oldReflectionBasedDestructurer.Destructure(
                     ex,
                     bag,
-                    DestructureUsingOldReflectionDestructurer);
+                    null);
 
                 return bag.GetResultDictionary();
             }
@@ -140,17 +143,17 @@ namespace Serilog.Exceptions.Benchmark
             [Benchmark]
             public IReadOnlyDictionary<string, object> OldReflectionDestructurer()
             {
-                return DestructureUsingOldReflectionDestructurer(_benchmarkException);
+                return DestructureUsingOldReflectionDestructurer(this._benchmarkException);
             }
 
-            public static IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex)
+            public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex)
             {
                 ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
 
-                benchmarkExceptionDestructurer.Destructure(
+                this.benchmarkExceptionDestructurer.Destructure(
                     ex,
                     bag,
-                    DestructureUsingCustomDestructurer);
+                    null);
 
                 return bag.GetResultDictionary();
             }
@@ -158,17 +161,17 @@ namespace Serilog.Exceptions.Benchmark
             [Benchmark]
             public IReadOnlyDictionary<string, object> CustomDestructurer()
             {
-                return DestructureUsingCustomDestructurer(_benchmarkException);
+                return DestructureUsingCustomDestructurer(this._benchmarkException);
             }
 
-            public static IReadOnlyDictionary<string, object> DestructureUsingFastReflectionDestructurer(Exception ex)
+            public IReadOnlyDictionary<string, object> DestructureUsingFastReflectionDestructurer(Exception ex)
             {
                 ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
 
-                fastReflectionBasedDestructurer.Destructure(
+                this.fastReflectionBasedDestructurer.Destructure(
                     ex,
                     bag,
-                    DestructureUsingFastReflectionDestructurer);
+                    null);
 
                 return bag.GetResultDictionary();
             }
@@ -176,14 +179,13 @@ namespace Serilog.Exceptions.Benchmark
             [Benchmark]
             public IReadOnlyDictionary<string, object> FastReflectionDestructurer()
             {
-                return DestructureUsingFastReflectionDestructurer(_benchmarkException);
+                return DestructureUsingFastReflectionDestructurer(this._benchmarkException);
             }
-
         }
 
-        static void Main(string[] args)
+        static void Main()
         {
-            var summary = BenchmarkRunner.Run<DestructuringBenchmark>();
+            BenchmarkRunner.Run<DestructuringBenchmark>();
         }
     }
 }
