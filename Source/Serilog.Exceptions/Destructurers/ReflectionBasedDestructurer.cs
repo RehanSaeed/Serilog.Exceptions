@@ -5,6 +5,7 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using FastMember;
     using Serilog.Exceptions.Core;
 
     public class ReflectionBasedDestructurer : IExceptionDestructurer
@@ -13,6 +14,8 @@ namespace Serilog.Exceptions.Destructurers
         private const string RefLabel = "$ref";
         private const string CyclicReferenceMessage = "Cyclic reference";
         private const int MaxRecursiveLevel = 10;
+
+        private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
 
         public Type[] TargetTypes => new[] { typeof(Exception) };
 
@@ -49,6 +52,22 @@ namespace Serilog.Exceptions.Destructurers
             }
 
             return refId;
+        }
+
+        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        {
+            var propertyNames = valueType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
+                .Select(p => p.Name)
+                .ToArray();
+
+            var reflectionInfo = new ReflectionInfo()
+            {
+                Accessor = TypeAccessor.Create(valueType),
+                PropertyNames = propertyNames
+            };
+            return reflectionInfo;
         }
 
         private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
@@ -156,16 +175,18 @@ namespace Serilog.Exceptions.Destructurers
             var values = new Dictionary<string, object>();
             destructuredObjects.Add(value, values);
 
-            var properties = valueType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0);
+            if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
+            {
+                reflectionInfo = GenerateReflectionInfoForType(valueType);
+                this.reflectionInfoCache.Add(valueType, reflectionInfo);
+            }
 
-            foreach (var property in properties)
+            foreach (var propertyName in reflectionInfo.PropertyNames)
             {
                 try
                 {
-                    values.Add(property.Name, this.DestructureValue(
-                        property.GetValue(value),
+                    values.Add(propertyName, this.DestructureValue(
+                        reflectionInfo.Accessor[value, propertyName],
                         level + 1,
                         destructuredObjects,
                         ref nextCyclicRefId));
@@ -175,12 +196,12 @@ namespace Serilog.Exceptions.Destructurers
                     var innerException = targetInvocationException.InnerException;
                     if (innerException != null)
                     {
-                        values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
+                        values.Add(propertyName, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
                 }
                 catch (Exception exception)
                 {
-                    values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
+                    values.Add(propertyName, $"threw {exception.GetType().FullName}: {exception.Message}");
                 }
             }
 
@@ -207,6 +228,13 @@ namespace Serilog.Exceptions.Destructurers
             {
                 values.Add("Type", valueType);
             }
+        }
+
+        private class ReflectionInfo
+        {
+            public TypeAccessor Accessor { get; set; }
+
+            public string[] PropertyNames { get; set; }
         }
     }
 }

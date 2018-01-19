@@ -11,9 +11,8 @@ namespace Serilog.Exceptions.Benchmark
     public class DestructuringBenchmark
     {
         private BenchmarkException benchmarkException;
-        private ReflectionBasedDestructurer oldReflectionBasedDestructurer = new ReflectionBasedDestructurer();
+        private ReflectionBasedDestructurer reflectionBasedDestructurer = new ReflectionBasedDestructurer();
         private BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new BenchmarkExceptionDestructurer();
-        private FastReflectionBasedDestructurer fastReflectionBasedDestructurer = new FastReflectionBasedDestructurer();
 
         [GlobalSetup]
         public void Setup()
@@ -34,11 +33,11 @@ namespace Serilog.Exceptions.Benchmark
 
         }
 
-        public IReadOnlyDictionary<string, object> DestructureUsingOldReflectionDestructurer(Exception ex)
+        public IReadOnlyDictionary<string, object> DestructureUsingReflectionDestructurer(Exception ex)
         {
             ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
 
-            this.oldReflectionBasedDestructurer.Destructure(
+            this.reflectionBasedDestructurer.Destructure(
                 ex,
                 bag,
                 null);
@@ -47,9 +46,9 @@ namespace Serilog.Exceptions.Benchmark
         }
 
         [Benchmark]
-        public IReadOnlyDictionary<string, object> OldReflectionDestructurer()
+        public IReadOnlyDictionary<string, object> ReflectionDestructurer()
         {
-            return DestructureUsingOldReflectionDestructurer(this.benchmarkException);
+            return DestructureUsingReflectionDestructurer(this.benchmarkException);
         }
 
         public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex)
@@ -68,24 +67,6 @@ namespace Serilog.Exceptions.Benchmark
         public IReadOnlyDictionary<string, object> CustomDestructurer()
         {
             return DestructureUsingCustomDestructurer(this.benchmarkException);
-        }
-
-        public IReadOnlyDictionary<string, object> DestructureUsingFastReflectionDestructurer(Exception ex)
-        {
-            ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
-
-            this.fastReflectionBasedDestructurer.Destructure(
-                ex,
-                bag,
-                null);
-
-            return bag.GetResultDictionary();
-        }
-
-        [Benchmark]
-        public IReadOnlyDictionary<string, object> FastReflectionDestructurer()
-        {
-            return DestructureUsingFastReflectionDestructurer(this.benchmarkException);
         }
     }
 }
