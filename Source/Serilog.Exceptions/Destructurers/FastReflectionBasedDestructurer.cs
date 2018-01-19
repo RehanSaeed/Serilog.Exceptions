@@ -54,6 +54,22 @@ namespace Serilog.Exceptions.Destructurers
             return refId;
         }
 
+        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        {
+            var propertyNames = valueType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
+                .Select(p => p.Name)
+                .ToArray();
+
+            var reflectionInfo = new ReflectionInfo()
+            {
+                Accessor = TypeAccessor.Create(valueType),
+                PropertyNames = propertyNames
+            };
+            return reflectionInfo;
+        }
+
         private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
         {
             if (value == null)
@@ -192,23 +208,6 @@ namespace Serilog.Exceptions.Destructurers
             this.AppendTypeIfPossible(values, valueType);
 
             return values;
-        }
-
-        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
-        {
-            ReflectionInfo reflectionInfo;
-            var propertyNames = valueType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
-                .Select(p => p.Name)
-                .ToArray();
-
-            reflectionInfo = new ReflectionInfo()
-            {
-                Accessor = TypeAccessor.Create(valueType),
-                PropertyNames = propertyNames
-            };
-            return reflectionInfo;
         }
 
         private void AppendTypeIfPossible(Dictionary<string, object> values, Type valueType)

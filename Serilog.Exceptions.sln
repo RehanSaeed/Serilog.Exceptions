@@ -34,12 +34,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.SqlServer", "Source\Serilog.Exceptions.SqlServer\Serilog.Exceptions.SqlServer.csproj", "{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Exceptions.Benchmarks", "Serilog.Benchmarks\Serilog.Exceptions.Benchmarks.csproj", "{D25A5400-9760-4099-967F-B22956D74ACE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serilog.Exceptions.Benchmark", "Serilog.Exceptions.Benchmark\Serilog.Exceptions.Benchmark.csproj", "{B633EE75-5869-4EDB-B4BC-A4DF9D282077}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -61,10 +58,10 @@ Global
 		{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D25A5400-9760-4099-967F-B22956D74ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D25A5400-9760-4099-967F-B22956D74ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D25A5400-9760-4099-967F-B22956D74ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D25A5400-9760-4099-967F-B22956D74ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B633EE75-5869-4EDB-B4BC-A4DF9D282077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B633EE75-5869-4EDB-B4BC-A4DF9D282077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B633EE75-5869-4EDB-B4BC-A4DF9D282077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B633EE75-5869-4EDB-B4BC-A4DF9D282077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,9 +71,12 @@ Global
 		{D8034654-4A6F-4857-9637-62098FC9267A} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{7C962929-2138-4787-ABA7-94E8D3F9C20C} = {D6E871A8-2DFF-4676-BED8-046B164919B9}
 		{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
-		{D25A5400-9760-4099-967F-B22956D74ACE} = {D6E871A8-2DFF-4676-BED8-046B164919B9}
+		{B633EE75-5869-4EDB-B4BC-A4DF9D282077} = {D6E871A8-2DFF-4676-BED8-046B164919B9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
