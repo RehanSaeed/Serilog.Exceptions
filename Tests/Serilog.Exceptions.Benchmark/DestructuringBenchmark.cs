@@ -8,6 +8,7 @@ namespace Serilog.Exceptions.Benchmark
 {
     [ClrJob]
     [CoreJob]
+    [MemoryDiagnoser]
     public class DestructuringBenchmark
     {
         private BenchmarkException benchmarkException;
