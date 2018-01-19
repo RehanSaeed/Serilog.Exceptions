@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
+    <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
     <PackageReference Include="BenchmarkDotNet" Version="0.10.12" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />

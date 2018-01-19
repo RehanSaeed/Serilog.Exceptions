@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DestructuringBenchmark</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.10.12, OS=Windows 10 Redstone 1 [1607, Anniversary Update] (10.0.14393.1944)
+Intel Core i5-6300U CPU 2.40GHz (Skylake), 1 CPU, 4 logical cores and 2 physical cores
+Frequency=2437499 Hz, Resolution=410.2566 ns, Timer=TSC
+.NET Core SDK=2.1.4
+  [Host] : .NET Core 2.0.5 (Framework 4.6.26020.03), 64bit RyuJIT
+  Clr    : .NET Framework 4.6.1 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.2117.0
+  Core   : .NET Core 2.0.5 (Framework 4.6.26020.03), 64bit RyuJIT
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>              Method</th><th>Job</th><th>Runtime</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th>
+</tr>
+</thead><tbody><tr><td>OldReflectionDestructurer</td><td>Clr</td><td>Clr</td><td>15.360 us</td><td>0.2928 us</td><td>0.3133 us</td><td>15.412 us</td>
+</tr><tr><td>CustomDestructurer</td><td>Clr</td><td>Clr</td><td>6.643 us</td><td>0.1304 us</td><td>0.1395 us</td><td>6.615 us</td>
+</tr><tr><td>FastReflectionDestructurer</td><td>Clr</td><td>Clr</td><td>11.316 us</td><td>0.2241 us</td><td>0.2201 us</td><td>11.364 us</td>
+</tr><tr><td>OldReflectionDestructurer</td><td>Core</td><td>Core</td><td>807.670 us</td><td>20.8714 us</td><td>51.1980 us</td><td>792.939 us</td>
+</tr><tr><td>CustomDestructurer</td><td>Core</td><td>Core</td><td>785.605 us</td><td>10.6901 us</td><td>9.9995 us</td><td>788.961 us</td>
+</tr><tr><td>FastReflectionDestructurer</td><td>Core</td><td>Core</td><td>883.007 us</td><td>42.0822 us</td><td>124.0805 us</td><td>813.333 us</td>
+</tr></tbody></table>
+</body>
+</html>
