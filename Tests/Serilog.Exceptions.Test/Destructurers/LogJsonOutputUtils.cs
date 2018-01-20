@@ -1,3 +1,6 @@
+using Serilog.Exceptions.Core;
+using Serilog.Exceptions.Filters;
+
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
@@ -13,13 +16,13 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public class LogJsonOutputUtils
     {
-        public static JObject LogAndDestructureException(Exception exception)
+        public static JObject LogAndDestructureException(Exception exception, IExceptionPropertyFilter filter = null)
         {
             // Arrange
             var jsonWriter = new StringWriter();
 
             ILogger logger = new LoggerConfiguration()
-                .Enrich.WithExceptionDetails()
+                .Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, filter)
                 .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
                 .CreateLogger();
 

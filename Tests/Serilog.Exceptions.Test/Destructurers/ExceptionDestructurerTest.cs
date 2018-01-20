@@ -4,8 +4,10 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System.Collections;
     using System.Collections.Generic;
     using Newtonsoft.Json.Linq;
+    using NSubstitute;
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Filters;
     using Xunit;
     using static LogJsonOutputUtils;
 
@@ -87,6 +89,20 @@ namespace Serilog.Exceptions.Test.Destructurers
             JProperty someKeyProperty = Assert.Single(dataObject.Properties(), x => x.Name == "SOMEKEY");
             JValue someKeyValue = Assert.IsType<JValue>(someKeyProperty.Value);
             Assert.Equal("SOMEVALUE", someKeyValue.Value);
+        }
+
+        [Fact]
+        public void PassedFilter_IsCalledWithCorrectArguments()
+        {
+            // Arrange
+            var exception = new Exception();
+            var filter = Substitute.For<IExceptionPropertyFilter>();
+
+            // Act
+            LogAndDestructureException(exception, filter);
+
+            // Assert
+            filter.Received().ShouldPropertyBeFiltered(exception, "StackTrace", null);
         }
 
         [Fact]
