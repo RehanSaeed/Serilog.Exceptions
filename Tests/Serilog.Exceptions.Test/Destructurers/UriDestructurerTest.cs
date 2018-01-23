@@ -1,11 +1,11 @@
-using System;
-using System.Collections;
-using Serilog.Exceptions.Core;
-using Serilog.Exceptions.Destructurers;
-using Xunit;
-
 namespace Serilog.Exceptions.Test.Destructurers
 {
+    using System;
+    using System.Collections;
+    using Core;
+    using Exceptions.Destructurers;
+    using Xunit;
+
     public class UriDestructurerTest
     {
         private ReflectionBasedDestructurer destructurer;
@@ -38,7 +38,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             {
                 Data =
                 {
-                    {"UriDataItem", new Uri(uriValue)}
+                    { "UriDataItem", new Uri(uriValue) }
                 }
             };
 
@@ -46,7 +46,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             this.destructurer.Destructure(exception, propertiesBag, null);
 
             var properties = propertiesBag.GetResultDictionary();
-            var data = (IDictionary) properties[nameof(Exception.Data)];
+            var data = (IDictionary)properties[nameof(Exception.Data)];
             var uriDataValue = data["UriDataItem"];
             Assert.IsType<string>(uriDataValue);
             Assert.Equal(uriValue, uriDataValue);
@@ -54,13 +54,13 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public class UriException : Exception
         {
-            public Uri Uri { get; }
-
-            public UriException(string message, Uri uri) : base(message)
+            public UriException(string message, Uri uri)
+                : base(message)
             {
-                Uri = uri;
+                this.Uri = uri;
             }
-        }
 
+            public Uri Uri { get; }
+        }
     }
 }
