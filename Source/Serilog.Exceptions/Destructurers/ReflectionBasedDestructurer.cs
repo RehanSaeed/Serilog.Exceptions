@@ -5,7 +5,6 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using FastMember;
     using Serilog.Exceptions.Core;
 
     public class ReflectionBasedDestructurer : IExceptionDestructurer
@@ -56,16 +55,14 @@ namespace Serilog.Exceptions.Destructurers
 
         private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
         {
-            var propertyNames = valueType
+            var properties = valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
-                .Select(p => p.Name)
                 .ToArray();
 
             var reflectionInfo = new ReflectionInfo()
             {
-                Accessor = TypeAccessor.Create(valueType),
-                PropertyNames = propertyNames
+                Properties = properties
             };
             return reflectionInfo;
         }
@@ -181,27 +178,29 @@ namespace Serilog.Exceptions.Destructurers
                 this.reflectionInfoCache.Add(valueType, reflectionInfo);
             }
 
-            foreach (var propertyName in reflectionInfo.PropertyNames)
+            foreach (var property in reflectionInfo.Properties)
             {
                 try
                 {
-                    values.Add(propertyName, this.DestructureValue(
-                        reflectionInfo.Accessor[value, propertyName],
+                    object valueToBeDestructured = property.GetValue(value);
+                    object destructuredValue = this.DestructureValue(
+                        valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
-                        ref nextCyclicRefId));
+                        ref nextCyclicRefId);
+                    values.Add(property.Name, destructuredValue);
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {
                     var innerException = targetInvocationException.InnerException;
                     if (innerException != null)
                     {
-                        values.Add(propertyName, $"threw {innerException.GetType().FullName}: {innerException.Message}");
+                        values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
                 }
                 catch (Exception exception)
                 {
-                    values.Add(propertyName, $"threw {exception.GetType().FullName}: {exception.Message}");
+                    values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
                 }
             }
 
@@ -232,9 +231,7 @@ namespace Serilog.Exceptions.Destructurers
 
         private class ReflectionInfo
         {
-            public TypeAccessor Accessor { get; set; }
-
-            public string[] PropertyNames { get; set; }
+            public PropertyInfo[] Properties { get; set; }
         }
     }
 }
