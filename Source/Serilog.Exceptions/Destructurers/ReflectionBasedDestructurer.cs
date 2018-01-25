@@ -14,6 +14,8 @@ namespace Serilog.Exceptions.Destructurers
         private const string CyclicReferenceMessage = "Cyclic reference";
         private const int MaxRecursiveLevel = 10;
 
+        private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
+
         public Type[] TargetTypes => new[] { typeof(Exception) };
 
         public void Destructure(
@@ -49,6 +51,20 @@ namespace Serilog.Exceptions.Destructurers
             }
 
             return refId;
+        }
+
+        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        {
+            var properties = valueType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
+                .ToArray();
+
+            var reflectionInfo = new ReflectionInfo()
+            {
+                Properties = properties
+            };
+            return reflectionInfo;
         }
 
         private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
@@ -156,19 +172,23 @@ namespace Serilog.Exceptions.Destructurers
             var values = new Dictionary<string, object>();
             destructuredObjects.Add(value, values);
 
-            var properties = valueType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0);
+            if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
+            {
+                reflectionInfo = GenerateReflectionInfoForType(valueType);
+                this.reflectionInfoCache.Add(valueType, reflectionInfo);
+            }
 
-            foreach (var property in properties)
+            foreach (var property in reflectionInfo.Properties)
             {
                 try
                 {
-                    values.Add(property.Name, this.DestructureValue(
-                        property.GetValue(value),
+                    object valueToBeDestructured = property.GetValue(value);
+                    object destructuredValue = this.DestructureValue(
+                        valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
-                        ref nextCyclicRefId));
+                        ref nextCyclicRefId);
+                    values.Add(property.Name, destructuredValue);
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {
@@ -207,6 +227,11 @@ namespace Serilog.Exceptions.Destructurers
             {
                 values.Add("Type", valueType);
             }
+        }
+
+        private class ReflectionInfo
+        {
+            public PropertyInfo[] Properties { get; set; }
         }
     }
 }
