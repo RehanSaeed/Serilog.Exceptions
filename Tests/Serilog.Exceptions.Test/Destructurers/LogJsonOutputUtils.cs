@@ -15,13 +15,16 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public class LogJsonOutputUtils
     {
-        public static JObject LogAndDestructureException(Exception exception, IExceptionPropertyFilter filter = null)
+        public static JObject LogAndDestructureException(
+            Exception exception,
+            IExceptionPropertyFilter filter = null,
+            IDestructuringOptions destructuringOptions = null)
         {
             // Arrange
             var jsonWriter = new StringWriter();
 
             ILogger logger = new LoggerConfiguration()
-                .Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, filter)
+                .Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, filter, destructuringOptions)
                 .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
                 .CreateLogger();
 
@@ -51,12 +54,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             return innerExceptionsValue;
         }
 
-        public static JObject ExtractExceptionDetails(JObject jObject)
+        public static JObject ExtractExceptionDetails(JObject jObject, string rootName = "ExceptionDetail")
         {
             JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
             JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
 
-            JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == "ExceptionDetail");
+            JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == rootName);
             JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
 
             return exceptionDetailValue;

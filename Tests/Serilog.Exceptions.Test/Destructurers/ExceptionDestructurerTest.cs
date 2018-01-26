@@ -92,6 +92,21 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void ArgumentException_WithCustomRootName_ContainsDataInCustomRootName()
+        {
+            const string customRootName = "Ex";
+            var applicationException = new ArgumentException();
+            applicationException.Data["SOMEKEY"] = "SOMEVALUE";
+
+            JObject rootObject = LogAndDestructureException(
+                applicationException,
+                destructuringOptions: new DestructuringOptions(customRootName));
+            JObject exceptionDetail = ExtractExceptionDetails(rootObject, customRootName);
+
+            Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
+        }
+
+        [Fact]
         public void PassedFilter_IsCalledWithCorrectArguments()
         {
             // Arrange
