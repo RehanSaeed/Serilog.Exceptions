@@ -104,7 +104,7 @@ namespace Serilog.Exceptions.Destructurers
 
             if (typeof(Uri).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
             {
-                return this.DestructureUri((Uri)value, destructuredObjects, ref nextCyclicRefId);
+                return this.DestructureUri((Uri)value);
             }
 
             return this.DestructureObject(value, valueType, level, destructuredObjects, ref nextCyclicRefId);
@@ -131,19 +131,8 @@ namespace Serilog.Exceptions.Destructurers
             return resultList;
         }
 
-        private object DestructureUri(Uri value, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private object DestructureUri(Uri value)
         {
-            if (destructuredObjects.ContainsKey(value))
-            {
-                var destructuredObject = destructuredObjects[value];
-                var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
-
-                return new Dictionary<string, object>
-                {
-                    { RefLabel, refId }
-                };
-            }
-
             return value.ToString();
         }
 
