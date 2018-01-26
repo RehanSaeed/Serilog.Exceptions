@@ -1,6 +1,3 @@
-using Serilog.Exceptions.Core;
-using Serilog.Exceptions.Filters;
-
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
@@ -9,7 +6,9 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Newtonsoft.Json.Linq;
     using Serilog.Core;
     using Serilog.Events;
+    using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Filters;
     using Serilog.Formatting;
     using Serilog.Formatting.Json;
     using Xunit;

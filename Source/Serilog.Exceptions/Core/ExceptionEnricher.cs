@@ -22,6 +22,9 @@ namespace Serilog.Exceptions.Core
             new ReflectionTypeLoadExceptionDestructurer()
         };
 
+        public static readonly IDestructuringOptions DefaultDestructuringOptions =
+            new DestructuringOptions(rootName: "ExceptionDetail");
+
         public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetIdExceptionFilter =
 
 #if NET45
@@ -37,6 +40,7 @@ namespace Serilog.Exceptions.Core
 
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
         private readonly IExceptionPropertyFilter filter;
+        private readonly IDestructuringOptions destructuringOptions;
 
         public ExceptionEnricher()
             : this(DefaultDestructurers)
@@ -47,13 +51,16 @@ namespace Serilog.Exceptions.Core
             params IExceptionDestructurer[] destructurers)
             : this(destructurers, null)
         {
+            this.destructuringOptions = DefaultDestructuringOptions;
         }
 
         public ExceptionEnricher(
             IEnumerable<IExceptionDestructurer> destructurers,
+            IDestructuringOptions destructuringOptions = null,
             IExceptionPropertyFilter filter = null)
         {
             this.filter = filter;
+            this.destructuringOptions = destructuringOptions ?? DefaultDestructuringOptions;
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
             foreach (var destructurer in destructurers)
             {
@@ -69,7 +76,7 @@ namespace Serilog.Exceptions.Core
             if (logEvent.Exception != null)
             {
                 logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-                    "ExceptionDetail",
+                    this.destructuringOptions.RootName,
                     this.DestructureException(logEvent.Exception),
                     true));
             }

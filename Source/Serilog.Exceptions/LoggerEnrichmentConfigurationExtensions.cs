@@ -27,7 +27,7 @@ namespace Serilog.Exceptions
             IEnumerable<IExceptionDestructurer> destructurers,
             IExceptionPropertyFilter filter)
         {
-            return loggerEnrichmentConfiguration.With(new ExceptionEnricher(destructurers, filter));
+            return loggerEnrichmentConfiguration.With(new ExceptionEnricher(destructurers, filter: filter));
         }
 
         public static Serilog.LoggerConfiguration WithProperties(
