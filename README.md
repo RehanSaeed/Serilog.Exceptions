@@ -129,6 +129,18 @@ Filtering for other scenarios is also supported:
  * implement custom `IExceptionPropertyFilter` if you need some different filtering logic
  * use `CompositeExceptionPropertyFilter` to combine multiple filters
 
+## Additional configuration
+
+You can configure some additional properties of destructuring process, by passing custom `DestructuringOptions` during setup:
+
+```
+.Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, destructuringOptions: new DestructuringOptions(rootName: "Ex"))
+```
+
+Currently following options are supported:
+
+* Property name which will hold destructured exception, `ExceptionDetail` by default
+
 ## Contributing
 
 Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/CONTRIBUTING.md).

@@ -26,7 +26,7 @@ namespace Serilog.Exceptions
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IEnumerable<IExceptionDestructurer> destructurers,
-            IExceptionPropertyFilter filter,
+            IExceptionPropertyFilter filter = null,
             IDestructuringOptions destructuringOptions = null)
         {
             ILogEventEnricher enricher = new ExceptionEnricher(
