@@ -139,7 +139,7 @@ You can configure some additional properties of destructuring process, by passin
 
 Currently following options are supported:
 
-* Property name which will hold destructured exception, `ExceptionDetail` by default
+* `RootName`: property name which will hold destructured exception, `ExceptionDetail` by default
 
 ## Contributing
 
