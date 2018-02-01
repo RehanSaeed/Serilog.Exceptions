@@ -1,5 +1,9 @@
 namespace Serilog.Exceptions.Core
 {
+    using System.Collections.Generic;
+    using Serilog.Exceptions.Destructurers;
+    using Serilog.Exceptions.Filters;
+
     public interface IDestructuringOptions
     {
         /// <summary>
@@ -7,5 +11,9 @@ namespace Serilog.Exceptions.Core
         /// will be assigned. Default value is "ExceptionDetail".
         /// </summary>
         string RootName { get; }
+
+        IEnumerable<IExceptionDestructurer> Destructurers { get; }
+
+        IExceptionPropertyFilter Filter { get; }
     }
 }

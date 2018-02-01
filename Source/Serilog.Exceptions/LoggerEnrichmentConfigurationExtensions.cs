@@ -25,14 +25,17 @@ namespace Serilog.Exceptions
 
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
-            IEnumerable<IExceptionDestructurer> destructurers,
-            IExceptionPropertyFilter filter = null,
-            IDestructuringOptions destructuringOptions = null)
+            IEnumerable<IExceptionDestructurer> destructurers)
         {
-            ILogEventEnricher enricher = new ExceptionEnricher(
-                destructurers,
-                filter: filter,
-                destructuringOptions: destructuringOptions);
+            ILogEventEnricher enricher = new ExceptionEnricher(new DestructuringOptionsBuilder().WithDestructurers(destructurers));
+            return loggerEnrichmentConfiguration.With(enricher);
+        }
+
+        public static Serilog.LoggerConfiguration WithExceptionDetails(
+            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
+            IDestructuringOptions destructuringOptions)
+        {
+            ILogEventEnricher enricher = new ExceptionEnricher(destructuringOptions);
             return loggerEnrichmentConfiguration.With(enricher);
         }
 

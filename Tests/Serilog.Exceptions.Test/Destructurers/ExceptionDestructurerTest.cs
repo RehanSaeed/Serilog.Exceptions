@@ -100,7 +100,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             JObject rootObject = LogAndDestructureException(
                 applicationException,
-                destructuringOptions: new DestructuringOptions(customRootName));
+                destructuringOptions: new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName(customRootName));
             JObject exceptionDetail = ExtractExceptionDetails(rootObject, customRootName);
 
             Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
@@ -114,7 +114,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var filter = Substitute.For<IExceptionPropertyFilter>();
 
             // Act
-            LogAndDestructureException(exception, filter);
+            LogAndDestructureException(exception, new DestructuringOptionsBuilder().WithFilter(filter));
 
             // Assert
             filter.Received().ShouldPropertyBeFiltered(exception, "StackTrace", null);
