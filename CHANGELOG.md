@@ -16,3 +16,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Appveyor build
+
+[Unreleased]: https://github.com/RehanSaeed/Serilog.Exceptions/compare/Serilog.Exceptions.3.0.0...HEAD
