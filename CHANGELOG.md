@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- New recommended fluent API for destructuring process configuration based on `DestructuringOptionsBuilder`
 - Ability to configure global exception properties filter
+- Ability to configure root property name of destructured exception
 - Benchmark project for performance measurments
 
 ### Changed
