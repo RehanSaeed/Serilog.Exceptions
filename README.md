@@ -131,10 +131,10 @@ Filtering for other scenarios is also supported:
 
 ## Additional configuration
 
-You can configure some additional properties of destructuring process, by passing custom `DestructuringOptions` during setup:
+You can configure some additional properties of destructuring process, by passing custom destructuring options during setup:
 
 ```
-.Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, destructuringOptions: new DestructuringOptions(rootName: "Ex"))
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers(destructurers).WithRootName("Exception"))
 ```
 
 Currently following options are supported:
