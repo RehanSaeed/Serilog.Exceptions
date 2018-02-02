@@ -118,7 +118,7 @@ If you write a destructurer that is not included in this project (even for a thi
 You can configure some additional properties of destructuring process, by passing custom destructuring options during setup:
 
 ```
-.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers(destructurers).WithRootName("Exception"))
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName("Exception"))
 ```
 
 Currently following options are supported:
