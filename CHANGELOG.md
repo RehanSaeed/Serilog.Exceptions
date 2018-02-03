@@ -19,4 +19,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Appveyor build
 
+## [3.0.0] - 2017-11-17
+
+### Added
+- netcoreapp2.0 target
+
+### Fixed
+- Fix adding exception type description if "Type" property is present
+
+### Change
+- Move SqlExceptionDestructurer to Serilog.Exceptions.SqlServer assembly
+
+### Remove
+- Remove System.Data types destructurer
+
+## [2.5.0] - 2017-08-20
+
+### Fixed
+- Fix destructuing of cyclic structures
+
+### Change
+- Update Serilog to 2.5.0
+
 [Unreleased]: https://github.com/RehanSaeed/Serilog.Exceptions/compare/Serilog.Exceptions.3.0.0...HEAD
+[3.0.0]: https://github.com/RehanSaeed/Serilog.Exceptions/compare/Serilog.Exceptions.2.5.0...Serilog.Exceptions.3.0.0
+[2.5.0]: https://github.com/RehanSaeed/Serilog.Exceptions/compare/2.4.1...Serilog.Exceptions.2.5.0
