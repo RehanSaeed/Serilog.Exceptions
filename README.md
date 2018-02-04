@@ -125,6 +125,7 @@ Currently following options are supported:
 
 * `RootName`: property name which will hold destructured exception, `ExceptionDetail` by default
 * `Filter`: object implementing `IExceptionPropertyFilter` that will have a chance to filter properties just before they are put in destructured exception object. Go to "Filtering properties" section for details.
+* `DestructuringDepth`: maximum depth of reflection based recursive destructuring process 
 
 ## Filtering properties
 
