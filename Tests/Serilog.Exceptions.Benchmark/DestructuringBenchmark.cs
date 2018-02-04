@@ -12,7 +12,7 @@ namespace Serilog.Exceptions.Benchmark
     public class DestructuringBenchmark
     {
         private BenchmarkException benchmarkException;
-        private ReflectionBasedDestructurer reflectionBasedDestructurer = new ReflectionBasedDestructurer();
+        private ReflectionBasedDestructurer reflectionBasedDestructurer = new ReflectionBasedDestructurer(10);
         private BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new BenchmarkExceptionDestructurer();
 
         [GlobalSetup]

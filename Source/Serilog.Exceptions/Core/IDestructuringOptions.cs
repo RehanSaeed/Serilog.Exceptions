@@ -12,6 +12,12 @@ namespace Serilog.Exceptions.Core
         /// </summary>
         string RootName { get; }
 
+        /// <summary>
+        /// Depth at which reflection based destructurer will stop recursive
+        /// process of children destructuring.
+        /// </summary>
+        int DestructuringDepth { get; }
+
         IEnumerable<IExceptionDestructurer> Destructurers { get; }
 
         IExceptionPropertyFilter Filter { get; }

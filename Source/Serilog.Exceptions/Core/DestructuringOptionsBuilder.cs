@@ -30,6 +30,7 @@ namespace Serilog.Exceptions.Core
 
         private readonly List<IExceptionDestructurer> destructurers = new List<IExceptionDestructurer>();
         private string rootName = "ExceptionDetail";
+        private int destructuringDepth = 10;
         private IExceptionPropertyFilter filter;
 
         public DestructuringOptionsBuilder()
@@ -37,6 +38,8 @@ namespace Serilog.Exceptions.Core
         }
 
         public string RootName => this.rootName;
+
+        public int DestructuringDepth => this.destructuringDepth;
 
         public IEnumerable<IExceptionDestructurer> Destructurers => this.destructurers;
 
@@ -67,6 +70,20 @@ namespace Serilog.Exceptions.Core
         public DestructuringOptionsBuilder WithRootName(string rootName)
         {
             this.rootName = rootName;
+            return this;
+        }
+
+        public DestructuringOptionsBuilder WithDestructuringDepth(int destructuringDepth)
+        {
+            if (destructuringDepth <= 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(destructuringDepth),
+                    destructuringDepth,
+                    "Destructuring depth must be positive");
+            }
+
+            this.destructuringDepth = destructuringDepth;
             return this;
         }
     }

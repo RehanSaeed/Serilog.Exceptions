@@ -161,7 +161,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(10);
             destructurer.Destructure(exception, result, null);
 
             // Assert
@@ -191,7 +191,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(10);
             destructurer.Destructure(exception, result, null);
 
             // Assert
@@ -222,7 +222,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(10);
             destructurer.Destructure(exception, result, null);
 
             // Assert

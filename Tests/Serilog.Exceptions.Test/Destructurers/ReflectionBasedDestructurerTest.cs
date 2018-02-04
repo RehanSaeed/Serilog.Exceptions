@@ -9,11 +9,11 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public class ReflectionBasedDestructurerTest
     {
-        private readonly ReflectionBasedDestructurer destructurer;
+        private ReflectionBasedDestructurer destructurer;
 
         public ReflectionBasedDestructurerTest()
         {
-            this.destructurer = new ReflectionBasedDestructurer();
+            this.destructurer = new ReflectionBasedDestructurer(10);
         }
 
         [Fact]
@@ -90,6 +90,40 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal(uriValue, uriDataValue);
         }
 
+        [Fact]
+        public void DestructuringDepthIsLimitedByConfiguredDepth()
+        {
+            // Arrange
+            var exception = new RecursiveException()
+            {
+                Node = new RecursiveNode()
+                {
+                    Name = "PARENT",
+                    Child = new RecursiveNode()
+                    {
+                        Name = "CHILD 1",
+                        Child = new RecursiveNode()
+                        {
+                            Name = "CHILD 2"
+                        }
+                    }
+                }
+            };
+            this.destructurer = new ReflectionBasedDestructurer(1);
+
+            // Act
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            this.destructurer.Destructure(exception, propertiesBag, null);
+
+            // Assert
+            // Parent is depth 1
+            // First child is depth 2
+            var properties = propertiesBag.GetResultDictionary();
+            var parent = (IDictionary<string, object>)properties[nameof(RecursiveException.Node)];
+            Assert.Equal("PARENT", parent[nameof(RecursiveNode.Name)]);
+            Assert.IsType<RecursiveNode>(parent[nameof(RecursiveNode.Child)]);
+        }
+
         public class TestException : Exception
         {
             public TestException()
@@ -132,6 +166,17 @@ namespace Serilog.Exceptions.Test.Destructurers
             }
 
             public Uri Uri { get; }
+        }
+
+        public class RecursiveNode
+        {
+            public string Name { get; set; }
+            public RecursiveNode Child { get; set; }
+        }
+
+        public class RecursiveException : Exception
+        {
+            public RecursiveNode Node { get; set; }
         }
     }
 }

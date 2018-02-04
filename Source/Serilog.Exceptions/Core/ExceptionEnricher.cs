@@ -13,10 +13,9 @@ namespace Serilog.Exceptions.Core
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
-        public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
-
         public static readonly IEnumerable<IExceptionDestructurer> DefaultDestructurers = DestructuringOptionsBuilder.DefaultDestructurers;
 
+        private readonly IExceptionDestructurer reflectionBasedDestructurer;
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
         private readonly IDestructuringOptions destructuringOptions;
 
@@ -31,10 +30,10 @@ namespace Serilog.Exceptions.Core
         {
         }
 
-        public ExceptionEnricher(
-            IDestructuringOptions destructuringOptions)
+        public ExceptionEnricher(IDestructuringOptions destructuringOptions)
         {
             this.destructuringOptions = destructuringOptions;
+            this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
 
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
             foreach (var destructurer in this.destructuringOptions.Destructurers)
@@ -70,7 +69,7 @@ namespace Serilog.Exceptions.Core
             }
             else
             {
-                ReflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
+                this.reflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
             }
 
             return data.GetResultDictionary();
