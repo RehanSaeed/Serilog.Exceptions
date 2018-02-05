@@ -13,6 +13,7 @@ namespace Serilog.Exceptions.Core
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
+        [Obsolete("Use new fluent configuration API based on the DestructuringOptionsBuilder")]
         public static readonly IEnumerable<IExceptionDestructurer> DefaultDestructurers = DestructuringOptionsBuilder.DefaultDestructurers;
 
         private readonly IExceptionDestructurer reflectionBasedDestructurer;

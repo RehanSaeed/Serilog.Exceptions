@@ -33,10 +33,6 @@ namespace Serilog.Exceptions.Core
         private int destructuringDepth = 10;
         private IExceptionPropertyFilter filter;
 
-        public DestructuringOptionsBuilder()
-        {
-        }
-
         public string RootName => this.rootName;
 
         public int DestructuringDepth => this.destructuringDepth;
@@ -47,28 +43,40 @@ namespace Serilog.Exceptions.Core
 
         public DestructuringOptionsBuilder WithDestructurers(IEnumerable<IExceptionDestructurer> destructurers)
         {
+            if (destructurers == null)
+            {
+                throw new ArgumentNullException(nameof(destructurers), "Cannot add null destructurers collection");
+            }
+
             this.destructurers.AddRange(destructurers);
             return this;
         }
 
-        public DestructuringOptionsBuilder WithDefaultDestructurers()
-        {
-            return this.WithDestructurers(DefaultDestructurers);
-        }
+        public DestructuringOptionsBuilder WithDefaultDestructurers() =>
+            this.WithDestructurers(DefaultDestructurers);
 
         public DestructuringOptionsBuilder WithFilter(IExceptionPropertyFilter filter)
         {
+            if (this.filter != null)
+            {
+                throw new InvalidOperationException(
+                    $"Filter was already set, only one filter can be configured. Use {nameof(CompositeExceptionPropertyFilter)} or other aggregate to combine filters");
+            }
+
             this.filter = filter;
             return this;
         }
 
-        public DestructuringOptionsBuilder WithIgnoreStackTraceAndTargetIdExceptionFilterFilter(IExceptionPropertyFilter filter)
-        {
-            return this.WithFilter(IgnoreStackTraceAndTargetIdExceptionFilter);
-        }
+        public DestructuringOptionsBuilder WithIgnoreStackTraceAndTargetIdExceptionFilterFilter(IExceptionPropertyFilter filter) =>
+            this.WithFilter(IgnoreStackTraceAndTargetIdExceptionFilter);
 
         public DestructuringOptionsBuilder WithRootName(string rootName)
         {
+            if (string.IsNullOrEmpty(rootName))
+            {
+                throw new ArgumentException("Cannot accept null or empty root property name", nameof(rootName));
+            }
+
             this.rootName = rootName;
             return this;
         }

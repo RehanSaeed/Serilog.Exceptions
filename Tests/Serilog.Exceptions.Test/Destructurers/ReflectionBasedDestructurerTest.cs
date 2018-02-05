@@ -171,6 +171,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public class RecursiveNode
         {
             public string Name { get; set; }
+
             public RecursiveNode Child { get; set; }
         }
 
