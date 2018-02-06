@@ -92,6 +92,21 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void ArgumentException_WithCustomRootName_ContainsDataInCustomRootName()
+        {
+            const string customRootName = "Ex";
+            var applicationException = new ArgumentException();
+            applicationException.Data["SOMEKEY"] = "SOMEVALUE";
+
+            JObject rootObject = LogAndDestructureException(
+                applicationException,
+                destructuringOptions: new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName(customRootName));
+            JObject exceptionDetail = ExtractExceptionDetails(rootObject, customRootName);
+
+            Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
+        }
+
+        [Fact]
         public void PassedFilter_IsCalledWithCorrectArguments()
         {
             // Arrange
@@ -99,7 +114,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var filter = Substitute.For<IExceptionPropertyFilter>();
 
             // Act
-            LogAndDestructureException(exception, filter);
+            LogAndDestructureException(exception, new DestructuringOptionsBuilder().WithFilter(filter));
 
             // Assert
             filter.Received().ShouldPropertyBeFiltered(exception, "StackTrace", null);
@@ -146,7 +161,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(10);
             destructurer.Destructure(exception, result, null);
 
             // Assert
@@ -176,7 +191,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(10);
             destructurer.Destructure(exception, result, null);
 
             // Assert
@@ -207,7 +222,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
-            var destructurer = new ReflectionBasedDestructurer();
+            var destructurer = new ReflectionBasedDestructurer(10);
             destructurer.Destructure(exception, result, null);
 
             // Assert

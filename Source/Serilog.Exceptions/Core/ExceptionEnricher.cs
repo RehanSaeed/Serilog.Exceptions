@@ -13,49 +13,31 @@ namespace Serilog.Exceptions.Core
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
-        public static readonly IExceptionDestructurer[] DefaultDestructurers =
-        {
-            new ExceptionDestructurer(),
-            new ArgumentExceptionDestructurer(),
-            new ArgumentOutOfRangeExceptionDestructurer(),
-            new AggregateExceptionDestructurer(),
-            new ReflectionTypeLoadExceptionDestructurer()
-        };
+        [Obsolete("Use new fluent configuration API based on the DestructuringOptionsBuilder")]
+        public static readonly IEnumerable<IExceptionDestructurer> DefaultDestructurers = DestructuringOptionsBuilder.DefaultDestructurers;
 
-        public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetIdExceptionFilter =
-
-#if NET45
-            new IgnorePropertyByNameExceptionFilter(
-                nameof(Exception.StackTrace),
-                nameof(Exception.TargetSite));
-#else
-            new IgnorePropertyByNameExceptionFilter(
-                nameof(Exception.StackTrace));
-#endif
-
-        public static readonly IExceptionDestructurer ReflectionBasedDestructurer = new ReflectionBasedDestructurer();
-
+        private readonly IExceptionDestructurer reflectionBasedDestructurer;
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
-        private readonly IExceptionPropertyFilter filter;
+        private readonly IDestructuringOptions destructuringOptions;
 
         public ExceptionEnricher()
-            : this(DefaultDestructurers)
+            : this(new DestructuringOptionsBuilder().WithDefaultDestructurers())
         {
         }
 
         public ExceptionEnricher(
             params IExceptionDestructurer[] destructurers)
-            : this(destructurers, null)
+            : this(new DestructuringOptionsBuilder().WithDestructurers(destructurers))
         {
         }
 
-        public ExceptionEnricher(
-            IEnumerable<IExceptionDestructurer> destructurers,
-            IExceptionPropertyFilter filter = null)
+        public ExceptionEnricher(IDestructuringOptions destructuringOptions)
         {
-            this.filter = filter;
+            this.destructuringOptions = destructuringOptions;
+            this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
+
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
-            foreach (var destructurer in destructurers)
+            foreach (var destructurer in this.destructuringOptions.Destructurers)
             {
                 foreach (var targetType in destructurer.TargetTypes)
                 {
@@ -69,7 +51,7 @@ namespace Serilog.Exceptions.Core
             if (logEvent.Exception != null)
             {
                 logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-                    "ExceptionDetail",
+                    this.destructuringOptions.RootName,
                     this.DestructureException(logEvent.Exception),
                     true));
             }
@@ -77,7 +59,7 @@ namespace Serilog.Exceptions.Core
 
         private IReadOnlyDictionary<string, object> DestructureException(Exception exception)
         {
-            var data = new ExceptionPropertiesBag(exception, this.filter);
+            var data = new ExceptionPropertiesBag(exception, this.destructuringOptions.Filter);
 
             var exceptionType = exception.GetType();
 
@@ -88,7 +70,7 @@ namespace Serilog.Exceptions.Core
             }
             else
             {
-                ReflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
+                this.reflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
             }
 
             return data.GetResultDictionary();

@@ -113,6 +113,20 @@ ILogger logger = new LoggerConfiguration()
 
 If you write a destructurer that is not included in this project (even for a third party library), please contribute it.
 
+## Additional configuration
+
+You can configure some additional properties of destructuring process, by passing custom destructuring options during setup:
+
+```
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName("Exception"))
+```
+
+Currently following options are supported:
+
+* `RootName`: property name which will hold destructured exception, `ExceptionDetail` by default
+* `Filter`: object implementing `IExceptionPropertyFilter` that will have a chance to filter properties just before they are put in destructured exception object. Go to "Filtering properties" section for details.
+* `DestructuringDepth`: maximum depth of reflection based recursive destructuring process 
+
 ## Filtering properties
 
 You may want to skip some properties of all or part your exception classes without directly creating or modyfying custom destructurers. Serilog.Exceptions supports this functionality using filter.
@@ -120,12 +134,12 @@ You may want to skip some properties of all or part your exception classes witho
 Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog is already reporting them so you may want Serilog.Exceptions to skip them to save space and processing time. To do that you just need to modify a line in configuration:
 
 ```
-.Enrich.WithExceptionDetails(ExceptionEnricher.DefaultDestructurers, ExceptionEnricher.IgnoreStackTraceAndTargetIdExceptionFilter)
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithFilter(someFilter));
 ```
 
 Filtering for other scenarios is also supported:
 
- * use `IgnorePropertyByNameExceptionFilter` if you need to filter some other set of named properties
+ * use `WithIgnoreStackTraceAndTargetIdExceptionFilterFilter` if you need to filter some other set of named properties
  * implement custom `IExceptionPropertyFilter` if you need some different filtering logic
  * use `CompositeExceptionPropertyFilter` to combine multiple filters
 

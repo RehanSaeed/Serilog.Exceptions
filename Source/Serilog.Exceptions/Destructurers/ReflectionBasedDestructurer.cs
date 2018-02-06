@@ -12,9 +12,22 @@ namespace Serilog.Exceptions.Destructurers
         private const string IdLabel = "$id";
         private const string RefLabel = "$ref";
         private const string CyclicReferenceMessage = "Cyclic reference";
-        private const int MaxRecursiveLevel = 10;
+        private readonly int destructuringDepth;
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
+
+        public ReflectionBasedDestructurer(int destructuringDepth)
+        {
+            if (destructuringDepth <= 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(destructuringDepth),
+                    destructuringDepth,
+                    "Destructuring depth must be positive");
+            }
+
+            this.destructuringDepth = destructuringDepth;
+        }
 
         public Type[] TargetTypes => new[] { typeof(Exception) };
 
@@ -87,7 +100,7 @@ namespace Serilog.Exceptions.Destructurers
                 return value;
             }
 
-            if (level >= MaxRecursiveLevel)
+            if (level > this.destructuringDepth)
             {
                 return value;
             }
