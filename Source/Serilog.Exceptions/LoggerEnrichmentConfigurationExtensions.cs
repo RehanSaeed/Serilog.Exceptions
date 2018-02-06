@@ -10,12 +10,27 @@ namespace Serilog.Exceptions
 
     public static class LoggerEnrichmentConfigurationExtensions
     {
+        /// <summary>
+        /// Enrich logger output with a destuctured object containing
+        /// exception's public properties.
+        /// </summary>
+        /// <param name="loggerEnrichmentConfiguration">The enrichment configuration</param>
+        /// <returns>Configuration object allowing method chaining.</returns>
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
         {
             return loggerEnrichmentConfiguration.With(new ExceptionEnricher());
         }
 
+        /// <summary>
+        /// Enrich logger output with a destuctured object containing
+        /// exception's public properties.
+        /// </summary>
+        /// <param name="loggerEnrichmentConfiguration">The enrichment configuration</param>
+        /// <param name="destructurers">
+        /// Destructurers that will be used to destructure captured exceptions.
+        /// </param>
+        /// <returns>Configuration object allowing method chaining.</returns>
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             params IExceptionDestructurer[] destructurers)
@@ -23,6 +38,15 @@ namespace Serilog.Exceptions
             return loggerEnrichmentConfiguration.With(new ExceptionEnricher(destructurers));
         }
 
+        /// <summary>
+        /// Enrich logger output with a destuctured object containing
+        /// exception's public properties.
+        /// </summary>
+        /// <param name="loggerEnrichmentConfiguration">The enrichment configuration</param>
+        /// <param name="destructurers">
+        /// Destructurers that will be used to destructure captured exceptions.
+        /// </param>
+        /// <returns>Configuration object allowing method chaining.</returns>
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IEnumerable<IExceptionDestructurer> destructurers)
@@ -31,6 +55,16 @@ namespace Serilog.Exceptions
             return loggerEnrichmentConfiguration.With(enricher);
         }
 
+        /// <summary>
+        /// Enrich logger output with a destuctured object containing
+        /// exception's public properties.
+        /// </summary>
+        /// <param name="loggerEnrichmentConfiguration">The enrichment configuration</param>
+        /// <param name="destructuringOptions">
+        /// Options that will influence the process of destructuring
+        /// exception's properties into result object.
+        /// </param>
+        /// <returns>Configuration object allowing method chaining.</returns>
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IDestructuringOptions destructuringOptions)
