@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Appveyor build
 
+### Removed
+- `LoggerEnrichmentConfiguration` not used extension methods: `WithProperties` and `WithLazyProperties`
+
 ## [3.0.0] - 2017-11-17
 
 ### Added
