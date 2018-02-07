@@ -31,6 +31,7 @@ namespace Serilog.Exceptions
         /// Destructurers that will be used to destructure captured exceptions.
         /// </param>
         /// <returns>Configuration object allowing method chaining.</returns>
+        [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             params IExceptionDestructurer[] destructurers)
@@ -47,6 +48,7 @@ namespace Serilog.Exceptions
         /// Destructurers that will be used to destructure captured exceptions.
         /// </param>
         /// <returns>Configuration object allowing method chaining.</returns>
+        [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IEnumerable<IExceptionDestructurer> destructurers)

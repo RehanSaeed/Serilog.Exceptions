@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - `LoggerEnrichmentConfiguration` not used extension methods: `WithProperties` and `WithLazyProperties`
 
+### Deprecated 
+- Configuration of destructurers using a raw destructurers list, usage of new fluent API is recommended
+
 ## [3.0.0] - 2017-11-17
 
 ### Added
