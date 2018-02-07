@@ -7,6 +7,13 @@ namespace Serilog.Exceptions.Destructurers
     using System.Reflection;
     using Serilog.Exceptions.Core;
 
+    /// <summary>
+    /// Destructures exceptions by gathering all public non-indexer properties
+    /// using reflection and then dynamically retrieving their values.
+    /// This class can handle every exception inluding those with circular
+    /// references and throwing properties. Additionally, a "Type" property
+    /// is added to let the user know exact type of destructured exception.
+    /// </summary>
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
         private const string IdLabel = "$id";

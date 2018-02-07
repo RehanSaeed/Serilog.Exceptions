@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `Uri` objects are destructured to plain strings instead of dictionaries
 - Adjusted examples using `Serilog.RollingFile` to updated API
 - Reflection destructurer caches `PropertyInfo` for each exception type
+- `WithExceptionDetails` overload with no parameters, sets default filter ignoring `StackTrace` and `TargetSite`
 
 ### Fixed
 - Appveyor build

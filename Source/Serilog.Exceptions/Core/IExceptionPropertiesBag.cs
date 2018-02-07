@@ -17,6 +17,11 @@ namespace Serilog.Exceptions.Core
         /// </returns>
         IReadOnlyDictionary<string, object> GetResultDictionary();
 
+        /// <summary>
+        /// Adds a property to the bag.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
         void AddProperty(string key, object value);
     }
 }
