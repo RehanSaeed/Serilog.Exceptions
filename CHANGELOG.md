@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adjusted examples using `Serilog.RollingFile` to updated API
 - Reflection destructurer caches `PropertyInfo` for each exception type
 - `WithExceptionDetails` overload with no parameters, sets default filter ignoring `StackTrace` and `TargetSite`
+- `IExceptionDestructurer` interface changed, instead of `Dictionary` it accepts `IExceptionPropertiesBag`
 
 ### Fixed
 - Appveyor build
