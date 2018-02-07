@@ -139,7 +139,7 @@ Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog
 
 Filtering for other scenarios is also supported:
 
- * use `WithIgnoreStackTraceAndTargetIdExceptionFilterFilter` if you need to filter some other set of named properties
+ * use `WithIgnoreStackTraceAndTargetSiteExceptionFilter` if you need to filter some other set of named properties
  * implement custom `IExceptionPropertyFilter` if you need some different filtering logic
  * use `CompositeExceptionPropertyFilter` to combine multiple filters
 

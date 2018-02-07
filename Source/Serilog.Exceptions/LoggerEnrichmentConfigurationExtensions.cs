@@ -12,14 +12,20 @@ namespace Serilog.Exceptions
     {
         /// <summary>
         /// Enrich logger output with a destuctured object containing
-        /// exception's public properties.
+        /// exception's public properties. Default destructurers are registered.
+        /// <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/> are omitted
+        /// by the destructuring process because Serilog already attaches them to log event.
         /// </summary>
         /// <param name="loggerEnrichmentConfiguration">The enrichment configuration</param>
         /// <returns>Configuration object allowing method chaining.</returns>
         public static Serilog.LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
         {
-            return loggerEnrichmentConfiguration.With(new ExceptionEnricher());
+            var options = new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithIgnoreStackTraceAndTargetSiteExceptionFilter();
+            var logEventEnricher = new ExceptionEnricher(options);
+            return loggerEnrichmentConfiguration.With(logEventEnricher);
         }
 
         /// <summary>

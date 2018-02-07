@@ -17,7 +17,7 @@ namespace Serilog.Exceptions.Core
             new ReflectionTypeLoadExceptionDestructurer()
         };
 
-        public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetIdExceptionFilter =
+        public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetSiteExceptionFilter =
 
 #if NET45
             new IgnorePropertyByNameExceptionFilter(
@@ -67,8 +67,8 @@ namespace Serilog.Exceptions.Core
             return this;
         }
 
-        public DestructuringOptionsBuilder WithIgnoreStackTraceAndTargetIdExceptionFilterFilter(IExceptionPropertyFilter filter) =>
-            this.WithFilter(IgnoreStackTraceAndTargetIdExceptionFilter);
+        public DestructuringOptionsBuilder WithIgnoreStackTraceAndTargetSiteExceptionFilter() =>
+            this.WithFilter(IgnoreStackTraceAndTargetSiteExceptionFilter);
 
         public DestructuringOptionsBuilder WithRootName(string rootName)
         {
