@@ -12,6 +12,9 @@ namespace Serilog.Exceptions.Core
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
+        /// <summary>
+        /// Collection of destructurers provided by Serilog.Exceptions itself for standard library exceptions.
+        /// </summary>
         [Obsolete("Use new fluent configuration API based on the DestructuringOptionsBuilder")]
         public static readonly IEnumerable<IExceptionDestructurer> DefaultDestructurers = DestructuringOptionsBuilder.DefaultDestructurers;
 
@@ -19,12 +22,19 @@ namespace Serilog.Exceptions.Core
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
         private readonly IDestructuringOptions destructuringOptions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
+        /// </summary>
         [Obsolete("Specify DestructuringOptions explicitly")]
         public ExceptionEnricher()
             : this(new DestructuringOptionsBuilder().WithDefaultDestructurers())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
+        /// </summary>
+        /// <param name="destructurers">Collection of destructurers</param>
         [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
         public ExceptionEnricher(
             params IExceptionDestructurer[] destructurers)
@@ -32,8 +42,19 @@ namespace Serilog.Exceptions.Core
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
+        /// </summary>
+        /// <param name="destructuringOptions">The destructuring options, cannot be null</param>
         public ExceptionEnricher(IDestructuringOptions destructuringOptions)
         {
+            if (destructuringOptions == null)
+            {
+                throw new ArgumentNullException(
+                    nameof(destructuringOptions),
+                    "Destructuring options cannot be null");
+            }
+
             this.destructuringOptions = destructuringOptions;
             this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
 

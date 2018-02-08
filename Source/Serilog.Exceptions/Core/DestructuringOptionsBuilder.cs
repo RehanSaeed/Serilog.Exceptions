@@ -1,3 +1,5 @@
+using Serilog.Events;
+
 namespace Serilog.Exceptions.Core
 {
     using System;
@@ -11,6 +13,9 @@ namespace Serilog.Exceptions.Core
     /// </summary>
     public class DestructuringOptionsBuilder : IDestructuringOptions
     {
+        /// <summary>
+        /// Default set of destructurers. Destructurers cover all of the exceptions from standard library.
+        /// </summary>
         public static readonly IExceptionDestructurer[] DefaultDestructurers =
         {
             new ExceptionDestructurer(),
@@ -20,6 +25,10 @@ namespace Serilog.Exceptions.Core
             new ReflectionTypeLoadExceptionDestructurer()
         };
 
+        /// <summary>
+        /// Filter that ignores <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/> properties.
+        /// Usually, they can be safely ignored, because Serilog attaches them tog <see cref="LogEvent"/> already.
+        /// </summary>
         public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetSiteExceptionFilter =
 
 #if NET45
@@ -36,12 +45,24 @@ namespace Serilog.Exceptions.Core
         private int destructuringDepth = 10;
         private IExceptionPropertyFilter filter;
 
+        /// <summary>
+        /// Name of the property which value will be filled with destructured exception.
+        /// </summary>
         public string RootName => this.rootName;
 
+        /// <summary>
+        /// Maximum depth of destructuring to which reflection destructurer will proceed.
+        /// </summary>
         public int DestructuringDepth => this.destructuringDepth;
 
+        /// <summary>
+        /// Collection of destructurers that will be used to handle exception.
+        /// </summary>
         public IEnumerable<IExceptionDestructurer> Destructurers => this.destructurers;
 
+        /// <summary>
+        /// Global filter, that will be applied to every destructured property just before it is added to the result.
+        /// </summary>
         public IExceptionPropertyFilter Filter => this.filter;
 
         /// <summary>

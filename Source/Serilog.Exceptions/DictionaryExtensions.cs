@@ -3,8 +3,16 @@ namespace Serilog.Exceptions
     using System.Collections;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Helper extension methods for specific dictionary operations.
+    /// </summary>
     internal static class DictionaryExtensions
     {
+        /// <summary>
+        /// Converts a dictionary to another one with stringified keys.
+        /// </summary>
+        /// <param name="dictionary">The input dictionary</param>
+        /// <returns>A dictionary with stringified keys</returns>
         public static Dictionary<string, object> ToStringObjectDictionary(this IDictionary dictionary)
         {
             var result = new Dictionary<string, object>(dictionary.Count);

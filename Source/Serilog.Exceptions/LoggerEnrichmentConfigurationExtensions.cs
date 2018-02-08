@@ -8,6 +8,9 @@ namespace Serilog.Exceptions
     using Serilog.Exceptions.Destructurers;
     using Serilog.Exceptions.Filters;
 
+    /// <summary>
+    /// Serilog logger enrichment extension methods.
+    /// </summary>
     public static class LoggerEnrichmentConfigurationExtensions
     {
         /// <summary>

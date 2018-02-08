@@ -23,6 +23,10 @@ namespace Serilog.Exceptions.Destructurers
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
+        /// </summary>
+        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception object graph</param>
         public ReflectionBasedDestructurer(int destructuringDepth)
         {
             if (destructuringDepth <= 0)
@@ -36,8 +40,10 @@ namespace Serilog.Exceptions.Destructurers
             this.destructuringDepth = destructuringDepth;
         }
 
+        /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public Type[] TargetTypes => new[] { typeof(Exception) };
 
+        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
