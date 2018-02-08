@@ -1,10 +1,8 @@
-using Serilog.Events;
-
 namespace Serilog.Exceptions.Core
 {
     using System;
-
     using System.Collections.Generic;
+    using Serilog.Events;
     using Serilog.Exceptions.Destructurers;
     using Serilog.Exceptions.Filters;
 
