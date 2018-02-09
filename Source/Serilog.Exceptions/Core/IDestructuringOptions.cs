@@ -4,6 +4,10 @@ namespace Serilog.Exceptions.Core
     using Serilog.Exceptions.Destructurers;
     using Serilog.Exceptions.Filters;
 
+    /// <summary>
+    /// Represents all the configuration options user can spefify to
+    /// influence the destructuring process.
+    /// </summary>
     public interface IDestructuringOptions
     {
         /// <summary>

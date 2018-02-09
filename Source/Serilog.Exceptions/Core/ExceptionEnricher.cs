@@ -9,10 +9,12 @@ namespace Serilog.Exceptions.Core
 
     /// <summary>
     /// Enrich a <see cref="LogEvent"/> with details about an <see cref="LogEvent.Exception"/> if present.
-    /// https://groups.google.com/forum/#!searchin/getseq/enhance$20exception/getseq/rsAL4u3JpLM/PrszbPbtEb0J
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
+        /// <summary>
+        /// Collection of destructurers provided by Serilog.Exceptions itself for standard library exceptions.
+        /// </summary>
         [Obsolete("Use new fluent configuration API based on the DestructuringOptionsBuilder")]
         public static readonly IEnumerable<IExceptionDestructurer> DefaultDestructurers = DestructuringOptionsBuilder.DefaultDestructurers;
 
@@ -20,19 +22,39 @@ namespace Serilog.Exceptions.Core
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
         private readonly IDestructuringOptions destructuringOptions;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
+        /// </summary>
+        [Obsolete("Specify DestructuringOptions explicitly")]
         public ExceptionEnricher()
             : this(new DestructuringOptionsBuilder().WithDefaultDestructurers())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
+        /// </summary>
+        /// <param name="destructurers">Collection of destructurers</param>
+        [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
         public ExceptionEnricher(
             params IExceptionDestructurer[] destructurers)
             : this(new DestructuringOptionsBuilder().WithDestructurers(destructurers))
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
+        /// </summary>
+        /// <param name="destructuringOptions">The destructuring options, cannot be null</param>
         public ExceptionEnricher(IDestructuringOptions destructuringOptions)
         {
+            if (destructuringOptions == null)
+            {
+                throw new ArgumentNullException(
+                    nameof(destructuringOptions),
+                    "Destructuring options cannot be null");
+            }
+
             this.destructuringOptions = destructuringOptions;
             this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
 
@@ -46,6 +68,12 @@ namespace Serilog.Exceptions.Core
             }
         }
 
+        /// <summary>
+        /// Enriches <paramref name="logEvent"/> with a destructured exception's properties.
+        /// If the exception is not present, no action is taken.
+        /// </summary>
+        /// <param name="logEvent">Log event that will be enriched</param>
+        /// <param name="propertyFactory">The property factory</param>
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
             if (logEvent.Exception != null)

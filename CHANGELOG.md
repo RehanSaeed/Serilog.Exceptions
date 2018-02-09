@@ -11,14 +11,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Ability to configure root property name of destructured exception
 - Ability to configure depth of reflection based destructuring
 - Benchmark project for performance measurments
+- Documentation comments for the whole public API
 
 ### Changed
 - `Uri` objects are destructured to plain strings instead of dictionaries
 - Adjusted examples using `Serilog.RollingFile` to updated API
 - Reflection destructurer caches `PropertyInfo` for each exception type
+- `WithExceptionDetails` overload with no parameters, sets default filter ignoring `StackTrace` and `TargetSite`
+- `IExceptionDestructurer` interface changed, instead of `Dictionary` it accepts `IExceptionPropertiesBag`
 
 ### Fixed
 - Appveyor build
+
+### Removed
+- `LoggerEnrichmentConfiguration` not used extension methods: `WithProperties` and `WithLazyProperties`
+
+### Deprecated 
+- Configuration of destructurers using a raw destructurers list, usage of new fluent API is recommended
 
 ## [3.0.0] - 2017-11-17
 

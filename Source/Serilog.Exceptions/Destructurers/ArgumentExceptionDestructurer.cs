@@ -4,14 +4,19 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections.Generic;
     using Serilog.Exceptions.Core;
 
+    /// <summary>
+    /// Destructurer for <see cref="ArgumentException"/>.
+    /// </summary>
     public class ArgumentExceptionDestructurer : ExceptionDestructurer
     {
+        /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public override Type[] TargetTypes => new[]
         {
             typeof(ArgumentException),
             typeof(ArgumentNullException)
         };
 
+        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public override void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,

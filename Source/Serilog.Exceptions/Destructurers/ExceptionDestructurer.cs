@@ -4,8 +4,16 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections.Generic;
     using Serilog.Exceptions.Core;
 
+    /// <summary>
+    /// Base class for more specific destructurers.
+    /// It destructures all the standard properties that every <see cref="Exception"/> has.
+    /// </summary>
     public class ExceptionDestructurer : IExceptionDestructurer
     {
+        /// <summary>
+        /// Collection of exceptions types from standard library that do not have any custom property,
+        /// so they can be destructured using generic exception destructurer.
+        /// </summary>
         public virtual Type[] TargetTypes
         {
             get
@@ -181,6 +189,7 @@ namespace Serilog.Exceptions.Destructurers
             }
         }
 
+        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public virtual void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,

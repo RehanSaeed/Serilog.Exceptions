@@ -7,6 +7,13 @@ namespace Serilog.Exceptions.Destructurers
     using System.Reflection;
     using Serilog.Exceptions.Core;
 
+    /// <summary>
+    /// Destructures exceptions by gathering all public non-indexer properties
+    /// using reflection and then dynamically retrieving their values.
+    /// This class can handle every exception inluding those with circular
+    /// references and throwing properties. Additionally, a "Type" property
+    /// is added to let the user know exact type of destructured exception.
+    /// </summary>
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
         private const string IdLabel = "$id";
@@ -16,6 +23,10 @@ namespace Serilog.Exceptions.Destructurers
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
+        /// </summary>
+        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception object graph</param>
         public ReflectionBasedDestructurer(int destructuringDepth)
         {
             if (destructuringDepth <= 0)
@@ -29,8 +40,10 @@ namespace Serilog.Exceptions.Destructurers
             this.destructuringDepth = destructuringDepth;
         }
 
+        /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public Type[] TargetTypes => new[] { typeof(Exception) };
 
+        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,

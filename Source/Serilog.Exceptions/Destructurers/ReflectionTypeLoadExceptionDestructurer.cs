@@ -6,10 +6,15 @@ namespace Serilog.Exceptions.Destructurers
     using System.Reflection;
     using Serilog.Exceptions.Core;
 
+    /// <summary>
+    /// Destructurer for <see cref="ReflectionTypeLoadException"/>.
+    /// </summary>
     public class ReflectionTypeLoadExceptionDestructurer : ExceptionDestructurer
     {
+        /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public override Type[] TargetTypes => new[] { typeof(ReflectionTypeLoadException) };
 
+        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public override void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
