@@ -6,6 +6,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
     using Xunit;
+    using static LogJsonOutputUtils;
 
     public class ReflectionBasedDestructurerTest
     {
@@ -17,8 +18,9 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
-        public void Destructure_()
+        public void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected()
         {
+            // Arrange
             Exception exception;
             try
             {
@@ -31,8 +33,10 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             var propertiesBag = new ExceptionPropertiesBag(new Exception());
 
+            // Act
             this.destructurer.Destructure(exception, propertiesBag, null);
 
+            // Assert
             var properties = propertiesBag.GetResultDictionary();
             Assert.Equal("PublicValue", properties[nameof(TestException.PublicProperty)]);
             Assert.Equal("threw System.Exception: Exception of type 'System.Exception' was thrown.", properties[nameof(TestException.ExceptionProperty)]);
@@ -44,7 +48,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Empty(data);
             Assert.Null(properties[nameof(TestException.InnerException)]);
 #if NET461
-            Assert.StartsWith("Void Destructure_(", properties[nameof(TestException.TargetSite)].ToString());
+            Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
             Assert.NotEmpty(properties[nameof(TestException.StackTrace)].ToString());
             Assert.Null(properties[nameof(TestException.HelpLink)]);
@@ -122,6 +126,159 @@ namespace Serilog.Exceptions.Test.Destructurers
             var parent = (IDictionary<string, object>)properties[nameof(RecursiveException.Node)];
             Assert.Equal("PARENT", parent[nameof(RecursiveNode.Name)]);
             Assert.IsType<RecursiveNode>(parent[nameof(RecursiveNode.Child)]);
+        }
+
+        [Fact]
+        public void ExceptionWithTypeProperty_StillContainsType_JustWithDollarAsPrefixInLabel()
+        {
+            var exceptionWithTypeProperty = new ExceptionWithTypeProperty() { Type = 13 };
+            Test_LoggedExceptionContainsProperty(exceptionWithTypeProperty, "$Type", $"Serilog.Exceptions.Test.Destructurers.{nameof(ReflectionBasedDestructurerTest)}+ExceptionWithTypeProperty");
+        }
+
+        [Fact]
+        public void WhenObjectContainsCyclicReferences_ThenNoStackoverflowExceptionIsThrown()
+        {
+            // Arrange
+            var exception = new CyclicException
+            {
+                MyObject = new MyObject()
+            };
+            exception.MyObject.Foo = "bar";
+            exception.MyObject.Reference = exception.MyObject;
+            exception.MyObject.Reference2 = exception.MyObject;
+
+            // Act
+            var result = new ExceptionPropertiesBag(new Exception());
+            var destructurer = new ReflectionBasedDestructurer(10);
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObject"];
+
+            Assert.Equal("bar", myObject["Foo"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference2"])["$ref"]);
+            Assert.Equal("1", myObject["$id"]);
+        }
+
+        [Fact]
+        public void WhenObjectContainsCyclicReferencesInList_ThenRecursiveDestructureIsImmediatelyStopped()
+        {
+            // Arrange
+            var cyclic = new MyObjectEnumerable
+            {
+                Foo = "Cyclic"
+            };
+            cyclic.Reference = cyclic;
+            var exception = new CyclicException2
+            {
+                MyObjectEnumerable = new MyObjectEnumerable()
+            };
+            exception.MyObjectEnumerable.Foo = "bar";
+            exception.MyObjectEnumerable.Reference = cyclic;
+
+            // Act
+            var result = new ExceptionPropertiesBag(new Exception());
+            var destructurer = new ReflectionBasedDestructurer(10);
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (List<object>)result.GetResultDictionary()["MyObjectEnumerable"];
+
+            // exception.MyObjectEnumerable[0] is still list
+            var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
+
+            // exception.MyObjectEnumerable[0][0] we notice that we would again destructure "cyclic"
+            var secondLevelList = Assert.IsType<Dictionary<string, object>>(firstLevelList[0]);
+            Assert.Equal("Cyclic reference", secondLevelList["$ref"]);
+        }
+
+        [Fact]
+        public void WhenObjectContainsCyclicReferencesInDict_ThenRecursiveDestructureIsImmediatelyStopped()
+        {
+            // Arrange
+            var cyclic = new MyObjectDict
+            {
+                Foo = "Cyclic",
+                Reference = new Dictionary<string, object>()
+            };
+            cyclic.Reference["x"] = cyclic.Reference;
+            var exception = new CyclicExceptionDict
+            {
+                MyObjectDict = cyclic
+            };
+
+            // Act
+            var result = new ExceptionPropertiesBag(new Exception());
+            var destructurer = new ReflectionBasedDestructurer(10);
+            destructurer.Destructure(exception, result, null);
+
+            // Assert
+            var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObjectDict"];
+
+            // exception.MyObjectDict["Reference"] is still regular dictionary
+            var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
+            var id = firstLevelDict["$id"];
+            Assert.Equal("1", id);
+
+            // exception.MyObjectDict["Reference"]["x"] we notice that we are destructuring same dictionary
+            var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
+            var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
+            Assert.Equal(id, refId);
+        }
+
+        public class MyObject
+        {
+            public string Foo { get; set; }
+
+            public MyObject Reference { get; set; }
+
+            public MyObject Reference2 { get; set; }
+        }
+
+        public class CyclicException : Exception
+        {
+            public MyObject MyObject { get; set; }
+        }
+
+        public class MyObjectEnumerable : IEnumerable<MyObjectEnumerable>
+        {
+            public string Foo { get; set; }
+
+            public MyObjectEnumerable Reference { get; set; }
+
+            public IEnumerator<MyObjectEnumerable> GetEnumerator()
+            {
+                var myObjects = new List<MyObjectEnumerable> { this.Reference };
+                return myObjects.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return this.GetEnumerator();
+            }
+        }
+
+        public class CyclicException2 : Exception
+        {
+            public MyObjectEnumerable MyObjectEnumerable { get; set; }
+        }
+
+        public class CyclicExceptionDict : Exception
+        {
+            public MyObjectDict MyObjectDict { get; set; }
+        }
+
+        public class MyObjectDict
+        {
+            public string Foo { get; set; }
+
+            public Dictionary<string, object> Reference { get; set; }
+        }
+
+        public class ExceptionWithTypeProperty : Exception
+        {
+            public int Type { get; set; }
         }
 
         public class TestException : Exception
