@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Ability to configure root property name of destructured exception
 - Ability to configure depth of reflection based destructuring
 - Benchmark project for performance measurments
+- Documentation comments for the whole public API
 
 ### Changed
 - `Uri` objects are destructured to plain strings instead of dictionaries
