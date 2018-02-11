@@ -10,13 +10,6 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public class ReflectionBasedDestructurerTest
     {
-        private ReflectionBasedDestructurer destructurer;
-
-        public ReflectionBasedDestructurerTest()
-        {
-            this.destructurer = new ReflectionBasedDestructurer(10);
-        }
-
         [Fact]
         public void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected()
         {
@@ -34,7 +27,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var propertiesBag = new ExceptionPropertiesBag(new Exception());
 
             // Act
-            this.destructurer.Destructure(exception, propertiesBag, null);
+            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -64,7 +57,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var exception = new UriException("test", new Uri(uriValue));
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            this.destructurer.Destructure(exception, propertiesBag, null);
+            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             var properties = propertiesBag.GetResultDictionary();
             var uriPropertyValue = properties[nameof(UriException.Uri)];
@@ -85,13 +78,59 @@ namespace Serilog.Exceptions.Test.Destructurers
             };
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            this.destructurer.Destructure(exception, propertiesBag, null);
+            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             var properties = propertiesBag.GetResultDictionary();
             var data = (IDictionary)properties[nameof(Exception.Data)];
             var uriDataValue = data["UriDataItem"];
             Assert.IsType<string>(uriDataValue);
             Assert.Equal(uriValue, uriDataValue);
+        }
+
+        [Fact]
+        public void CanDestructureStructDataItem()
+        {
+            // Arrange
+            var exception = new Exception("test");
+            exception.Data["data"] = new TestStruct()
+            {
+                ValueType = 10,
+                ReferenceType = "ABC"
+            };
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+
+            // Act
+            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+
+            // Assert
+            var properties = propertiesBag.GetResultDictionary();
+            var data = (IDictionary)properties[nameof(Exception.Data)];
+            var testStructDataValue = data["data"];
+            Assert.IsAssignableFrom<TestStruct>(testStructDataValue);
+        }
+
+        [Fact]
+        public void CanDestructureClassDataItem()
+        {
+            // Arrange
+            var exception = new Exception("test");
+            exception.Data["data"] = new TestClass()
+            {
+                ValueType = 10,
+                ReferenceType = "ABC"
+            };
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+
+            // Act
+            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+
+            // Assert
+            var properties = propertiesBag.GetResultDictionary();
+            var data = (IDictionary)properties[nameof(Exception.Data)];
+            var testStructDataValue = data["data"];
+            var destructuredStructDictionary = Assert.IsAssignableFrom<IDictionary<string, object>>(testStructDataValue);
+            Assert.Equal(10, destructuredStructDictionary[nameof(TestStruct.ValueType)]);
+            Assert.Equal("ABC", destructuredStructDictionary[nameof(TestStruct.ReferenceType)]);
         }
 
         [Fact]
@@ -113,11 +152,11 @@ namespace Serilog.Exceptions.Test.Destructurers
                     }
                 }
             };
-            this.destructurer = new ReflectionBasedDestructurer(1);
+            var destructurer = new ReflectionBasedDestructurer(1);
 
             // Act
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            this.destructurer.Destructure(exception, propertiesBag, null);
+            destructurer.Destructure(exception, propertiesBag, null);
 
             // Assert
             // Parent is depth 1
@@ -227,6 +266,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal(id, refId);
         }
 
+        private ReflectionBasedDestructurer CreateReflectionBasedDestructurer()
+        {
+            return new ReflectionBasedDestructurer(10);
+        }
+
         public class MyObject
         {
             public string Foo { get; set; }
@@ -308,10 +352,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             private string PrivateProperty { get; set; }
 
-            public string this[int i]
-            {
-                get { return "IndexerValue"; }
-            }
+            public string this[int i] => "IndexerValue";
         }
 
         public class UriException : Exception
@@ -335,6 +376,24 @@ namespace Serilog.Exceptions.Test.Destructurers
         public class RecursiveException : Exception
         {
             public RecursiveNode Node { get; set; }
+        }
+
+        [Serializable]
+#pragma warning disable SA1201 // Elements should appear in the correct order
+        internal struct TestStruct
+#pragma warning restore SA1201 // Elements should appear in the correct order
+        {
+            public int ValueType { get; set; }
+
+            public string ReferenceType { get; set; }
+        }
+
+        [Serializable]
+        internal class TestClass
+        {
+            public int ValueType { get; set; }
+
+            public string ReferenceType { get; set; }
         }
     }
 }
