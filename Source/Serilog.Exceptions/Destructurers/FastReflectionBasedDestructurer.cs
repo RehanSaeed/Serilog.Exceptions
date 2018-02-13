@@ -4,8 +4,8 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Reflection;
-    using System.Reflection.Emit;
     using Serilog.Exceptions.Core;
 
     /// <summary>
@@ -82,38 +82,14 @@ namespace Serilog.Exceptions.Destructurers
 
         private static Func<object, object> GenerateFastGetterForProperty(Type type, PropertyInfo property)
         {
-#if NETSTANDARD1_3 || NETSTANDARD1_6
-            return (x) => property.GetValue(x);
-#else
-            DynamicMethod dynamicMethod = new DynamicMethod(
-                "ExtractProperty",
-                typeof(object),
-                new[] { typeof(object) });
-
-            var getMethod = property.GetGetMethod();
-
-            ILGenerator ilGenerator = dynamicMethod.GetILGenerator();
-            ilGenerator.Emit(OpCodes.Ldarg_0);
-            ilGenerator.Emit(OpCodes.Castclass, type);
-            ilGenerator.EmitCall(OpCodes.Callvirt, getMethod, null);
-            if (IsValueType(property.PropertyType))
-            {
-                ilGenerator.Emit(OpCodes.Box, property.PropertyType);
-            }
-
-            ilGenerator.Emit(OpCodes.Ret);
-
-            return (Func<object, object>)dynamicMethod.CreateDelegate(typeof(Func<object, object>));
-#endif
-        }
-
-        private static bool IsValueType(Type type)
-        {
-#if NETSTANDARD1_3 || NETSTANDARD1_6
-            return type.GetTypeInfo().IsValueType;
-#else
-            return type.IsValueType;
-#endif
+            ParameterExpression objParam = Expression.Parameter(typeof(object), "num");
+            UnaryExpression typedObj = Expression.Convert(objParam, type);
+            MemberExpression memberExpression = Expression.Property(typedObj, property);
+            UnaryExpression typedResult = Expression.Convert(memberExpression, typeof(object));
+            Expression<Func<object, object>> resultLambda =
+                Expression.Lambda<Func<object, object>>(
+                    typedResult, objParam);
+            return resultLambda.Compile();
         }
 
         private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)

@@ -389,7 +389,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Serializable]
-        public class TestClass
+        internal class TestClass
         {
             public int ValueType { get; set; }
 
