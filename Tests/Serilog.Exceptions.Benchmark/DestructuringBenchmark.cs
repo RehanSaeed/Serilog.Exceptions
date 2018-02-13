@@ -13,6 +13,7 @@ namespace Serilog.Exceptions.Benchmark
     {
         private BenchmarkException benchmarkException;
         private ReflectionBasedDestructurer reflectionBasedDestructurer = new ReflectionBasedDestructurer(10);
+        private FastReflectionBasedDestructurer fastReflectionBasedDestructurer = new FastReflectionBasedDestructurer(10);
         private BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new BenchmarkExceptionDestructurer();
 
         [GlobalSetup]
@@ -39,6 +40,24 @@ namespace Serilog.Exceptions.Benchmark
             ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
 
             this.reflectionBasedDestructurer.Destructure(
+                ex,
+                bag,
+                null);
+
+            return bag.GetResultDictionary();
+        }
+
+        [Benchmark]
+        public IReadOnlyDictionary<string, object> FastReflectionDestructurer()
+        {
+            return DestructureUsingFastReflectionDestructurer(this.benchmarkException);
+        }
+
+        public IReadOnlyDictionary<string, object> DestructureUsingFastReflectionDestructurer(Exception ex)
+        {
+            ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
+
+            this.fastReflectionBasedDestructurer.Destructure(
                 ex,
                 bag,
                 null);
