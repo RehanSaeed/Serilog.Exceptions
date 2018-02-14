@@ -266,9 +266,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal(id, refId);
         }
 
-        private FastReflectionBasedDestructurer CreateReflectionBasedDestructurer()
+        private ReflectionBasedDestructurer CreateReflectionBasedDestructurer()
         {
-            return new FastReflectionBasedDestructurer(10);
+            return new ReflectionBasedDestructurer(10);
         }
 
         public class MyObject
