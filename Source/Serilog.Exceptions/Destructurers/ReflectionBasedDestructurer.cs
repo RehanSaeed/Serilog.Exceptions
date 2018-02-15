@@ -4,6 +4,7 @@ namespace Serilog.Exceptions.Destructurers
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Reflection;
     using Serilog.Exceptions.Core;
 
@@ -79,6 +80,18 @@ namespace Serilog.Exceptions.Destructurers
             return refId;
         }
 
+        private static Func<object, object> GenerateFastGetterForProperty(Type type, PropertyInfo property)
+        {
+            ParameterExpression objParam = Expression.Parameter(typeof(object), "num");
+            UnaryExpression typedObj = Expression.Convert(objParam, type);
+            MemberExpression memberExpression = Expression.Property(typedObj, property);
+            UnaryExpression typedResult = Expression.Convert(memberExpression, typeof(object));
+            Expression<Func<object, object>> resultLambda =
+                Expression.Lambda<Func<object, object>>(
+                    typedResult, objParam);
+            return resultLambda.Compile();
+        }
+
         private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
         {
             var properties = valueType
@@ -88,7 +101,11 @@ namespace Serilog.Exceptions.Destructurers
 
             var reflectionInfo = new ReflectionInfo()
             {
-                Properties = properties
+                Properties = properties.Select(p => new ReflectionPropertyInfo()
+                {
+                    Name = p.Name,
+                    Getter = GenerateFastGetterForProperty(valueType, p)
+                }).ToArray()
             };
             return reflectionInfo;
         }
@@ -218,7 +235,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 try
                 {
-                    object valueToBeDestructured = property.GetValue(value);
+                    object valueToBeDestructured = property.Getter(value);
                     object destructuredValue = this.DestructureValue(
                         valueToBeDestructured,
                         level + 1,
@@ -267,7 +284,14 @@ namespace Serilog.Exceptions.Destructurers
 
         private class ReflectionInfo
         {
-            public PropertyInfo[] Properties { get; set; }
+            public ReflectionPropertyInfo[] Properties { get; set; }
+        }
+
+        private class ReflectionPropertyInfo
+        {
+            public string Name { get; set; }
+
+            public Func<object, object> Getter { get; set; }
         }
     }
 }

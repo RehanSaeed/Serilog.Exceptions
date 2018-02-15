@@ -129,8 +129,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             var data = (IDictionary)properties[nameof(Exception.Data)];
             var testStructDataValue = data["data"];
             var destructuredStructDictionary = Assert.IsAssignableFrom<IDictionary<string, object>>(testStructDataValue);
-            Assert.Equal(10, destructuredStructDictionary[nameof(TestStruct.ValueType)]);
-            Assert.Equal("ABC", destructuredStructDictionary[nameof(TestStruct.ReferenceType)]);
+            Assert.Equal(10, destructuredStructDictionary[nameof(TestClass.ValueType)]);
+            Assert.Equal("ABC", destructuredStructDictionary[nameof(TestClass.ReferenceType)]);
         }
 
         [Fact]
