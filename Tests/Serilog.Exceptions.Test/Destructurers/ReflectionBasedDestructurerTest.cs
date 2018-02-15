@@ -3,6 +3,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using FluentAssertions;
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
     using Xunit;
@@ -37,14 +38,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "ProtectedProperty"));
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty"));
             Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
-            var data = Assert.IsType<Dictionary<string, object>>(properties[nameof(TestException.Data)]);
-            Assert.Empty(data);
-            Assert.Null(properties[nameof(TestException.InnerException)]);
 #if NET461
             Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
             Assert.NotEmpty(properties[nameof(TestException.StackTrace)].ToString());
-            Assert.Null(properties[nameof(TestException.HelpLink)]);
             Assert.Equal("Serilog.Exceptions.Test", properties[nameof(TestException.Source)]);
             Assert.Equal(-2146233088, properties[nameof(TestException.HResult)]);
             Assert.Contains(typeof(TestException).FullName, properties["Type"].ToString());
@@ -264,6 +261,38 @@ namespace Serilog.Exceptions.Test.Destructurers
             var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
             var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
             Assert.Equal(id, refId);
+        }
+
+        [Fact]
+        public void WhenDestruringArgumentException_ResultShouldBeEquivalentToArgumentExceptionDestructurer()
+        {
+            // Arrange
+            ArgumentException exception;
+            try
+            {
+                throw new ArgumentException("Message", "paramName");
+            }
+            catch (ArgumentException ex)
+            {
+                exception = ex;
+            }
+
+            var reflectionBasedResult = new ExceptionPropertiesBag(exception);
+            var customBasedResult = new ExceptionPropertiesBag(exception);
+            var reflectionBasedDestructurer = this.CreateReflectionBasedDestructurer();
+            var customDestructurer = new ArgumentExceptionDestructurer();
+
+            // Act
+            reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, null);
+            customDestructurer.Destructure(exception, customBasedResult, null);
+
+            // Assert
+            var reflectionBasedDictionary = (Dictionary<string, object>)reflectionBasedResult.GetResultDictionary();
+            var customBasedDictionary = (Dictionary<string, object>)customBasedResult.GetResultDictionary();
+
+            reflectionBasedDictionary.Should().BeEquivalentTo(
+                customBasedDictionary,
+                options => options);
         }
 
         private ReflectionBasedDestructurer CreateReflectionBasedDestructurer()

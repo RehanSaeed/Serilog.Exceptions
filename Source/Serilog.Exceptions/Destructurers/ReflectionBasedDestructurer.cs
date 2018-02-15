@@ -51,11 +51,19 @@ namespace Serilog.Exceptions.Destructurers
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
             var nextCyclicRefId = 1;
+            var destructuredObjects = new Dictionary<object, IDictionary<string, object>>();
+
+            ExceptionDestructurer.DestructureCommonExceptionProperties(
+                exception,
+                propertiesBag,
+                destructureException,
+                data => this.DestructureValueDictionary(data, 1, destructuredObjects, ref nextCyclicRefId));
+
             foreach (var p in this.DestructureObject(
                 exception,
                 exception.GetType(),
                 0,
-                new Dictionary<object, IDictionary<string, object>>(),
+                destructuredObjects,
                 ref nextCyclicRefId))
             {
                 propertiesBag.AddProperty(p.Key, p.Value);
@@ -92,12 +100,20 @@ namespace Serilog.Exceptions.Destructurers
             return resultLambda.Compile();
         }
 
-        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType, int destructuringLevel)
         {
-            var properties = valueType
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
-                .ToArray();
+            var properties = GetExceptionPropertiesForDestructuring(valueType);
+
+            // Level 0 means that we are destructuring main exception
+            // For this exception we need to skip all the properties
+            // that were already destructured using custom
+            // code in ExceptionDestructurer.
+            if (destructuringLevel == 0)
+            {
+                var baseExceptionProperties = GetExceptionPropertiesForDestructuring(typeof(Exception));
+
+                properties = properties.Where(p => baseExceptionProperties.All(bp => bp.Name != p.Name)).ToArray();
+            }
 
             var reflectionInfo = new ReflectionInfo()
             {
@@ -108,6 +124,14 @@ namespace Serilog.Exceptions.Destructurers
                 }).ToArray()
             };
             return reflectionInfo;
+        }
+
+        private static PropertyInfo[] GetExceptionPropertiesForDestructuring(Type valueType)
+        {
+            return valueType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
+                .ToArray();
         }
 
         private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
@@ -227,7 +251,7 @@ namespace Serilog.Exceptions.Destructurers
 
             if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
             {
-                reflectionInfo = GenerateReflectionInfoForType(valueType);
+                reflectionInfo = GenerateReflectionInfoForType(valueType, level);
                 this.reflectionInfoCache.Add(valueType, reflectionInfo);
             }
 
@@ -268,7 +292,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 if (!values.ContainsKey("$Type"))
                 {
-                    values.Add("$Type", valueType);
+                    values.Add("$Type", valueType.FullName);
                 }
                 else
                 {
@@ -278,7 +302,7 @@ namespace Serilog.Exceptions.Destructurers
             }
             else
             {
-                values.Add("Type", valueType);
+                values.Add("Type", valueType.FullName);
             }
         }
 
