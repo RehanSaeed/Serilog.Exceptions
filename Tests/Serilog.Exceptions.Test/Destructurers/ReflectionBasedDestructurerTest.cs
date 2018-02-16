@@ -261,6 +261,15 @@ namespace Serilog.Exceptions.Test.Destructurers
             Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
         }
 
+        // To be discussed: whether we need to keep consistent behaviour even for inner exceptions
+        //[Fact]
+        //public void WhenDestruringAggregateException_ResultShouldBeEquivalentToAggregateExceptionDestructurer()
+        //{
+        //    var argumentException = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
+        //    var aggregateException = ThrowAndCatchException(() => throw new AggregateException(argumentException));
+        //    Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(aggregateException, new AggregateExceptionDestructurer());
+        //}
+
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
             IExceptionDestructurer customDestructurer)
@@ -271,8 +280,20 @@ namespace Serilog.Exceptions.Test.Destructurers
             var reflectionBasedDestructurer = CreateReflectionBasedDestructurer();
 
             // Act
-            reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, null);
-            customDestructurer.Destructure(exception, customBasedResult, null);
+            Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructure(IExceptionDestructurer destructurer)
+            {
+                return (ex) =>
+                {
+                    var resultsBag = new ExceptionPropertiesBag(ex);
+
+                    destructurer.Destructure(ex, resultsBag, null);
+
+                    return resultsBag.GetResultDictionary();
+                };
+            }
+
+            reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, InnerDestructure(reflectionBasedDestructurer));
+            customDestructurer.Destructure(exception, customBasedResult, InnerDestructure(new ArgumentExceptionDestructurer()));
 
             // Assert
             var reflectionBasedDictionary = (Dictionary<string, object>)reflectionBasedResult.GetResultDictionary();

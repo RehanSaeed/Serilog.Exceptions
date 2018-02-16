@@ -23,6 +23,7 @@ namespace Serilog.Exceptions.Destructurers
         private readonly int destructuringDepth;
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
+        private readonly PropertyInfo[] baseExceptionPropertiesForDestructuring;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
@@ -39,6 +40,8 @@ namespace Serilog.Exceptions.Destructurers
             }
 
             this.destructuringDepth = destructuringDepth;
+
+            this.baseExceptionPropertiesForDestructuring = GetExceptionPropertiesForDestructuring(typeof(Exception));
         }
 
         /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
@@ -100,38 +103,32 @@ namespace Serilog.Exceptions.Destructurers
             return resultLambda.Compile();
         }
 
-        private static ReflectionInfo GenerateReflectionInfoForType(Type valueType, int destructuringLevel)
-        {
-            var properties = GetExceptionPropertiesForDestructuring(valueType);
-
-            // Level 0 means that we are destructuring main exception
-            // For this exception we need to skip all the properties
-            // that were already destructured using custom
-            // code in ExceptionDestructurer.
-            if (destructuringLevel == 0)
-            {
-                var baseExceptionProperties = GetExceptionPropertiesForDestructuring(typeof(Exception));
-
-                properties = properties.Where(p => baseExceptionProperties.All(bp => bp.Name != p.Name)).ToArray();
-            }
-
-            var reflectionInfo = new ReflectionInfo()
-            {
-                Properties = properties.Select(p => new ReflectionPropertyInfo()
-                {
-                    Name = p.Name,
-                    Getter = GenerateFastGetterForProperty(valueType, p)
-                }).ToArray()
-            };
-            return reflectionInfo;
-        }
-
         private static PropertyInfo[] GetExceptionPropertiesForDestructuring(Type valueType)
         {
             return valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
                 .ToArray();
+        }
+
+        private ReflectionInfo GenerateReflectionInfoForType(Type valueType, int destructuringLevel)
+        {
+            var properties = GetExceptionPropertiesForDestructuring(valueType);
+            var propertyInfos = properties.Select(p => new ReflectionPropertyInfo()
+            {
+                Name = p.Name,
+                Getter = GenerateFastGetterForProperty(valueType, p),
+            }).ToArray();
+            var propertiesInfosExceptBaseOnes = propertyInfos
+                .Where(p => this.baseExceptionPropertiesForDestructuring.All(bp => bp.Name != p.Name))
+                .ToArray();
+
+            var reflectionInfo = new ReflectionInfo()
+            {
+                Properties = propertyInfos,
+                PropertiesExceptBaseOnes = propertiesInfosExceptBaseOnes
+            };
+            return reflectionInfo;
         }
 
         private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
@@ -251,11 +248,13 @@ namespace Serilog.Exceptions.Destructurers
 
             if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
             {
-                reflectionInfo = GenerateReflectionInfoForType(valueType, level);
+                reflectionInfo = this.GenerateReflectionInfoForType(valueType, level);
                 this.reflectionInfoCache.Add(valueType, reflectionInfo);
             }
 
-            foreach (var property in reflectionInfo.Properties)
+            var properties = level == 0 ? reflectionInfo.PropertiesExceptBaseOnes : reflectionInfo.Properties;
+
+            foreach (var property in properties)
             {
                 try
                 {
@@ -309,6 +308,8 @@ namespace Serilog.Exceptions.Destructurers
         private class ReflectionInfo
         {
             public ReflectionPropertyInfo[] Properties { get; set; }
+
+            public ReflectionPropertyInfo[] PropertiesExceptBaseOnes { get; set; }
         }
 
         private class ReflectionPropertyInfo
