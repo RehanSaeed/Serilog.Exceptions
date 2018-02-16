@@ -15,20 +15,11 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected()
         {
             // Arrange
-            Exception exception;
-            try
-            {
-                throw new TestException();
-            }
-            catch (Exception e)
-            {
-                exception = e;
-            }
-
-            var propertiesBag = new ExceptionPropertiesBag(new Exception());
+            var exception = ThrowAndCatchException(() => throw new TestException());
+            var propertiesBag = new ExceptionPropertiesBag(exception);
 
             // Act
-            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -54,7 +45,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var exception = new UriException("test", new Uri(uriValue));
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             var properties = propertiesBag.GetResultDictionary();
             var uriPropertyValue = properties[nameof(UriException.Uri)];
@@ -75,7 +66,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             };
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             var properties = propertiesBag.GetResultDictionary();
             var data = (IDictionary)properties[nameof(Exception.Data)];
@@ -97,7 +88,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
             // Act
-            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -119,7 +110,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
             // Act
-            this.CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -266,21 +257,18 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void WhenDestruringArgumentException_ResultShouldBeEquivalentToArgumentExceptionDestructurer()
         {
-            // Arrange
-            ArgumentException exception;
-            try
-            {
-                throw new ArgumentException("Message", "paramName");
-            }
-            catch (ArgumentException ex)
-            {
-                exception = ex;
-            }
+            var exception = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
+            Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
+        }
 
+        private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
+            Exception exception,
+            IExceptionDestructurer customDestructurer)
+        {
+            // Arrange
             var reflectionBasedResult = new ExceptionPropertiesBag(exception);
             var customBasedResult = new ExceptionPropertiesBag(exception);
-            var reflectionBasedDestructurer = this.CreateReflectionBasedDestructurer();
-            var customDestructurer = new ArgumentExceptionDestructurer();
+            var reflectionBasedDestructurer = CreateReflectionBasedDestructurer();
 
             // Act
             reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, null);
@@ -290,12 +278,25 @@ namespace Serilog.Exceptions.Test.Destructurers
             var reflectionBasedDictionary = (Dictionary<string, object>)reflectionBasedResult.GetResultDictionary();
             var customBasedDictionary = (Dictionary<string, object>)customBasedResult.GetResultDictionary();
 
-            reflectionBasedDictionary.Should().BeEquivalentTo(
-                customBasedDictionary,
-                options => options);
+            reflectionBasedDictionary.Should().BeEquivalentTo(customBasedDictionary);
         }
 
-        private ReflectionBasedDestructurer CreateReflectionBasedDestructurer()
+        private static Exception ThrowAndCatchException(Action throwingAction)
+        {
+            try
+            {
+                throwingAction();
+            }
+            catch (Exception ex)
+            {
+                return ex;
+            }
+
+            Assert.True(false, $"{nameof(throwingAction)} did not throw");
+            return null;
+        }
+
+        private static ReflectionBasedDestructurer CreateReflectionBasedDestructurer()
         {
             return new ReflectionBasedDestructurer(10);
         }
