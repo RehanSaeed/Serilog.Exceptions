@@ -61,5 +61,11 @@ namespace Serilog.Exceptions.Core
 
             this.properties.Add(key, value);
         }
+
+        /// <inheritdoc cref="IExceptionPropertiesBag.ContainsProperty"/>
+        public bool ContainsProperty(string key)
+        {
+            return this.properties.ContainsKey(key);
+        }
     }
 }

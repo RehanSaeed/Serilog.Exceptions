@@ -10,9 +10,9 @@ Frequency=2437506 Hz, Resolution=410.2554 ns, Timer=TSC
 
 
 ```
-|                 Method |  Job | Runtime |       Mean |      Error |     StdDev |   Gen 0 | Allocated |
-|----------------------- |----- |-------- |-----------:|-----------:|-----------:|--------:|----------:|
-| ReflectionDestructurer |  Clr |     Clr |  10.192 us |  0.2402 us |  0.5754 us |  2.7618 |   4.26 KB |
-|     CustomDestructurer |  Clr |     Clr |   7.351 us |  0.1092 us |  0.1022 us |  2.2354 |   3.44 KB |
-| ReflectionDestructurer | Core |    Core | 859.037 us | 18.4941 us | 16.3945 us | 10.7422 |  16.56 KB |
-|     CustomDestructurer | Core |    Core | 833.124 us |  7.8910 us |  6.9952 us |  9.7656 |  15.74 KB |
+|                 Method |  Job | Runtime |       Mean |      Error |     StdDev |  Gen 0 | Allocated |
+|----------------------- |----- |-------- |-----------:|-----------:|-----------:|-------:|----------:|
+| ReflectionDestructurer |  Clr |     Clr |   9.966 us |  0.1979 us |  0.3196 us | 2.4719 |   3.81 KB |
+|     CustomDestructurer |  Clr |     Clr |   7.567 us |  0.0839 us |  0.0701 us | 2.2278 |   3.44 KB |
+| ReflectionDestructurer | Core |    Core | 850.053 us |  7.5538 us |  7.0658 us | 9.7656 |  16.11 KB |
+|     CustomDestructurer | Core |    Core | 868.570 us | 17.1272 us | 17.5884 us | 9.7656 |  15.74 KB |
