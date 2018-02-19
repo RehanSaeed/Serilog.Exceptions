@@ -180,7 +180,7 @@ namespace Serilog.Exceptions.Destructurers
             var valueType = value.GetType();
             var valueTypeInfo = valueType.GetTypeInfo();
 
-            if (valueTypeInfo.IsSubclassOf(typeof(MemberInfo)))
+            if (value is MemberInfo)
             {
                 return value;
             }
@@ -195,25 +195,25 @@ namespace Serilog.Exceptions.Destructurers
                 return value;
             }
 
-            if (typeof(IDictionary).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
+            if (value is IDictionary dictionary)
             {
-                return this.DestructureValueDictionary(value, level, destructuredObjects, ref nextCyclicRefId);
+                return this.DestructureValueDictionary(dictionary, level, destructuredObjects, ref nextCyclicRefId);
             }
 
-            if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
+            if (value is IEnumerable enumerable)
             {
-                return this.DestructureValueEnumerable(value, level, destructuredObjects, ref nextCyclicRefId);
+                return this.DestructureValueEnumerable(enumerable, level, destructuredObjects, ref nextCyclicRefId);
             }
 
-            if (typeof(Uri).GetTypeInfo().IsAssignableFrom(valueTypeInfo))
+            if (value is Uri uri)
             {
-                return this.DestructureUri((Uri)value);
+                return this.DestructureUri(uri);
             }
 
             return this.DestructureObject(value, valueType, level, destructuredObjects, ref nextCyclicRefId);
         }
 
-        private object DestructureValueEnumerable(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private object DestructureValueEnumerable(IEnumerable value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
@@ -226,7 +226,7 @@ namespace Serilog.Exceptions.Destructurers
             destructuredObjects.Add(value, new Dictionary<string, object>());
 
             var resultList = new List<object>();
-            foreach (var o in ((IEnumerable)value).Cast<object>())
+            foreach (var o in value.Cast<object>())
             {
                 resultList.Add(this.DestructureValue(o, level + 1, destructuredObjects, ref nextCyclicRefId));
             }
@@ -239,7 +239,7 @@ namespace Serilog.Exceptions.Destructurers
             return value.ToString();
         }
 
-        private object DestructureValueDictionary(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private object DestructureValueDictionary(IDictionary value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
@@ -252,7 +252,7 @@ namespace Serilog.Exceptions.Destructurers
                 };
             }
 
-            var destructuredDictionary = ((IDictionary)value).ToStringObjectDictionary();
+            var destructuredDictionary = value.ToStringObjectDictionary();
             destructuredObjects.Add(value, destructuredDictionary);
 
             foreach (var kvp in destructuredDictionary.ToDictionary(k => k.Key, v => v.Value))
