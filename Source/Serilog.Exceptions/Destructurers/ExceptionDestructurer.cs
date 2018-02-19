@@ -197,9 +197,30 @@ namespace Serilog.Exceptions.Destructurers
         {
             propertiesBag.AddProperty("Type", exception.GetType().FullName);
 
+            DestructureCommonExceptionProperties(
+                exception,
+                propertiesBag,
+                innerDestructure,
+                data => data.ToStringObjectDictionary());
+        }
+
+        /// <summary>
+        /// Destructures public properties of <see cref="Exception"/>.
+        /// Omits less frequently used ones if they are null.
+        /// </summary>
+        /// <param name="exception">The exception that will be destructured.</param>
+        /// <param name="propertiesBag">The bag when destructured properties will be put.</param>
+        /// <param name="innerDestructure">Function that can be used to destructure inner exceptions if there are any.</param>
+        /// <param name="destructureDataProperty">Injected function for destructuring <see cref="Exception.Data"/></param>
+        internal static void DestructureCommonExceptionProperties(
+            Exception exception,
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure,
+            Func<System.Collections.IDictionary, object> destructureDataProperty)
+        {
             if (exception.Data.Count != 0)
             {
-                propertiesBag.AddProperty(nameof(Exception.Data), exception.Data.ToStringObjectDictionary());
+                propertiesBag.AddProperty(nameof(Exception.Data), destructureDataProperty(exception.Data));
             }
 
             if (!string.IsNullOrEmpty(exception.HelpLink))

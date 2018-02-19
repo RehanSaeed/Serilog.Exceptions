@@ -15,7 +15,7 @@
 <pre><code>
 BenchmarkDotNet=v0.10.12, OS=Windows 10 Redstone 1 [1607, Anniversary Update] (10.0.14393.1944)
 Intel Core i5-6300U CPU 2.40GHz (Skylake), 1 CPU, 4 logical cores and 2 physical cores
-Frequency=2437504 Hz, Resolution=410.2557 ns, Timer=TSC
+Frequency=2437506 Hz, Resolution=410.2554 ns, Timer=TSC
 .NET Core SDK=2.1.4
   [Host] : .NET Core 2.0.5 (Framework 4.6.26020.03), 64bit RyuJIT
   Clr    : .NET Framework 4.6.1 (CLR 4.0.30319.42000), 64bit RyuJIT-v4.7.2117.0
@@ -24,14 +24,12 @@ Frequency=2437504 Hz, Resolution=410.2557 ns, Timer=TSC
 <pre><code></code></pre>
 
 <table>
-<thead><tr><th>              Method</th><th>Job</th><th>Runtime</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th><th>Gen 0</th><th>Allocated</th>
+<thead><tr><th>          Method</th><th>Job</th><th>Runtime</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen 0</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>FastReflectionDestructurer</td><td>Clr</td><td>Clr</td><td>11.555 us</td><td>0.2609 us</td><td>0.4359 us</td><td>11.400 us</td><td>3.2196</td><td>4.96 KB</td>
-</tr><tr><td>ReflectionDestructurer</td><td>Clr</td><td>Clr</td><td>14.164 us</td><td>0.2820 us</td><td>0.8182 us</td><td>13.810 us</td><td>3.2196</td><td>4.96 KB</td>
-</tr><tr><td>CustomDestructurer</td><td>Clr</td><td>Clr</td><td>6.585 us</td><td>0.0813 us</td><td>0.0721 us</td><td>6.565 us</td><td>2.2354</td><td>3.44 KB</td>
-</tr><tr><td>FastReflectionDestructurer</td><td>Core</td><td>Core</td><td>756.909 us</td><td>11.7003 us</td><td>9.7703 us</td><td>755.749 us</td><td>10.7422</td><td>17.2 KB</td>
-</tr><tr><td>ReflectionDestructurer</td><td>Core</td><td>Core</td><td>758.189 us</td><td>13.6420 us</td><td>12.0933 us</td><td>753.921 us</td><td>10.7422</td><td>17.2 KB</td>
-</tr><tr><td>CustomDestructurer</td><td>Core</td><td>Core</td><td>740.791 us</td><td>13.1880 us</td><td>12.3361 us</td><td>741.054 us</td><td>9.7656</td><td>15.74 KB</td>
+</thead><tbody><tr><td>ReflectionDestructurer</td><td>Clr</td><td>Clr</td><td>9.966 us</td><td>0.1979 us</td><td>0.3196 us</td><td>2.4719</td><td>3.81 KB</td>
+</tr><tr><td>CustomDestructurer</td><td>Clr</td><td>Clr</td><td>7.567 us</td><td>0.0839 us</td><td>0.0701 us</td><td>2.2278</td><td>3.44 KB</td>
+</tr><tr><td>ReflectionDestructurer</td><td>Core</td><td>Core</td><td>850.053 us</td><td>7.5538 us</td><td>7.0658 us</td><td>9.7656</td><td>16.11 KB</td>
+</tr><tr><td>CustomDestructurer</td><td>Core</td><td>Core</td><td>868.570 us</td><td>17.1272 us</td><td>17.5884 us</td><td>9.7656</td><td>15.74 KB</td>
 </tr></tbody></table>
 </body>
 </html>

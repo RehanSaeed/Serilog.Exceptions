@@ -23,5 +23,12 @@ namespace Serilog.Exceptions.Core
         /// <param name="key">The key</param>
         /// <param name="value">The value</param>
         void AddProperty(string key, object value);
+
+        /// <summary>
+        /// Returns true if given key is already present in the bag.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>True if given key is already present.</returns>
+        bool ContainsProperty(string key);
     }
 }

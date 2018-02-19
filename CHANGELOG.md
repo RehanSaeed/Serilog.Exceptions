@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Improved performance of reflection based destructurer using dynamic code generation
+- Reflection based destructure omits following properties if they are null or empty(just like custom destructurers) : `Data`, `InnerException`, `HelpLink`, `HResult`and `TargetSite`
 
 ## [4.0.0] - 2018-02-11
 
