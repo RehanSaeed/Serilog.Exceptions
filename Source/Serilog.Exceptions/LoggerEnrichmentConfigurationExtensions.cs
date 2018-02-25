@@ -20,13 +20,16 @@ namespace Serilog.Exceptions
         /// by the destructuring process because Serilog already attaches them to log event.
         /// </summary>
         /// <param name="loggerEnrichmentConfiguration">The enrichment configuration</param>
+        /// <param name="customRootName">Name of the property which value will be filled with destructured exception.</param>
         /// <returns>Configuration object allowing method chaining.</returns>
         public static Serilog.LoggerConfiguration WithExceptionDetails(
-            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
+            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
+            string customRootName = "ExceptionDetails")
         {
             var options = new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithIgnoreStackTraceAndTargetSiteExceptionFilter();
+                .WithIgnoreStackTraceAndTargetSiteExceptionFilter()
+                .WithRootName(customRootName);
             var logEventEnricher = new ExceptionEnricher(options);
             return loggerEnrichmentConfiguration.With(logEventEnricher);
         }

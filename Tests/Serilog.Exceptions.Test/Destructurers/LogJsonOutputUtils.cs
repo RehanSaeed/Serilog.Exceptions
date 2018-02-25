@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
@@ -58,7 +60,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
             JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
 
-            JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == rootName);
+            JProperty exceptionDetailProperty = propertiesObject.Properties().Should()
+                .ContainSingle(
+                    x => x.Name == rootName,
+                    "expected {0} to be present in destructured properties",
+                    rootName).Which;
             JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
 
             return exceptionDetailValue;

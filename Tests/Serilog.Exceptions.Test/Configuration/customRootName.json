@@ -1,0 +1,11 @@
+{
+  "Serilog": {
+    "MinimumLevel": "Debug",
+    "Enrich": [
+      {
+        "Name": "WithExceptionDetails",
+        "Args": { "customRootName": "Ex" }
+      }
+    ]
+  }
+}
