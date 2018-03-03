@@ -261,14 +261,16 @@ namespace Serilog.Exceptions.Test.Destructurers
             Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
         }
 
-        // To be discussed: whether we need to keep consistent behaviour even for inner exceptions
-        //[Fact]
-        //public void WhenDestruringAggregateException_ResultShouldBeEquivalentToAggregateExceptionDestructurer()
-        //{
-        //    var argumentException = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
-        //    var aggregateException = ThrowAndCatchException(() => throw new AggregateException(argumentException));
-        //    Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(aggregateException, new AggregateExceptionDestructurer());
-        //}
+        /*
+         To be discussed: whether we need to keep consistent behaviour even for inner exceptions
+        [Fact]
+        public void WhenDestruringAggregateException_ResultShouldBeEquivalentToAggregateExceptionDestructurer()
+        {
+            var argumentException = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
+            var aggregateException = ThrowAndCatchException(() => throw new AggregateException(argumentException));
+            Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(aggregateException, new AggregateExceptionDestructurer());
+        }
+        */
 
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
@@ -415,18 +417,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             }
 
             public Uri Uri { get; }
-        }
-
-        public class RecursiveNode
-        {
-            public string Name { get; set; }
-
-            public RecursiveNode Child { get; set; }
-        }
-
-        public class RecursiveException : Exception
-        {
-            public RecursiveNode Node { get; set; }
         }
 
         [Serializable]

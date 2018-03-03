@@ -1,16 +1,14 @@
-using FluentAssertions;
-
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.IO;
+    using System.Linq;
+    using FluentAssertions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Serilog.Core;
     using Serilog.Events;
     using Serilog.Exceptions.Core;
-    using Serilog.Exceptions.Destructurers;
-    using Serilog.Exceptions.Filters;
     using Serilog.Formatting;
     using Serilog.Formatting.Json;
     using Xunit;
@@ -60,7 +58,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
             JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
 
-            JProperty exceptionDetailProperty = propertiesObject.Properties().Should()
+            JProperty[] properties = propertiesObject.Properties().ToArray();
+            JProperty exceptionDetailProperty = properties.Should()
                 .ContainSingle(
                     x => x.Name == rootName,
                     "expected {0} to be present in destructured properties",
