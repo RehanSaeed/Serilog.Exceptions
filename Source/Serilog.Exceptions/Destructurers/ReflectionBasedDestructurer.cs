@@ -21,6 +21,7 @@ namespace Serilog.Exceptions.Destructurers
         private const string RefLabel = "$ref";
         private const string CyclicReferenceMessage = "Cyclic reference";
         private readonly int destructuringDepth;
+        private readonly object lockObj = new object();
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
         private readonly PropertyInfo[] baseExceptionPropertiesForDestructuring;
@@ -318,13 +319,16 @@ namespace Serilog.Exceptions.Destructurers
 
         private ReflectionInfo GetOrCreateReflectionInfo(Type valueType)
         {
-            if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
+            lock (this.lockObj)
             {
-                reflectionInfo = this.GenerateReflectionInfoForType(valueType);
-                this.reflectionInfoCache.Add(valueType, reflectionInfo);
-            }
+                if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
+                {
+                    reflectionInfo = this.GenerateReflectionInfoForType(valueType);
+                    this.reflectionInfoCache.Add(valueType, reflectionInfo);
+                }
 
-            return reflectionInfo;
+                return reflectionInfo;
+            }
         }
 
         private void AppendTypeIfPossible(IExceptionPropertiesBag propertiesBag, Type valueType)
