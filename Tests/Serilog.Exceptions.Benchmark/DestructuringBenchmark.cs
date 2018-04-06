@@ -51,12 +51,6 @@ namespace Serilog.Exceptions.Benchmark
             return DestructureUsingReflectionDestructurer(this.benchmarkException, new ExceptionPropertiesBag(this.benchmarkException));
         }
 
-        [Benchmark]
-        public IReadOnlyDictionary<string, object> ReflectionDestructurerListDict()
-        {
-            return DestructureUsingReflectionDestructurer(this.benchmarkException, new FastExceptionPropertiesBag(this.benchmarkException));
-        }
-
         public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex, IExceptionPropertiesBag exceptionPropertiesBag)
         {
             this.benchmarkExceptionDestructurer.Destructure(
@@ -71,12 +65,6 @@ namespace Serilog.Exceptions.Benchmark
         public IReadOnlyDictionary<string, object> CustomDestructurer()
         {
             return DestructureUsingCustomDestructurer(this.benchmarkException, new ExceptionPropertiesBag(this.benchmarkException));
-        }
-
-        [Benchmark]
-        public IReadOnlyDictionary<string, object> CustomDestructurerListDict()
-        {
-            return DestructureUsingCustomDestructurer(this.benchmarkException, new FastExceptionPropertiesBag(this.benchmarkException));
         }
     }
 }
