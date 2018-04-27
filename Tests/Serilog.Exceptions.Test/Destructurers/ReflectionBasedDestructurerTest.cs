@@ -262,14 +262,13 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         // To be discussed: whether we need to keep consistent behaviour even for inner exceptions
-        //[Fact]
-        //public void WhenDestruringAggregateException_ResultShouldBeEquivalentToAggregateExceptionDestructurer()
-        //{
+        // [Fact]
+        // public void WhenDestruringAggregateException_ResultShouldBeEquivalentToAggregateExceptionDestructurer()
+        // {
         //    var argumentException = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
         //    var aggregateException = ThrowAndCatchException(() => throw new AggregateException(argumentException));
         //    Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(aggregateException, new AggregateExceptionDestructurer());
-        //}
-
+        // }
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
             IExceptionDestructurer customDestructurer)

@@ -9,7 +9,7 @@ namespace Serilog.Exceptions.Core
     {
         private readonly Exception exception;
         private readonly IExceptionPropertyFilter filter;
-        private readonly Dictionary<string, object> properties = new Dictionary<string, object>();
+        private readonly ListBasedDictionary properties = new ListBasedDictionary();
 
         // We keep a note on whether the results were collected to be sure that
         // after that there are no changes. This is the application of fail-fast principle.
@@ -24,7 +24,9 @@ namespace Serilog.Exceptions.Core
         {
             if (exception == null)
             {
-                throw new ArgumentNullException(nameof(exception), $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
+                throw new ArgumentNullException(
+                    nameof(exception),
+                    $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
             }
 
             this.exception = exception;
@@ -48,7 +50,8 @@ namespace Serilog.Exceptions.Core
 
             if (this.resultsCollected)
             {
-                throw new InvalidOperationException($"Cannot add exception property '{key}' to bag, after results were already collected");
+                throw new InvalidOperationException(
+                    $"Cannot add exception property '{key}' to bag, after results were already collected");
             }
 
             if (this.filter != null)
@@ -62,7 +65,7 @@ namespace Serilog.Exceptions.Core
             this.properties.Add(key, value);
         }
 
-        /// <inheritdoc cref="IExceptionPropertiesBag.ContainsProperty"/>
+        /// <inheritdoc />
         public bool ContainsProperty(string key)
         {
             return this.properties.ContainsKey(key);

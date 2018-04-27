@@ -1,8 +1,9 @@
-using System;
-using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Jobs;
 using Serilog.Exceptions.Destructurers;
+using System;
+using System.Collections.Generic;
+using Serilog.Exceptions.Core;
 
 namespace Serilog.Exceptions.Benchmark
 {
@@ -34,40 +35,36 @@ namespace Serilog.Exceptions.Benchmark
 
         }
 
-        public IReadOnlyDictionary<string, object> DestructureUsingReflectionDestructurer(Exception ex)
+        public IReadOnlyDictionary<string, object> DestructureUsingReflectionDestructurer(Exception ex, IExceptionPropertiesBag exceptionPropertiesBag)
         {
-            ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
-
             this.reflectionBasedDestructurer.Destructure(
                 ex,
-                bag,
+                exceptionPropertiesBag,
                 null);
 
-            return bag.GetResultDictionary();
+            return exceptionPropertiesBag.GetResultDictionary();
         }
 
         [Benchmark]
         public IReadOnlyDictionary<string, object> ReflectionDestructurer()
         {
-            return DestructureUsingReflectionDestructurer(this.benchmarkException);
+            return DestructureUsingReflectionDestructurer(this.benchmarkException, new ExceptionPropertiesBag(this.benchmarkException));
         }
 
-        public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex)
+        public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex, IExceptionPropertiesBag exceptionPropertiesBag)
         {
-            ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
-
             this.benchmarkExceptionDestructurer.Destructure(
                 ex,
-                bag,
+                exceptionPropertiesBag,
                 null);
 
-            return bag.GetResultDictionary();
+            return exceptionPropertiesBag.GetResultDictionary();
         }
 
         [Benchmark]
         public IReadOnlyDictionary<string, object> CustomDestructurer()
         {
-            return DestructureUsingCustomDestructurer(this.benchmarkException);
+            return DestructureUsingCustomDestructurer(this.benchmarkException, new ExceptionPropertiesBag(this.benchmarkException));
         }
     }
 }
