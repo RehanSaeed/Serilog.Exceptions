@@ -6,6 +6,7 @@ namespace Serilog.Exceptions.Destructurers
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Threading;
     using Serilog.Exceptions.Core;
 
     /// <summary>
@@ -18,12 +19,17 @@ namespace Serilog.Exceptions.Destructurers
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
         private const string IdLabel = "$id";
+
         private const string RefLabel = "$ref";
+
         private const string CyclicReferenceMessage = "Cyclic reference";
+
         private readonly int destructuringDepth;
+
         private readonly object lockObj = new object();
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
+
         private readonly PropertyInfo[] baseExceptionPropertiesForDestructuring;
 
         /// <summary>
@@ -209,6 +215,11 @@ namespace Serilog.Exceptions.Destructurers
             if (value is Uri uri)
             {
                 return this.DestructureUri(uri);
+            }
+
+            if (value is CancellationToken ct)
+            {
+                return OperationCanceledExceptionDestructurer.DestructureCancellationToken(ct);
             }
 
             return this.DestructureObject(value, valueType, level, destructuredObjects, ref nextCyclicRefId);
