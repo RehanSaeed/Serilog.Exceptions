@@ -29,19 +29,24 @@ namespace Serilog.Exceptions.Destructurers
                 return "null";
             }
 
-            var taskProperties = new SortedList<string, object>(task.Exception != null ? 4 : 3)
+            if (task.IsFaulted && task.Exception != null)
             {
-                [nameof(Task.Id)] = task.Id,
-                [nameof(Task.Status)] = task.Status.ToString("G"),
-                [nameof(Task.CreationOptions)] = task.CreationOptions.ToString("F")
-            };
-
-            if (task.IsFaulted)
-            {
-                taskProperties[nameof(Task.Exception)] = innerDestructure(task.Exception);
+                return new
+                {
+                    Id = task.Id,
+                    Status = task.Status.ToString("G"),
+                    CreationOptions = task.CreationOptions.ToString("F"),
+                    Exception = innerDestructure(task.Exception),
+                };
             }
 
-            return taskProperties;
+            return new
+            {
+                Id = task.Id,
+                Status = task.Status.ToString("G"),
+                CreationOptions = task.CreationOptions.ToString("F"),
+            };
+
         }
     }
 }
