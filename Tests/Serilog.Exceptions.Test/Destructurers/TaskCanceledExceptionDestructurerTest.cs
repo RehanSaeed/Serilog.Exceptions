@@ -3,9 +3,8 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using static LogJsonOutputUtils;
     using Xunit;
+    using static LogJsonOutputUtils;
 
     public class TaskCanceledExceptionDestructurerTest: IDisposable
     {

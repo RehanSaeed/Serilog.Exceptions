@@ -20,17 +20,12 @@ namespace Serilog.Exceptions.Destructurers
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
         private const string IdLabel = "$id";
-
         private const string RefLabel = "$ref";
-
         private const string CyclicReferenceMessage = "Cyclic reference";
-
         private readonly int destructuringDepth;
-
         private readonly object lockObj = new object();
 
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new Dictionary<Type, ReflectionInfo>();
-
         private readonly PropertyInfo[] baseExceptionPropertiesForDestructuring;
 
         /// <summary>
