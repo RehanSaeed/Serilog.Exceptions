@@ -261,15 +261,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
         }
 
-        // To be discussed: whether we need to keep consistent behaviour even for inner exceptions
-        //[Fact]
-        //public void WhenDestruringAggregateException_ResultShouldBeEquivalentToAggregateExceptionDestructurer()
-        //{
-        //    var argumentException = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
-        //    var aggregateException = ThrowAndCatchException(() => throw new AggregateException(argumentException));
-        //    Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(aggregateException, new AggregateExceptionDestructurer());
-        //}
-
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
             IExceptionDestructurer customDestructurer)
@@ -317,10 +308,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             return null;
         }
 
-        private static ReflectionBasedDestructurer CreateReflectionBasedDestructurer()
-        {
-            return new ReflectionBasedDestructurer(10);
-        }
+        private static ReflectionBasedDestructurer CreateReflectionBasedDestructurer() =>
+            new ReflectionBasedDestructurer(10);
 
         public class MyObject
         {
@@ -342,16 +331,10 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             public MyObjectEnumerable Reference { get; set; }
 
-            public IEnumerator<MyObjectEnumerable> GetEnumerator()
-            {
-                var myObjects = new List<MyObjectEnumerable> { this.Reference };
-                return myObjects.GetEnumerator();
-            }
+            public IEnumerator<MyObjectEnumerable> GetEnumerator() =>
+                new List<MyObjectEnumerable> { this.Reference }.GetEnumerator();
 
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.GetEnumerator();
-            }
+            IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
 
         public class CyclicException2 : Exception
@@ -392,10 +375,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             public string PublicProperty { get; set; }
 
-            public string ExceptionProperty
-            {
-                get { throw new Exception(); }
-            }
+            public string ExceptionProperty => throw new Exception();
 
             internal string InternalProperty { get; set; }
 
@@ -409,10 +389,8 @@ namespace Serilog.Exceptions.Test.Destructurers
         public class UriException : Exception
         {
             public UriException(string message, Uri uri)
-                : base(message)
-            {
+                : base(message) =>
                 this.Uri = uri;
-            }
 
             public Uri Uri { get; }
         }

@@ -1,10 +1,10 @@
-using System;
-using System.Collections.Generic;
-using Serilog.Exceptions.Core;
-using Serilog.Exceptions.Filters;
-
 namespace Serilog.Exceptions.Benchmark
 {
+    using System;
+    using System.Collections.Generic;
+    using Serilog.Exceptions.Core;
+    using Serilog.Exceptions.Filters;
+
     internal class ExceptionPropertiesBag : IExceptionPropertiesBag
     {
         private readonly Exception exception;
@@ -17,13 +17,9 @@ namespace Serilog.Exceptions.Benchmark
 
         public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
         {
-            if (exception == null)
-            {
-                throw new ArgumentNullException(nameof(exception),
-                    $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
-            }
-
-            this.exception = exception;
+            this.exception = exception ?? throw new ArgumentNullException(
+                nameof(exception),
+                $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
             this.filter = filter;
         }
 
@@ -57,9 +53,6 @@ namespace Serilog.Exceptions.Benchmark
             this.properties.Add(key, value);
         }
 
-        public bool ContainsProperty(string key)
-        {
-            return this.properties.ContainsKey(key);
-        }
+        public bool ContainsProperty(string key) => this.properties.ContainsKey(key);
     }
 }

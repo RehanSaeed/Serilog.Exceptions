@@ -1,38 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <PropertyGroup Label="Build">
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.0;net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Label="Project References">
     <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Package References">
     <PackageReference Include="BenchmarkDotNet" Version="0.11.1" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
     <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Principal.Windows" Version="4.3.0" />
+    <PackageReference Include="System.Security.Principal.Windows" Version="4.5.1" />
   </ItemGroup>
 
-  
-
-  <ItemGroup>
-    <Folder Include="BenchmarkDotNet.Artifacts\" />
+  <ItemGroup Label="Package References (.NET Core)"
+             Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>
 
-  <ItemGroup Label="Package References (.NET Standard 1.6)" Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
-  </ItemGroup>
-
-  <ItemGroup Label="Package References (.NET Standard 1.3)" Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.4.0" />
-  </ItemGroup>
-
-  <ItemGroup Label="References (.NET 4.6)" Condition=" '$(TargetFramework)' == 'net46' ">
+  <ItemGroup Label="References (.NET Framework)" Condition=" '$(TargetFramework)' == 'net46' ">
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 

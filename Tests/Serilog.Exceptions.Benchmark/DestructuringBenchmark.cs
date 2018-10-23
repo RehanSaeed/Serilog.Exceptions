@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
-using Serilog.Exceptions.Destructurers;
-
 namespace Serilog.Exceptions.Benchmark
 {
+    using System;
+    using System.Collections.Generic;
+    using BenchmarkDotNet.Attributes;
+    using Serilog.Exceptions.Destructurers;
+
     [ClrJob]
     [CoreJob]
     [MemoryDiagnoser]
@@ -36,7 +35,7 @@ namespace Serilog.Exceptions.Benchmark
 
         public IReadOnlyDictionary<string, object> DestructureUsingReflectionDestructurer(Exception ex)
         {
-            ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
+            var bag = new ExceptionPropertiesBag(ex);
 
             this.reflectionBasedDestructurer.Destructure(
                 ex,
@@ -47,14 +46,12 @@ namespace Serilog.Exceptions.Benchmark
         }
 
         [Benchmark]
-        public IReadOnlyDictionary<string, object> ReflectionDestructurer()
-        {
-            return DestructureUsingReflectionDestructurer(this.benchmarkException);
-        }
+        public IReadOnlyDictionary<string, object> ReflectionDestructurer() =>
+            this.DestructureUsingReflectionDestructurer(this.benchmarkException);
 
         public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex)
         {
-            ExceptionPropertiesBag bag = new ExceptionPropertiesBag(ex);
+            var bag = new ExceptionPropertiesBag(ex);
 
             this.benchmarkExceptionDestructurer.Destructure(
                 ex,
@@ -65,9 +62,7 @@ namespace Serilog.Exceptions.Benchmark
         }
 
         [Benchmark]
-        public IReadOnlyDictionary<string, object> CustomDestructurer()
-        {
-            return DestructureUsingCustomDestructurer(this.benchmarkException);
-        }
+        public IReadOnlyDictionary<string, object> CustomDestructurer() =>
+            this.DestructureUsingCustomDestructurer(this.benchmarkException);
     }
 }

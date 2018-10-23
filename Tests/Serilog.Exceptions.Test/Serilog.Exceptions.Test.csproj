@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
-    <TargetFrameworks>netcoreapp2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
@@ -20,18 +20,14 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="FluentAssertions" Version="5.1.1" />
+    <PackageReference Include="FluentAssertions" Version="5.4.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.0-beta009" />
-    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
-  </ItemGroup>
-
-  <ItemGroup Label="Tools">
-    <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
