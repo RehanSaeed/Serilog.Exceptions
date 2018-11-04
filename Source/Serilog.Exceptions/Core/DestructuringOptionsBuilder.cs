@@ -29,7 +29,7 @@ namespace Serilog.Exceptions.Core
         /// </summary>
         public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetSiteExceptionFilter =
 
-#if NET45
+#if NET46
             new IgnorePropertyByNameExceptionFilter(
                 nameof(Exception.StackTrace),
                 nameof(Exception.TargetSite));
