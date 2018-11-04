@@ -136,7 +136,8 @@ namespace Serilog.Exceptions.Destructurers
                         valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
-                        destructureException, ref localNextCyclicRefId);
+                        destructureException,
+                        ref localNextCyclicRefId);
                     nextCyclicRefId = localNextCyclicRefId;
                     addPropertyAction(property.Name, destructuredValue);
                 }
@@ -176,7 +177,9 @@ namespace Serilog.Exceptions.Destructurers
         }
 
         private object DestructureValue(
-            object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            object value,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException,
             ref int nextCyclicRefId)
         {
@@ -257,13 +260,12 @@ namespace Serilog.Exceptions.Destructurers
             return resultList;
         }
 
-        private object DestructureUri(Uri value)
-        {
-            return value.ToString();
-        }
+        private object DestructureUri(Uri value) => value.ToString();
 
         private object DestructureValueDictionary(
-            IDictionary value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            IDictionary value,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException,
             ref int nextCyclicRefId)
         {
@@ -323,7 +325,8 @@ namespace Serilog.Exceptions.Destructurers
                         valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
-                        destructureException, ref nextCyclicRefId);
+                        destructureException,
+                        ref nextCyclicRefId);
                     values.Add(property.Name, destructuredValue);
                 }
                 catch (TargetInvocationException targetInvocationException)

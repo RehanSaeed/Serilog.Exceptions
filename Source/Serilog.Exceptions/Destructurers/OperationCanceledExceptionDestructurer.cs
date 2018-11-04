@@ -24,11 +24,8 @@ namespace Serilog.Exceptions.Destructurers
             propertiesBag.AddProperty(nameof(OperationCanceledException.CancellationToken), DestructureCancellationToken(oce.CancellationToken));
         }
 
-        internal static object DestructureCancellationToken(in CancellationToken ct)
-        {
-            return ct.IsCancellationRequested
-                ? "CancellationRequested: true"
-                : "CancellationRequested: false";
-        }
+        internal static object DestructureCancellationToken(in CancellationToken ct) => ct.IsCancellationRequested
+            ? "CancellationRequested: true"
+            : "CancellationRequested: false";
     }
 }

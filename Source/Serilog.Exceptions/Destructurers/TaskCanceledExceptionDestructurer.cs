@@ -46,7 +46,6 @@ namespace Serilog.Exceptions.Destructurers
                 Status = task.Status.ToString("G"),
                 CreationOptions = task.CreationOptions.ToString("F"),
             };
-
         }
     }
 }

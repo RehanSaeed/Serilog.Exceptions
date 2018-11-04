@@ -5,14 +5,13 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Xunit;
     using static LogJsonOutputUtils;
 
-
-    public class OperationCanceledExceptionDestructurerTest: IDisposable
+    public class OperationCanceledExceptionDestructurerTest : IDisposable
     {
         private CancellationTokenSource cancellationTokenSource;
 
         public OperationCanceledExceptionDestructurerTest()
         {
-            cancellationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
         }
 
         [Fact]

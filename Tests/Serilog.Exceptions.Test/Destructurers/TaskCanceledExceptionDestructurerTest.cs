@@ -6,13 +6,13 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Xunit;
     using static LogJsonOutputUtils;
 
-    public class TaskCanceledExceptionDestructurerTest: IDisposable
+    public class TaskCanceledExceptionDestructurerTest : IDisposable
     {
         private CancellationTokenSource cancellationTokenSource;
 
         public TaskCanceledExceptionDestructurerTest()
         {
-            cancellationTokenSource = new CancellationTokenSource();
+            this.cancellationTokenSource = new CancellationTokenSource();
         }
 
         [Fact]
@@ -30,6 +30,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                     return e;
                 }
             }
+
             this.cancellationTokenSource.CancelAfter(100);
 
             var ex = await Wait(this.cancellationTokenSource.Token).ConfigureAwait(false);
