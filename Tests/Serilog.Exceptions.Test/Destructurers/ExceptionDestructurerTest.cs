@@ -3,6 +3,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using FluentAssertions;
     using Newtonsoft.Json.Linq;
     using NSubstitute;
     using Serilog.Exceptions.Core;
@@ -23,26 +24,26 @@ namespace Serilog.Exceptions.Test.Destructurers
             if (Type.GetType("System.Diagnostics.Eventing.Reader.EventLogInvalidDataException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089") != null)
             {
                 // Full .NET
-                Assert.Contains(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogInvalidDataException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogNotFoundException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogReadingException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Diagnostics.Tracing.EventSourceException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstanceNotFoundException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationBaseException");
-                Assert.Contains(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogInvalidDataException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogNotFoundException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogReadingException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Diagnostics.Tracing.EventSourceException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Management.Instrumentation.InstanceNotFoundException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Management.Instrumentation.InstrumentationBaseException");
+                targetTypes.Should().Contain(t => t.FullName == "System.Management.Instrumentation.InstrumentationException");
             }
             else
             {
                 // Mono
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogInvalidDataException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogNotFoundException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogReadingException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Diagnostics.Tracing.EventSourceException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstanceNotFoundException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationBaseException");
-                Assert.DoesNotContain(targetTypes, t => t.FullName == "System.Management.Instrumentation.InstrumentationException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogInvalidDataException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogNotFoundException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Diagnostics.Eventing.Reader.EventLogReadingException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Diagnostics.Tracing.EventSourceException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Management.Instrumentation.InstanceNotFoundException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Management.Instrumentation.InstrumentationBaseException");
+                targetTypes.Should().NotContain(t => t.FullName == "System.Management.Instrumentation.InstrumentationException");
             }
         }
 
