@@ -16,24 +16,14 @@ var buildNumber =
     0;
 
 var artifactsDirectory = Directory("./Artifacts");
-string versionSuffix = null;
-if (!string.IsNullOrEmpty(preReleaseSuffix))
-{
-    versionSuffix = preReleaseSuffix + "-" + buildNumber.ToString("D4");
-}
+var versionSuffix = string.IsNullOrEmpty(preReleaseSuffix) ? null : preReleaseSuffix + "-" + buildNumber.ToString("D4");
 
 Task("Clean")
     .Does(() =>
     {
         CleanDirectory(artifactsDirectory);
-        DeleteDirectories(GetDirectories("**/bin"), new DeleteDirectorySettings {
-			Recursive = true,
-			Force = true
-		});
-        DeleteDirectories(GetDirectories("**/obj"), new DeleteDirectorySettings {
-			Recursive = true,
-			Force = true
-		});
+        DeleteDirectories(GetDirectories("**/bin"), new DeleteDirectorySettings() { Force = true, Recursive = true });
+        DeleteDirectories(GetDirectories("**/obj"), new DeleteDirectorySettings() { Force = true, Recursive = true });
     });
 
 Task("Restore")
@@ -52,6 +42,7 @@ Task("Restore")
             new DotNetCoreBuildSettings()
             {
                 Configuration = configuration,
+                NoRestore = true,
                 VersionSuffix = versionSuffix
             });
     });
@@ -62,15 +53,16 @@ Task("Test")
     {
         foreach(var project in GetFiles("./Tests/**/*Test.csproj"))
         {
-            var outputFilePath = MakeAbsolute(artifactsDirectory.Path)
-                .CombineWithFilePath(project.GetFilenameWithoutExtension());
-            DotNetCoreTool(
-                project,
-                "xunit",
-                new ProcessArgumentBuilder()
-                    .AppendSwitch("-configuration", configuration)
-                    .AppendSwitchQuoted("-xml", outputFilePath.AppendExtension(".xml").ToString())
-                    .AppendSwitchQuoted("-html", outputFilePath.AppendExtension(".html").ToString()));
+            DotNetCoreTest(
+                project.ToString(),
+                new DotNetCoreTestSettings()
+                {
+                    Configuration = configuration,
+                    Logger = $"trx;LogFileName={project.GetFilenameWithoutExtension()}.trx",
+                    NoBuild = true,
+                    NoRestore = true,
+                    ResultsDirectory = artifactsDirectory
+                });
         }
     });
 
