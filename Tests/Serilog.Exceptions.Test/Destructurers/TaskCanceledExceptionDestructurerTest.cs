@@ -3,6 +3,8 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Threading;
     using System.Threading.Tasks;
+    using FluentAssertions;
+    using Newtonsoft.Json.Linq;
     using Xunit;
     using static LogJsonOutputUtils;
 
@@ -18,6 +20,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public async Task TaskCanceledException_SimplePropertiesAreAttached()
         {
+            // Arrange
             async Task<Exception> Wait(CancellationToken ct)
             {
                 try
@@ -33,12 +36,19 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             this.cancellationTokenSource.CancelAfter(100);
 
+            // Act
             var ex = await Wait(this.cancellationTokenSource.Token).ConfigureAwait(false);
 
-            Assert.NotNull(ex);
-            var tce = Assert.IsType<TaskCanceledException>(ex);
+            // Assert
+            var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
+            var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
+            Assert_ContainsPropertyWithValue(exceptionDetails, "CancellationToken", "CancellationRequested: true");
 
-            var exceptionDetails = LogAndDestructureException(tce);
+            var taskProperty = ExtractProperty(exceptionDetails, "Task");
+            var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
+            Assert_ContainsPropertyWithValue(taskPropertyObject, "Status", "Canceled");
+            Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "None");
+
         }
 
         public void Dispose() => this.cancellationTokenSource?.Dispose();

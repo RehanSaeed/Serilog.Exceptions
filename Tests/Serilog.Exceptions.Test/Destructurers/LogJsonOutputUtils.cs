@@ -1,3 +1,5 @@
+using FluentAssertions;
+
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
@@ -69,10 +71,17 @@ namespace Serilog.Exceptions.Test.Destructurers
             string propertyKey,
             string propertyValue)
         {
-            JProperty paramNameProperty = Assert.Single(jObject.Properties(), x => x.Name == propertyKey);
+            var paramNameProperty = ExtractProperty(jObject, propertyKey);
             JValue paramName = Assert.IsType<JValue>(paramNameProperty.Value);
 
             Assert.Equal(propertyValue, paramName.Value);
+        }
+
+        public static JProperty ExtractProperty(JObject jObject, string propertyKey)
+        {
+            JProperty paramNameProperty = jObject.Properties().Should()
+                .ContainSingle(x => x.Name == propertyKey, $"property with name {propertyKey} was expected").Which;
+            return paramNameProperty;
         }
 
         public static void Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(
