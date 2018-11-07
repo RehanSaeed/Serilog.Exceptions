@@ -10,34 +10,17 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public class TaskCanceledExceptionDestructurerTest : IDisposable
     {
-        private CancellationTokenSource cancellationTokenSource;
-
-        public TaskCanceledExceptionDestructurerTest()
-        {
-            this.cancellationTokenSource = new CancellationTokenSource();
-        }
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
         [Fact]
-        public async Task TaskCanceledException_SimplePropertiesAreAttached()
+        public void TaskCanceledException_SimplePropertiesAreAttached()
         {
             // Arrange
-            async Task<Exception> Wait(CancellationToken ct)
-            {
-                try
-                {
-                    await Task.Delay(500, ct).ConfigureAwait(false);
-                    return null;
-                }
-                catch (Exception e)
-                {
-                    return e;
-                }
-            }
-
-            this.cancellationTokenSource.CancelAfter(100);
+            this.cancellationTokenSource.Cancel();
+            var task = Task.FromCanceled(this.cancellationTokenSource.Token);
 
             // Act
-            var ex = await Wait(this.cancellationTokenSource.Token).ConfigureAwait(false);
+            var ex = new TaskCanceledException(task);
 
             // Assert
             var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
@@ -48,6 +31,38 @@ namespace Serilog.Exceptions.Test.Destructurers
             var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
             Assert_ContainsPropertyWithValue(taskPropertyObject, "Status", "Canceled");
             Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "None");
+
+        }
+
+        [Fact]
+        public void FaultedTaskCanceledException_SimplePropertiesAreAttached()
+        {
+            // Arrange
+            var innerException = new Exception("Inner exception message");
+            var task = Task.FromException(innerException);
+            var ex = new TaskCanceledException(task);
+
+            // Act
+            var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(ex));
+
+            // Assert
+            Assert_ContainsPropertyWithValue(exceptionDetails, "CancellationToken", "CancellationRequested: false");
+
+            var taskProperty = ExtractProperty(exceptionDetails, "Task");
+            var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
+            Assert_ContainsPropertyWithValue(taskPropertyObject, "Status", "Faulted");
+            Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "None");
+            var taskException = ExtractProperty(taskPropertyObject, "Exception");
+            var taskExceptionObject = taskException.Should().BeOfType<JProperty>()
+                .Which.Value.Should().BeOfType<JObject>()
+                .Which;
+
+            var typeOfTaskException = ExtractProperty(taskExceptionObject, "Type");
+            typeOfTaskException.Should().BeOfType<JProperty>()
+                .Which.Value.Should().BeOfType<JValue>()
+                .Which.Value.Should().BeOfType<string>()
+                .Which.Should().Be("System.AggregateException");
+
 
         }
 
