@@ -31,7 +31,20 @@ namespace Serilog.Exceptions.Test.Destructurers
             var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
             Assert_ContainsPropertyWithValue(taskPropertyObject, "Status", "Canceled");
             Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "None");
+        }
 
+        [Fact]
+        public void TaskCanceledException_TaskNull()
+        {
+            // Arrange
+
+            // Act
+            var ex = new TaskCanceledException();
+
+            // Assert
+            var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
+            var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
+            Assert_ContainsPropertyWithValue(exceptionDetails, "Task", "null");
         }
 
         [Fact]
@@ -62,8 +75,6 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Which.Value.Should().BeOfType<JValue>()
                 .Which.Value.Should().BeOfType<string>()
                 .Which.Should().Be("System.AggregateException");
-
-
         }
 
         public void Dispose() => this.cancellationTokenSource?.Dispose();
