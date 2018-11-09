@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
@@ -73,6 +75,27 @@ namespace Serilog.Exceptions.Test.Destructurers
             var uriDataValue = data["UriDataItem"];
             Assert.IsType<string>(uriDataValue);
             Assert.Equal(uriValue, uriDataValue);
+        }
+
+        [Fact]
+        public void CanDestructureTask()
+        {
+            Task task = Task.FromResult(12);
+            var exception = new TaskCanceledException(task);
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+
+            var properties = propertiesBag.GetResultDictionary();
+            var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
+            var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be("RanToCompletion");
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be("None");
         }
 
         [Fact]
