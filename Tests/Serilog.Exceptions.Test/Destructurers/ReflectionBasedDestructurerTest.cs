@@ -3,6 +3,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
     using Serilog.Exceptions.Core;
@@ -79,7 +80,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void CanDestructureTask()
         {
-            Task task = Task.FromResult(12);
+            Task task = new TaskFactory<int>().StartNew(() => 12, TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
             var exception = new TaskCanceledException(task);
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
@@ -94,7 +95,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Which.Should().Be("RanToCompletion");
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Be("None");
+                .Which.Should().Contain("LongRunning").And.Contain("PreferFairness");
         }
 
         [Fact]
