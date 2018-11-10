@@ -28,13 +28,16 @@ namespace Serilog.Exceptions.Destructurers
                 return "null";
             }
 
+            string taskStatus = task.Status.ToString("G");
+            string taskCreationOptions = task.CreationOptions.ToString("F");
+
             if (task.IsFaulted && task.Exception != null)
             {
                 return new
                 {
                     Id = task.Id,
-                    Status = task.Status.ToString("G"),
-                    CreationOptions = task.CreationOptions.ToString("F"),
+                    Status = taskStatus,
+                    CreationOptions = taskCreationOptions,
                     Exception = innerDestructure(task.Exception),
                 };
             }
@@ -42,8 +45,8 @@ namespace Serilog.Exceptions.Destructurers
             return new
             {
                 Id = task.Id,
-                Status = task.Status.ToString("G"),
-                CreationOptions = task.CreationOptions.ToString("F"),
+                Status = taskStatus,
+                CreationOptions = taskCreationOptions,
             };
         }
     }
