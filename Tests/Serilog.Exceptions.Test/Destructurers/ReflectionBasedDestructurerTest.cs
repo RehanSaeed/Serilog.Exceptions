@@ -92,10 +92,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Be("RanToCompletion");
+                .Which.Should().Be(nameof(TaskStatus.RanToCompletion));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Contain("LongRunning").And.Contain("PreferFairness");
+                .Which.Should().Contain(nameof(TaskCreationOptions.LongRunning))
+                .And.Contain(nameof(TaskCreationOptions.PreferFairness));
         }
 
         [Fact]
@@ -114,10 +115,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Be("Faulted");
+                .Which.Should().Be(nameof(TaskStatus.Faulted));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Be("None");
+                .Which.Should().Be(nameof(TaskCreationOptions.None));
             var taskFirstLevelExceptionDictionary = destructuredTaskProperties.Should().ContainKey(nameof(Task.Exception))
                 .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which;

@@ -25,12 +25,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Assert
             var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
             var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
-            Assert_ContainsPropertyWithValue(exceptionDetails, "CancellationToken", "CancellationRequested: true");
+            Assert_ContainsPropertyWithValue(exceptionDetails, nameof(TaskCanceledException.CancellationToken), "CancellationRequested: true");
 
-            var taskProperty = ExtractProperty(exceptionDetails, "Task");
+            var taskProperty = ExtractProperty(exceptionDetails, nameof(TaskCanceledException.Task));
             var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
-            Assert_ContainsPropertyWithValue(taskPropertyObject, "Status", "Canceled");
-            Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "None");
+            Assert_ContainsPropertyWithValue(taskPropertyObject, nameof(Task.Status), nameof(TaskStatus.Canceled));
+            Assert_ContainsPropertyWithValue(taskPropertyObject, nameof(Task.CreationOptions), nameof(TaskCreationOptions.None));
         }
 
         [Fact]
@@ -45,9 +45,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Assert
             var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
             var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
-            var taskProperty = ExtractProperty(exceptionDetails, "Task");
+            var taskProperty = ExtractProperty(exceptionDetails, nameof(TaskCanceledException.Task));
             var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
-            Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "PreferFairness, LongRunning");
+            Assert_ContainsPropertyWithValue(taskPropertyObject, nameof(Task.CreationOptions), $"{nameof(TaskCreationOptions.PreferFairness)}, {nameof(TaskCreationOptions.LongRunning)}");
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Assert
             var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
             var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
-            Assert_ContainsPropertyWithValue(exceptionDetails, "Task", "null");
+            Assert_ContainsPropertyWithValue(exceptionDetails, nameof(TaskCanceledException.Task), "null");
         }
 
         [Fact]
@@ -78,11 +78,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Assert
             Assert_ContainsPropertyWithValue(exceptionDetails, "CancellationToken", "CancellationRequested: false");
 
-            var taskProperty = ExtractProperty(exceptionDetails, "Task");
+            var taskProperty = ExtractProperty(exceptionDetails, nameof(TaskCanceledException.Task));
             var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
-            Assert_ContainsPropertyWithValue(taskPropertyObject, "Status", "Faulted");
-            Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "None");
-            var taskException = ExtractProperty(taskPropertyObject, "Exception");
+            Assert_ContainsPropertyWithValue(taskPropertyObject, nameof(Task.Status), nameof(TaskStatus.Faulted));
+            Assert_ContainsPropertyWithValue(taskPropertyObject, nameof(Task.CreationOptions), nameof(TaskCreationOptions.None));
+            var taskException = ExtractProperty(taskPropertyObject, nameof(Task.Exception));
             var taskExceptionObject = taskException.Should().BeOfType<JProperty>()
                 .Which.Value.Should().BeOfType<JObject>()
                 .Which;
