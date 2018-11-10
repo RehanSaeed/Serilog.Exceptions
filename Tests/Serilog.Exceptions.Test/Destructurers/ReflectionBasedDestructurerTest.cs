@@ -1,10 +1,9 @@
-using System.Threading.Tasks;
-
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using FluentAssertions;
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
@@ -96,6 +95,39 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
                 .WhichValue.Should().BeOfType<string>()
                 .Which.Should().Be("None");
+        }
+
+        [Fact]
+        public void CanDestructureFaultedTask()
+        {
+            var taskException = new Exception("INNER EXCEPTION MESSAGE");
+            Task task = Task.FromException(taskException);
+            var exception = new TaskException("TASK EXCEPTION MESSAGE", task);
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, InnerDestructure(CreateReflectionBasedDestructurer()));
+
+            var properties = propertiesBag.GetResultDictionary();
+            var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
+            var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be("Faulted");
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be("None");
+            var taskFirstLevelExceptionDictionary = destructuredTaskProperties.Should().ContainKey(nameof(Task.Exception))
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which;
+            taskFirstLevelExceptionDictionary.Should().ContainKey("Message")
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Contain("One or more errors occurred.", "task's first level exception is aggregate exception");
+            taskFirstLevelExceptionDictionary.Should().ContainKey("InnerException")
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which.Should().ContainKey("Message")
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be("INNER EXCEPTION MESSAGE");
         }
 
         [Fact]
@@ -294,18 +326,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             var reflectionBasedDestructurer = CreateReflectionBasedDestructurer();
 
             // Act
-            Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructure(IExceptionDestructurer destructurer)
-            {
-                return (ex) =>
-                {
-                    var resultsBag = new ExceptionPropertiesBag(ex);
-
-                    destructurer.Destructure(ex, resultsBag, null);
-
-                    return resultsBag.GetResultDictionary();
-                };
-            }
-
             reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, InnerDestructure(reflectionBasedDestructurer));
             customDestructurer.Destructure(exception, customBasedResult, InnerDestructure(new ArgumentExceptionDestructurer()));
 
@@ -315,6 +335,15 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             reflectionBasedDictionary.Should().BeEquivalentTo(customBasedDictionary);
         }
+
+        private static Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructure(IExceptionDestructurer destructurer) => (ex) =>
+        {
+            var resultsBag = new ExceptionPropertiesBag(ex);
+
+            destructurer.Destructure(ex, resultsBag, InnerDestructure(destructurer));
+
+            return resultsBag.GetResultDictionary();
+        };
 
         private static Exception ThrowAndCatchException(Action throwingAction)
         {
@@ -416,6 +445,15 @@ namespace Serilog.Exceptions.Test.Destructurers
                 this.Uri = uri;
 
             public Uri Uri { get; }
+        }
+
+        public class TaskException : Exception
+        {
+            public TaskException(string message, Task task)
+                : base(message) =>
+                this.Task = task;
+
+            public Task Task { get; }
         }
 
         public class RecursiveNode

@@ -1,9 +1,8 @@
-using FluentAssertions;
-
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.IO;
+    using FluentAssertions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using Serilog.Core;
