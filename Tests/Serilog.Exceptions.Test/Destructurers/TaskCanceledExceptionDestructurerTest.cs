@@ -34,6 +34,23 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void TaskCanceledException_TaskWithSomeCreationOptions_TheyAreDestructured()
+        {
+            // Arrange
+            var task = new Task(() => { }, TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
+
+            // Act
+            var ex = new TaskCanceledException(task);
+
+            // Assert
+            var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
+            var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
+            var taskProperty = ExtractProperty(exceptionDetails, "Task");
+            var taskPropertyObject = taskProperty.Value.Should().BeOfType<JObject>().Which;
+            Assert_ContainsPropertyWithValue(taskPropertyObject, "CreationOptions", "PreferFairness, LongRunning");
+        }
+
+        [Fact]
         public void TaskCanceledException_TaskNull()
         {
             // Arrange
