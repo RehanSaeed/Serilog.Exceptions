@@ -228,7 +228,7 @@ namespace Serilog.Exceptions.Destructurers
 
             if (value is Task task)
             {
-                return this.DestructureTask(task, destructuredObjects, destructureException, ref nextCyclicRefId);
+                return this.DestructureTask(task, level, destructuredObjects, destructureException, ref nextCyclicRefId);
             }
 
             return this.DestructureObject(value, valueType, level, destructuredObjects, destructureException, ref nextCyclicRefId);
@@ -348,6 +348,7 @@ namespace Serilog.Exceptions.Destructurers
 
         private object DestructureTask(
             Task task,
+            int level,
             IDictionary<object, IDictionary<string, object>> destructuredObjects,
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException,
             ref int nextCyclicRefId)
@@ -370,7 +371,7 @@ namespace Serilog.Exceptions.Destructurers
             values[nameof(Task.CreationOptions)] = task.CreationOptions.ToString("F");
             if (task.IsFaulted)
             {
-                values[nameof(Task.Exception)] = destructureException(task.Exception);
+                values[nameof(Task.Exception)] = this.DestructureValue(task.Exception, level, destructuredObjects, destructureException, ref nextCyclicRefId);
             }
 
             return values;
