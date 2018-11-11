@@ -341,7 +341,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructuredCyclicException.Should().ContainKey(nameof(CyclicExceptionTask.Task))
                 .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which.Should().ContainKey("$ref", "task was already destructured, so inner task should just contain ref");
-
         }
 
         [Fact]
