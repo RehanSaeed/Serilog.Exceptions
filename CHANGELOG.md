@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Add `OperationCanceledExceptionDestructurer` and `TaskCanceledExceptionDestructurer`
+- Extend reflection based destructurer with custom `Task` and `CancellationToken` destructuring code
+
 ## [4.1.0] - 2018-03-27
 
 ### Fixed
