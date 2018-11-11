@@ -328,17 +328,20 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var resultsDictionary = result.GetResultDictionary();
-            var myObject = (IDictionary<string, object>)resultsDictionary["Task"];
+            var destructuredTask = resultsDictionary[nameof(CyclicExceptionTask.Task)].Should().BeAssignableTo<IDictionary<string, object>>().Which;
+            var destructuredCyclicException = destructuredTask.Should().ContainKey(nameof(Task.Exception))
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which.Should().ContainKey(nameof(AggregateException.InnerExceptions))
+                .WhichValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
+                .Which.Should().ContainSingle()
+                .Which.Should().BeAssignableTo<IDictionary<string, object>>().Which;
+            destructuredCyclicException.Should().ContainKey(nameof(Exception.Message))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Contain(nameof(CyclicExceptionTask));
+            destructuredCyclicException.Should().ContainKey(nameof(CyclicExceptionTask.Task))
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which.Should().ContainKey("$ref", "task was already destructured, so inner task should just contain ref");
 
-            //// exception.MyObjectDict["Reference"] is still regular dictionary
-            //var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
-            //var id = firstLevelDict["$id"];
-            //Assert.Equal("1", id);
-
-            //// exception.MyObjectDict["Reference"]["x"] we notice that we are destructuring same dictionary
-            //var secondLevelDict = Assert.IsType<Dictionary<string, object>>(firstLevelDict["x"]);
-            //var refId = Assert.IsType<string>(secondLevelDict["$ref"]);
-            //Assert.Equal(id, refId);
         }
 
         [Fact]
