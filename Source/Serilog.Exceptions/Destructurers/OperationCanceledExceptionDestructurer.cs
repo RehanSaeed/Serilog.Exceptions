@@ -10,6 +10,9 @@ namespace Serilog.Exceptions.Destructurers
     /// </summary>
     public class OperationCanceledExceptionDestructurer : ExceptionDestructurer
     {
+        private const string CancellationTokenTrue = "CancellationRequested: true";
+        private const string CancellationTokenFalse = "CancellationRequested: false";
+
         private static readonly Type[] TargetExceptionTypes =
         {
             typeof(OperationCanceledException)
@@ -25,7 +28,7 @@ namespace Serilog.Exceptions.Destructurers
         }
 
         internal static object DestructureCancellationToken(in CancellationToken ct) => ct.IsCancellationRequested
-            ? "CancellationRequested: true"
-            : "CancellationRequested: false";
+            ? CancellationTokenTrue
+            : CancellationTokenFalse;
     }
 }
