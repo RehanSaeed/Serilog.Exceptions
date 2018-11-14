@@ -6,12 +6,14 @@ namespace Serilog.Exceptions.Destructurers
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Serilog.Exceptions.Core;
 
     /// <summary>
     /// Destructures exceptions by gathering all public non-indexer properties
     /// using reflection and then dynamically retrieving their values.
-    /// This class can handle every exception inluding those with circular
+    /// This class can handle every exception including those with circular
     /// references and throwing properties. Additionally, a "Type" property
     /// is added to let the user know exact type of destructured exception.
     /// </summary>
@@ -29,7 +31,7 @@ namespace Serilog.Exceptions.Destructurers
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
         /// </summary>
-        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception object graph</param>
+        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception object graph.</param>
         public ReflectionBasedDestructurer(int destructuringDepth)
         {
             if (destructuringDepth <= 0)
@@ -171,7 +173,11 @@ namespace Serilog.Exceptions.Destructurers
             return reflectionInfo;
         }
 
-        private object DestructureValue(object value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private object DestructureValue(
+            object value,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            ref int nextCyclicRefId)
         {
             if (value == null)
             {
@@ -211,10 +217,24 @@ namespace Serilog.Exceptions.Destructurers
                 return this.DestructureUri(uri);
             }
 
+            if (value is CancellationToken ct)
+            {
+                return OperationCanceledExceptionDestructurer.DestructureCancellationToken(ct);
+            }
+
+            if (value is Task task)
+            {
+                return this.DestructureTask(task, level, destructuredObjects, ref nextCyclicRefId);
+            }
+
             return this.DestructureObject(value, valueType, level, destructuredObjects, ref nextCyclicRefId);
         }
 
-        private object DestructureValueEnumerable(IEnumerable value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private object DestructureValueEnumerable(
+            IEnumerable value,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
@@ -235,12 +255,13 @@ namespace Serilog.Exceptions.Destructurers
             return resultList;
         }
 
-        private object DestructureUri(Uri value)
-        {
-            return value.ToString();
-        }
+        private object DestructureUri(Uri value) => value.ToString();
 
-        private object DestructureValueDictionary(IDictionary value, int level, IDictionary<object, IDictionary<string, object>> destructuredObjects, ref int nextCyclicRefId)
+        private object DestructureValueDictionary(
+            IDictionary value,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            ref int nextCyclicRefId)
         {
             if (destructuredObjects.ContainsKey(value))
             {
@@ -312,6 +333,36 @@ namespace Serilog.Exceptions.Destructurers
                 {
                     values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
                 }
+            }
+
+            return values;
+        }
+
+        private object DestructureTask(
+            Task task,
+            int level,
+            IDictionary<object, IDictionary<string, object>> destructuredObjects,
+            ref int nextCyclicRefId)
+        {
+            if (destructuredObjects.TryGetValue(task, out var destructuredTask))
+            {
+                var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredTask);
+
+                return new SortedList<string, object>()
+                {
+                    { RefLabel, refId }
+                };
+            }
+
+            var values = new SortedList<string, object>();
+            destructuredObjects.Add(task, values);
+
+            values[nameof(Task.Id)] = task.Id;
+            values[nameof(Task.Status)] = task.Status.ToString("G");
+            values[nameof(Task.CreationOptions)] = task.CreationOptions.ToString("F");
+            if (task.IsFaulted)
+            {
+                values[nameof(Task.Exception)] = this.DestructureValue(task.Exception, level, destructuredObjects, ref nextCyclicRefId);
             }
 
             return values;

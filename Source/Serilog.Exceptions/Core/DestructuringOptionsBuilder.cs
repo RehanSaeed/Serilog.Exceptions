@@ -20,7 +20,9 @@ namespace Serilog.Exceptions.Core
             new ArgumentExceptionDestructurer(),
             new ArgumentOutOfRangeExceptionDestructurer(),
             new AggregateExceptionDestructurer(),
-            new ReflectionTypeLoadExceptionDestructurer()
+            new ReflectionTypeLoadExceptionDestructurer(),
+            new OperationCanceledExceptionDestructurer(),
+            new TaskCanceledExceptionDestructurer(),
         };
 
         /// <summary>

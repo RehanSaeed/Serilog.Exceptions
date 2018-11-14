@@ -3,6 +3,8 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
     using FluentAssertions;
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
@@ -73,6 +75,63 @@ namespace Serilog.Exceptions.Test.Destructurers
             var uriDataValue = data["UriDataItem"];
             Assert.IsType<string>(uriDataValue);
             Assert.Equal(uriValue, uriDataValue);
+        }
+
+        [Fact]
+        public void CanDestructureTask()
+        {
+            Task task = new TaskFactory<int>().StartNew(() => 12, TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
+            var exception = new TaskCanceledException(task);
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+
+            var properties = propertiesBag.GetResultDictionary();
+            var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
+            var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be(nameof(TaskStatus.RanToCompletion));
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Contain(nameof(TaskCreationOptions.LongRunning))
+                .And.Contain(nameof(TaskCreationOptions.PreferFairness));
+        }
+
+        [Fact]
+        public void CanDestructureFaultedTask()
+        {
+            var taskException = new Exception("INNER EXCEPTION MESSAGE");
+            Task task = Task.FromException(taskException);
+            var exception = new TaskException("TASK EXCEPTION MESSAGE", task);
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, InnerDestructure(CreateReflectionBasedDestructurer()));
+
+            var properties = propertiesBag.GetResultDictionary();
+            var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
+            var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be(nameof(TaskStatus.Faulted));
+            destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be(nameof(TaskCreationOptions.None));
+            var taskFirstLevelExceptionDictionary = destructuredTaskProperties.Should().ContainKey(nameof(Task.Exception))
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which;
+            taskFirstLevelExceptionDictionary.Should().ContainKey("Message")
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Contain("One or more errors occurred.", "task's first level exception is aggregate exception");
+            taskFirstLevelExceptionDictionary.Should().ContainKey("InnerExceptions")
+                .WhichValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
+                .Which.Should().ContainSingle()
+                .Which.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which.Should().ContainKey("Message")
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Be("INNER EXCEPTION MESSAGE");
         }
 
         [Fact]
@@ -255,6 +314,36 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void WhenObjectContainsCyclicReferencesInTask_ThenRecursiveDestructureIsImmediatelyStopped()
+        {
+            // Arrange
+            var exception = new CyclicExceptionTask();
+            var task = Task.FromException(exception);
+            exception.Task = task;
+
+            // Act
+            var result = new ExceptionPropertiesBag(exception);
+            var destructurer = CreateReflectionBasedDestructurer();
+            destructurer.Destructure(exception, result, InnerDestructure(destructurer));
+
+            // Assert
+            var resultsDictionary = result.GetResultDictionary();
+            var destructuredTask = resultsDictionary[nameof(CyclicExceptionTask.Task)].Should().BeAssignableTo<IDictionary<string, object>>().Which;
+            var destructuredCyclicException = destructuredTask.Should().ContainKey(nameof(Task.Exception))
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which.Should().ContainKey(nameof(AggregateException.InnerExceptions))
+                .WhichValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
+                .Which.Should().ContainSingle()
+                .Which.Should().BeAssignableTo<IDictionary<string, object>>().Which;
+            destructuredCyclicException.Should().ContainKey(nameof(Exception.Message))
+                .WhichValue.Should().BeOfType<string>()
+                .Which.Should().Contain(nameof(CyclicExceptionTask));
+            destructuredCyclicException.Should().ContainKey(nameof(CyclicExceptionTask.Task))
+                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .Which.Should().ContainKey("$ref", "task was already destructured, so inner task should just contain ref");
+        }
+
+        [Fact]
         public void WhenDestruringArgumentException_ResultShouldBeEquivalentToArgumentExceptionDestructurer()
         {
             var exception = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
@@ -271,18 +360,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             var reflectionBasedDestructurer = CreateReflectionBasedDestructurer();
 
             // Act
-            Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructure(IExceptionDestructurer destructurer)
-            {
-                return (ex) =>
-                {
-                    var resultsBag = new ExceptionPropertiesBag(ex);
-
-                    destructurer.Destructure(ex, resultsBag, null);
-
-                    return resultsBag.GetResultDictionary();
-                };
-            }
-
             reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, InnerDestructure(reflectionBasedDestructurer));
             customDestructurer.Destructure(exception, customBasedResult, InnerDestructure(new ArgumentExceptionDestructurer()));
 
@@ -292,6 +369,15 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             reflectionBasedDictionary.Should().BeEquivalentTo(customBasedDictionary);
         }
+
+        private static Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructure(IExceptionDestructurer destructurer) => (ex) =>
+        {
+            var resultsBag = new ExceptionPropertiesBag(ex);
+
+            destructurer.Destructure(ex, resultsBag, InnerDestructure(destructurer));
+
+            return resultsBag.GetResultDictionary();
+        };
 
         private static Exception ThrowAndCatchException(Action throwingAction)
         {
@@ -347,6 +433,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             public MyObjectDict MyObjectDict { get; set; }
         }
 
+        public class CyclicExceptionTask : Exception
+        {
+            public Task Task { get; set; }
+        }
+
         public class MyObjectDict
         {
             public string Foo { get; set; }
@@ -393,6 +484,15 @@ namespace Serilog.Exceptions.Test.Destructurers
                 this.Uri = uri;
 
             public Uri Uri { get; }
+        }
+
+        public class TaskException : Exception
+        {
+            public TaskException(string message, Task task)
+                : base(message) =>
+                this.Task = task;
+
+            public Task Task { get; }
         }
 
         public class RecursiveNode
