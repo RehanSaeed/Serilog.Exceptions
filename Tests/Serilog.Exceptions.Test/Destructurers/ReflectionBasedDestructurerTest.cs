@@ -344,6 +344,23 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void WhenExceptionIsPartOfCyclicReferenceItself_ItShouldContainIdProperty_AndBeReferencedFromCyclicRef()
+        {
+            // Arrange
+            var exception = new CyclicExceptionItself();
+            var result = new ExceptionPropertiesBag(exception);
+            var destructurer = CreateReflectionBasedDestructurer();
+
+            // Act
+            destructurer.Destructure(exception, result, InnerDestructure(destructurer));
+
+            // Assert
+            var resultsDictionary = result.GetResultDictionary();
+            resultsDictionary["$id"].Should().BeOfType<string>()
+                .Which.Should().Be("1");
+        }
+
+        [Fact]
         public void WhenDestruringArgumentException_ResultShouldBeEquivalentToArgumentExceptionDestructurer()
         {
             var exception = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
@@ -404,6 +421,16 @@ namespace Serilog.Exceptions.Test.Destructurers
             public MyObject Reference { get; set; }
 
             public MyObject Reference2 { get; set; }
+        }
+
+        public class CyclicExceptionItself : Exception
+        {
+            public CyclicExceptionItself()
+            {
+                this.Myself = this;
+            }
+
+            public Exception Myself { get; }
         }
 
         public class CyclicException : Exception
