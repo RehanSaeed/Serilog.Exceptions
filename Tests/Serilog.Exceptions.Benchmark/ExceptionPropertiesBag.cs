@@ -54,5 +54,6 @@ namespace Serilog.Exceptions.Benchmark
         }
 
         public bool ContainsProperty(string key) => this.properties.ContainsKey(key);
+        public object GetProperty(string key) => this.properties[key];
     }
 }

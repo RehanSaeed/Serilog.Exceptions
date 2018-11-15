@@ -62,7 +62,10 @@ namespace Serilog.Exceptions.Destructurers
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
             var nextCyclicRefId = 1;
-            var destructuredObjects = new Dictionary<object, IAlreadyDestructuredObject>();
+            var destructuredObjects = new Dictionary<object, IAlreadyDestructuredObject>
+            {
+                { exception, new AlreadyDestructuredObjectExceptionPropertiesBagAdapter(propertiesBag) }
+            };
 
             ExceptionDestructurer.DestructureCommonExceptionProperties(
                 exception,
@@ -405,6 +408,34 @@ namespace Serilog.Exceptions.Destructurers
             public string Name { get; set; }
 
             public Func<object, object> Getter { get; set; }
+        }
+
+        private class AlreadyDestructuredObjectExceptionPropertiesBagAdapter : IAlreadyDestructuredObject
+        {
+            private readonly IExceptionPropertiesBag destructuredObject;
+
+            public AlreadyDestructuredObjectExceptionPropertiesBagAdapter(IExceptionPropertiesBag destructuredObject)
+            {
+                this.destructuredObject = destructuredObject;
+            }
+
+            public string GetOrInitializeRefIf(ref int nextCyclicRefId)
+            {
+                string refId;
+                if (this.destructuredObject.ContainsProperty(IdLabel))
+                {
+                    refId = (string)this.destructuredObject.GetProperty(IdLabel);
+                }
+                else
+                {
+                    var id = nextCyclicRefId;
+                    nextCyclicRefId++;
+                    refId = id.ToString();
+                    this.destructuredObject.AddProperty(IdLabel, refId);
+                }
+
+                return refId;
+            }
         }
 
         private class AlreadyDestructuredObjectDictionaryAdapter : IAlreadyDestructuredObject
