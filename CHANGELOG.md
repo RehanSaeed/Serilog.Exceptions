@@ -10,10 +10,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `OperationCanceledExceptionDestructurer` and `TaskCanceledExceptionDestructurer`
 - Extend reflection based destructurer with custom `Task` and `CancellationToken` destructuring code
 
+### Fixed
+- 
+
 ## [4.1.0] - 2018-03-27
 
 ### Fixed
-- Race condition in `ReflectionBasedDestructurer` cache
+- Reflection based destructurer handles a case when exception itself is a part of object graph cycle
 
 ### Changed
 - Improved performance of reflection based destructurer using dynamic code generation
