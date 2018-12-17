@@ -86,6 +86,12 @@ ILogger logger = new LoggerConfiguration()
     .CreateLogger();
 ```
 
+Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.Console` and many more do not do that by default. You may need to add `{Properties:j}` to your sink's format template. For example, configuration for console sink may look like that:
+
+```
+.WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception} {Properties:j}")
+```
+
 ## Performance
 
 This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
