@@ -2,18 +2,17 @@
 
   <PropertyGroup Label="Build">
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.1;netcoreapp2.0;netcoreapp1.1;net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.2;netcoreapp2.1;netcoreapp2.0;netcoreapp1.1;net46</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.0-beta009" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.1-beta.61" />
   </ItemGroup>
 
-  <ItemGroup Label="Package References (.NET Core)"
-             Condition=" '$(TargetFramework)' == 'netcoreapp2.1' OR '$(TargetFramework)' == 'netcoreapp2.0' OR '$(TargetFramework)' == 'netcoreapp1.1' ">
+  <ItemGroup Label="Package References (.NET Core)" Condition=" '$(TargetFramework)' == 'netcoreapp2.2' OR '$(TargetFramework)' == 'netcoreapp2.1' OR '$(TargetFramework)' == 'netcoreapp2.0' OR '$(TargetFramework)' == 'netcoreapp1.1' ">
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>
 
