@@ -7,7 +7,7 @@ os:
 
 # .NET CLI require Ubuntu 14.04
 sudo: required
-dist: trusty
+dist: bionic
 addons:
   apt:
     packages:
@@ -22,7 +22,7 @@ addons:
 osx_image: xcode7.2
 
 # Ensure that .NET Core is installed
-dotnet: 2.2.100
+dotnet: 2.2.101
 # Ensure Mono is installed
 mono: latest
 
