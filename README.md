@@ -72,7 +72,7 @@ Add the [Serilog.Exceptions](https://www.nuget.org/packages/Serilog.Exceptions/)
 Install-Package Serilog.Exceptions
 ```
 
-When setting up your logger, add the `With.ExceptionDetails()` line like so:
+When setting up your logger, add the `WithExceptionDetails()` line like so:
 
 ```
 using Serilog;
