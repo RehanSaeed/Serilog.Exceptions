@@ -34,4 +34,4 @@ env:
 
 script:
   - dotnet tool install --global Cake.Tool
-  - dotnet cake --target Build
+  - dotnet cake --target=Build
