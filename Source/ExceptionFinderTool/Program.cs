@@ -5,9 +5,15 @@ namespace ExceptionFinderTool
     using System.Reflection;
     using System.Text;
 
+    /// <summary>
+    /// The main program.
+    /// </summary>
     public class Program
     {
-        public static void Main(string[] args)
+        /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
+        public static void Main()
         {
             var stringBuilder = new StringBuilder();
 
@@ -25,10 +31,9 @@ namespace ExceptionFinderTool
             Console.Read();
         }
 
-        private static Assembly[] GetAllAssemblies()
-        {
+        private static Assembly[] GetAllAssemblies() =>
 #if NETCOREAPP1_1
-            return new Assembly[]
+            new Assembly[]
             {
                 Assembly.Load(new AssemblyName("System.AppContext")),
                 Assembly.Load(new AssemblyName("System.Collections")),
@@ -74,8 +79,7 @@ namespace ExceptionFinderTool
                 Assembly.Load(new AssemblyName("System.Xml.XDocument"))
             };
 #else
-            return AppDomain.CurrentDomain.GetAssemblies();
+            AppDomain.CurrentDomain.GetAssemblies();
 #endif
-        }
     }
 }

@@ -34,7 +34,7 @@ namespace Serilog.Exceptions.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
         /// </summary>
-        /// <param name="destructurers">Collection of destructurers</param>
+        /// <param name="destructurers">Collection of destructurers.</param>
         [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
         public ExceptionEnricher(
             params IExceptionDestructurer[] destructurers)
@@ -45,17 +45,12 @@ namespace Serilog.Exceptions.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
         /// </summary>
-        /// <param name="destructuringOptions">The destructuring options, cannot be null</param>
+        /// <param name="destructuringOptions">The destructuring options, cannot be null.</param>
         public ExceptionEnricher(IDestructuringOptions destructuringOptions)
         {
-            if (destructuringOptions == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(destructuringOptions),
-                    "Destructuring options cannot be null");
-            }
-
-            this.destructuringOptions = destructuringOptions;
+            this.destructuringOptions = destructuringOptions ?? throw new ArgumentNullException(
+                nameof(destructuringOptions),
+                "Destructuring options cannot be null");
             this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
 
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
@@ -72,8 +67,8 @@ namespace Serilog.Exceptions.Core
         /// Enriches <paramref name="logEvent"/> with a destructured exception's properties.
         /// If the exception is not present, no action is taken.
         /// </summary>
-        /// <param name="logEvent">Log event that will be enriched</param>
-        /// <param name="propertyFactory">The property factory</param>
+        /// <param name="logEvent">Log event that will be enriched.</param>
+        /// <param name="propertyFactory">The property factory.</param>
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
             if (logEvent.Exception != null)

@@ -1,7 +1,9 @@
 namespace Serilog.Exceptions
 {
     using System;
+#if NETSTANDARD1_3
     using System.Reflection;
+#endif
 
     /// <summary>
     /// Helper methods for <see cref="Type"/> class.
@@ -9,14 +11,13 @@ namespace Serilog.Exceptions
     internal static class TypeExtensions
     {
         /// <summary>
-        /// Helper method that return type codes.
-        /// Fills a missing method in NETSTANDARD1_3.
+        /// Helper method that return type codes. Fills a missing method in netstandard1.3.
         /// </summary>
-        /// <param name="type">Input type</param>
-        /// <returns>Type code</returns>
+        /// <param name="type">The input type.</param>
+        /// <returns>The type code.</returns>
+#if NETSTANDARD1_3
         public static TypeCode GetTypeCode(this Type type)
         {
-#if NETSTANDARD1_3
             if (type == null)
             {
                 return TypeCode.Empty;
@@ -88,9 +89,9 @@ namespace Serilog.Exceptions
             }
 
             return TypeCode.Object;
-#else
-            return Type.GetTypeCode(type);
-#endif
         }
+#else
+        public static TypeCode GetTypeCode(this Type type) => Type.GetTypeCode(type);
+#endif
     }
 }

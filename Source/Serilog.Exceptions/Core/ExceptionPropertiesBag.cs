@@ -22,12 +22,9 @@ namespace Serilog.Exceptions.Core
         /// <param name="filter">Filter that should be applied to each property just before adding it to the bag.</param>
         public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
         {
-            if (exception == null)
-            {
-                throw new ArgumentNullException(nameof(exception), $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
-            }
-
-            this.exception = exception;
+            this.exception = exception ?? throw new ArgumentNullException(
+                nameof(exception),
+                $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
             this.filter = filter;
         }
 
@@ -63,9 +60,6 @@ namespace Serilog.Exceptions.Core
         }
 
         /// <inheritdoc cref="IExceptionPropertiesBag.ContainsProperty"/>
-        public bool ContainsProperty(string key)
-        {
-            return this.properties.ContainsKey(key);
-        }
+        public bool ContainsProperty(string key) => this.properties.ContainsKey(key);
     }
 }
