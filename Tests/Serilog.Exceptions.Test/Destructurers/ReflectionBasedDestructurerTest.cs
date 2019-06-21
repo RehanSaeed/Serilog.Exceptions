@@ -31,7 +31,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "ProtectedProperty"));
             Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty"));
             Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
-#if NET461
+#if NET461 || NET472
             Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
             Assert.NotEmpty(properties[nameof(TestException.StackTrace)].ToString());
@@ -103,7 +103,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void CanDestructureFaultedTask()
         {
             var taskException = new Exception("INNER EXCEPTION MESSAGE");
-            Task task = Task.FromException(taskException);
+            var task = Task.FromException(taskException);
             var exception = new TaskException("TASK EXCEPTION MESSAGE", task);
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
