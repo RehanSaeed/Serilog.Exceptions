@@ -3,6 +3,7 @@ namespace Serilog.Exceptions.Destructurers
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -11,11 +12,10 @@ namespace Serilog.Exceptions.Destructurers
     using Serilog.Exceptions.Core;
 
     /// <summary>
-    /// Destructures exceptions by gathering all public non-indexer properties
-    /// using reflection and then dynamically retrieving their values.
-    /// This class can handle every exception including those with circular
-    /// references and throwing properties. Additionally, a "Type" property
-    /// is added to let the user know exact type of destructured exception.
+    /// Destructures exceptions by gathering all public non-indexer properties using reflection and then dynamically
+    /// retrieving their values. This class can handle every exception including those with circular references and
+    /// throwing properties. Additionally, a "Type" property is added to let the user know exact type of destructured
+    /// exception.
     /// </summary>
     public class ReflectionBasedDestructurer : IExceptionDestructurer
     {
@@ -31,7 +31,8 @@ namespace Serilog.Exceptions.Destructurers
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
         /// </summary>
-        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception object graph.</param>
+        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception
+        /// object graph.</param>
         public ReflectionBasedDestructurer(int destructuringDepth)
         {
             if (destructuringDepth <= 0)
@@ -48,7 +49,9 @@ namespace Serilog.Exceptions.Destructurers
         }
 
         /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
+#pragma warning disable CA1819 // Properties should not return arrays
         public Type[] TargetTypes => new[] { typeof(Exception) };
+#pragma warning restore CA1819 // Properties should not return arrays
 
         /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public void Destructure(
@@ -89,7 +92,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 var id = nextCyclicRefId;
                 nextCyclicRefId++;
-                refId = id.ToString();
+                refId = id.ToString(CultureInfo.InvariantCulture);
                 destructuredObject[IdLabel] = refId;
             }
 
@@ -98,23 +101,21 @@ namespace Serilog.Exceptions.Destructurers
 
         private static Func<object, object> GenerateFastGetterForProperty(Type type, PropertyInfo property)
         {
-            ParameterExpression objParam = Expression.Parameter(typeof(object), "num");
-            UnaryExpression typedObj = Expression.Convert(objParam, type);
-            MemberExpression memberExpression = Expression.Property(typedObj, property);
-            UnaryExpression typedResult = Expression.Convert(memberExpression, typeof(object));
-            Expression<Func<object, object>> resultLambda =
-                Expression.Lambda<Func<object, object>>(
-                    typedResult, objParam);
+            var objParam = Expression.Parameter(typeof(object), "num");
+            var typedObj = Expression.Convert(objParam, type);
+            var memberExpression = Expression.Property(typedObj, property);
+            var typedResult = Expression.Convert(memberExpression, typeof(object));
+            var resultLambda = Expression.Lambda<Func<object, object>>(typedResult, objParam);
             return resultLambda.Compile();
         }
 
-        private static PropertyInfo[] GetExceptionPropertiesForDestructuring(Type valueType)
-        {
-            return valueType
+        private static PropertyInfo[] GetExceptionPropertiesForDestructuring(Type valueType) =>
+            valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
                 .ToArray();
-        }
+
+        private static object DestructureUri(Uri value) => value.ToString();
 
         private void AppendProperties(
             object value,
@@ -128,9 +129,9 @@ namespace Serilog.Exceptions.Destructurers
             {
                 try
                 {
-                    object valueToBeDestructured = property.Getter(value);
-                    int localNextCyclicRefId = nextCyclicRefId;
-                    object destructuredValue = this.DestructureValue(
+                    var valueToBeDestructured = property.Getter(value);
+                    var localNextCyclicRefId = nextCyclicRefId;
+                    var destructuredValue = this.DestructureValue(
                         valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
@@ -146,10 +147,12 @@ namespace Serilog.Exceptions.Destructurers
                         addPropertyAction(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception exception)
                 {
                     addPropertyAction(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
                 }
+#pragma warning restore CA1031 // Do not catch general exception types
             }
         }
 
@@ -214,7 +217,7 @@ namespace Serilog.Exceptions.Destructurers
 
             if (value is Uri uri)
             {
-                return this.DestructureUri(uri);
+                return DestructureUri(uri);
             }
 
             if (value is CancellationToken ct)
@@ -255,8 +258,6 @@ namespace Serilog.Exceptions.Destructurers
             return resultList;
         }
 
-        private object DestructureUri(Uri value) => value.ToString();
-
         private object DestructureValueDictionary(
             IDictionary value,
             int level,
@@ -265,7 +266,7 @@ namespace Serilog.Exceptions.Destructurers
         {
             if (destructuredObjects.ContainsKey(value))
             {
-                IDictionary<string, object> destructuredObject = destructuredObjects[value];
+                var destructuredObject = destructuredObjects[value];
                 var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
                 return new Dictionary<string, object>
@@ -313,8 +314,8 @@ namespace Serilog.Exceptions.Destructurers
             {
                 try
                 {
-                    object valueToBeDestructured = property.Getter(value);
-                    object destructuredValue = this.DestructureValue(
+                    var valueToBeDestructured = property.Getter(value);
+                    var destructuredValue = this.DestructureValue(
                         valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
@@ -329,10 +330,12 @@ namespace Serilog.Exceptions.Destructurers
                         values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
                 }
+#pragma warning disable CA1031 // Do not catch general exception types
                 catch (Exception exception)
                 {
                     values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
                 }
+#pragma warning restore CA1031 // Do not catch general exception types
             }
 
             return values;

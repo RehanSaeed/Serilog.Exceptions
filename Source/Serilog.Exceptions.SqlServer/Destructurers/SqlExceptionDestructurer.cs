@@ -4,14 +4,21 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Linq;
-    using Serilog.Exceptions.Destructurers;
     using Serilog.Exceptions.Core;
+    using Serilog.Exceptions.Destructurers;
 
+    /// <summary>
+    /// A destructurer for <see cref="SqlException"/>.
+    /// </summary>
+    /// <seealso cref="ExceptionDestructurer" />
     public class SqlExceptionDestructurer : ExceptionDestructurer
     {
+        /// <inheritdoc />
         public override Type[] TargetTypes => new[] { typeof(SqlException) };
 
-        public override void Destructure(Exception exception,
+        /// <inheritdoc />
+        public override void Destructure(
+            Exception exception,
             IExceptionPropertiesBag propertiesBag,
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {

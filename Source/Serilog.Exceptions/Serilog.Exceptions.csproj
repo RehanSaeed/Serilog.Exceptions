@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
-    <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.3;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.3;net461;net472</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <!--TODO: Add <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
     <LangVersion>latest</LangVersion>
@@ -15,13 +15,13 @@
     <Description>Log exception details and custom properties that are not output in Exception.ToString().</Description>
     <Copyright>Copyright © Muhammad Rehan Saeed. All rights Reserved</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RehanSaeed/Serilog.Exceptions</PackageProjectUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/RehanSaeed/Serilog.Exceptions.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Serilog;Exception;Log;Logging;Detail;Details</PackageTags>
-    <PackageReleaseNotes>https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/RehanSaeed/Serilog.Exceptions/releases</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Label="Signing">
@@ -40,7 +40,9 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="1.0.0-beta2-19270-01" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="all" Version="2.9.2" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0-preview.2" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="1.0.0-beta2-19270-01" />
     <PackageReference Include="Serilog" Version="2.5.0" />
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.118" />
   </ItemGroup>
@@ -49,30 +51,8 @@
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
   </ItemGroup>
 
-  <ItemGroup Label="References (.NET Framework)" Condition=" '$(TargetFramework)' == 'net461' ">
+  <ItemGroup Label="References (.NET Framework)" Condition=" '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net472' ">
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-
-  <PropertyGroup Label="Build net641 on Mono" Condition="$(TargetFramework.StartsWith('net4')) and '$(OS)' == 'Unix'">
-    <!-- When compiling .NET SDK 2.0 projects targeting .NET 4.x on Mono using 'dotnet build' you -->
-    <!-- have to teach MSBuild where the Mono copy of the reference asssemblies is -->
-    <!-- Look in the standard install locations -->
-    <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND EXISTS('/Library/Frameworks/Mono.framework/Versions/Current/lib/mono')">/Library/Frameworks/Mono.framework/Versions/Current/lib/mono</BaseFrameworkPathOverrideForMono>
-    <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND EXISTS('/usr/lib/mono')">/usr/lib/mono</BaseFrameworkPathOverrideForMono>
-    <BaseFrameworkPathOverrideForMono Condition="'$(BaseFrameworkPathOverrideForMono)' == '' AND EXISTS('/usr/local/lib/mono')">/usr/local/lib/mono</BaseFrameworkPathOverrideForMono>
-    <!-- If we found Mono reference assemblies, then use them -->
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net40'">$(BaseFrameworkPathOverrideForMono)/4.0-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net45'">$(BaseFrameworkPathOverrideForMono)/4.5-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net451'">$(BaseFrameworkPathOverrideForMono)/4.5.1-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net452'">$(BaseFrameworkPathOverrideForMono)/4.5.2-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net46'">$(BaseFrameworkPathOverrideForMono)/4.6-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net461'">$(BaseFrameworkPathOverrideForMono)/4.6.1-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net462'">$(BaseFrameworkPathOverrideForMono)/4.6.2-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net47'">$(BaseFrameworkPathOverrideForMono)/4.7-api</FrameworkPathOverride>
-    <FrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != '' AND '$(TargetFramework)' == 'net471'">$(BaseFrameworkPathOverrideForMono)/4.7.1-api</FrameworkPathOverride>
-    <EnableFrameworkPathOverride Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">true</EnableFrameworkPathOverride>
-    <!-- Add the Facades directory.  Not sure how else to do this. Necessary at least for .NET 4.5 -->
-    <AssemblySearchPaths Condition="'$(BaseFrameworkPathOverrideForMono)' != ''">$(FrameworkPathOverride)/Facades;$(AssemblySearchPaths)</AssemblySearchPaths>
-  </PropertyGroup>
 
 </Project>

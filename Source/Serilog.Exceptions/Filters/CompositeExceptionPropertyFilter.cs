@@ -3,15 +3,20 @@ namespace Serilog.Exceptions.Filters
     using System;
 
     /// <summary>
-    /// Abstraction over collection of filters that filters property is
-    /// any of given filters alone would filter it. This is equivalent to
-    /// OR over a set of booleans. Executes filters in the order they were
-    /// passed to a constructor.
+    /// Abstraction over collection of filters that filters property is any of given filters alone would filter it.
+    /// This is equivalent to OR over a set of booleans. Executes filters in the order they were passed to a
+    /// constructor.
     /// </summary>
     public class CompositeExceptionPropertyFilter : IExceptionPropertyFilter
     {
         private readonly IExceptionPropertyFilter[] filters;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompositeExceptionPropertyFilter"/> class.
+        /// </summary>
+        /// <param name="filters">The filters.</param>
+        /// <exception cref="ArgumentNullException">filters was <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">filters was empty or filter at index {i} is <c>null</c>.</exception>
         public CompositeExceptionPropertyFilter(params IExceptionPropertyFilter[] filters)
         {
             if (filters == null)
@@ -28,7 +33,7 @@ namespace Serilog.Exceptions.Filters
                     nameof(filters));
             }
 
-            for (int i = 0; i < filters.Length; i++)
+            for (var i = 0; i < filters.Length; ++i)
             {
                 if (filters[i] == null)
                 {
@@ -41,9 +46,10 @@ namespace Serilog.Exceptions.Filters
             this.filters = filters;
         }
 
+        /// <inheritdoc />
         public bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object value)
         {
-            for (int i = 0; i < this.filters.Length; i++)
+            for (var i = 0; i < this.filters.Length; ++i)
             {
                 if (this.filters[i].ShouldPropertyBeFiltered(exception, propertyName, value))
                 {

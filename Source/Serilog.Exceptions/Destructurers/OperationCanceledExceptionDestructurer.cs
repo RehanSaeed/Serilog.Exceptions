@@ -18,17 +18,26 @@ namespace Serilog.Exceptions.Destructurers
             typeof(OperationCanceledException)
         };
 
+        /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public override Type[] TargetTypes => TargetExceptionTypes;
 
-        public override void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
+        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
+        public override void Destructure(
+            Exception exception,
+            IExceptionPropertiesBag propertiesBag,
+            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
         {
             base.Destructure(exception, propertiesBag, innerDestructure);
             var oce = (OperationCanceledException)exception;
             propertiesBag.AddProperty(nameof(OperationCanceledException.CancellationToken), DestructureCancellationToken(oce.CancellationToken));
         }
 
-        internal static object DestructureCancellationToken(in CancellationToken ct) => ct.IsCancellationRequested
-            ? CancellationTokenTrue
-            : CancellationTokenFalse;
+        /// <summary>
+        /// Destructures the cancellation token.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The destructured cancellation token.</returns>
+        internal static object DestructureCancellationToken(in CancellationToken cancellationToken) =>
+            cancellationToken.IsCancellationRequested ? CancellationTokenTrue : CancellationTokenFalse;
     }
 }

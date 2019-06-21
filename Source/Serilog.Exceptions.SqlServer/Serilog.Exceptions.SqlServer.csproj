@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
-    <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.3;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.3;net461;net472</TargetFrameworks>
     <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <!--TODO: Add <GenerateDocumentationFile>true</GenerateDocumentationFile>-->
     <IsPackable>false</IsPackable>
@@ -41,7 +41,10 @@
   </PropertyGroup>
 
   <ItemGroup Label="Project References">
-    <PackageReference Condition="'$(OS)' == 'Windows_NT'" Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="1.0.0-beta2-19270-01" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="all" Version="2.9.2" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0-preview.2" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="1.0.0-beta2-19270-01" />
+    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.118" />
     <ProjectReference Include="..\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
 

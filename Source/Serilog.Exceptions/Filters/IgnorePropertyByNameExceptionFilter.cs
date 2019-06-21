@@ -3,9 +3,8 @@ namespace Serilog.Exceptions.Filters
     using System;
 
     /// <summary>
-    /// Filters the exception properties based only on their name. If exception property
-    /// matches any of provided property names, exception property is ignored altogether.
-    /// Comparison method is exact case-sensitive.
+    /// Filters the exception properties based only on their name. If exception property matches any of provided
+    /// property names, exception property is ignored altogether. Comparison method is exact case-sensitive.
     /// </summary>
     public class IgnorePropertyByNameExceptionFilter : IExceptionPropertyFilter
     {
@@ -16,11 +15,14 @@ namespace Serilog.Exceptions.Filters
         /// </summary>
         private readonly string[] propertiesToIgnore;
 
-        public IgnorePropertyByNameExceptionFilter(params string[] propertiesToIgnore)
-        {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IgnorePropertyByNameExceptionFilter"/> class.
+        /// </summary>
+        /// <param name="propertiesToIgnore">The properties to ignore.</param>
+        public IgnorePropertyByNameExceptionFilter(params string[] propertiesToIgnore) =>
             this.propertiesToIgnore = propertiesToIgnore;
-        }
 
+        /// <inheritdoc />
         public bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object value)
         {
             if (this.propertiesToIgnore == null)
@@ -28,9 +30,9 @@ namespace Serilog.Exceptions.Filters
                 return false;
             }
 
-            for (int i = 0; i < this.propertiesToIgnore.Length; i++)
+            for (var i = 0; i < this.propertiesToIgnore.Length; i++)
             {
-                if (this.propertiesToIgnore[i].Equals(propertyName))
+                if (this.propertiesToIgnore[i].Equals(propertyName, StringComparison.Ordinal))
                 {
                     return true;
                 }

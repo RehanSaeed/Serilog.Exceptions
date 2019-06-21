@@ -14,7 +14,9 @@ namespace Serilog.Exceptions.Destructurers
         /// Collection of exceptions types from standard library that do not have any custom property,
         /// so they can be destructured using generic exception destructurer.
         /// </summary>
+#pragma warning disable CA1819 // Properties should not return arrays
         public virtual Type[] TargetTypes
+#pragma warning restore CA1819 // Properties should not return arrays
         {
             get
             {

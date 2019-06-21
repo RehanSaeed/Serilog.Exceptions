@@ -86,8 +86,8 @@ namespace Serilog.Exceptions.Core
             this.WithDestructurers(DefaultDestructurers);
 
         /// <summary>
-        /// Sets a filter that will be used by <see cref="ExceptionEnricher"/>
-        /// Only one filter can be set, second invocation of this method throws <see cref="InvalidOperationException"/>.
+        /// Sets a filter that will be used by <see cref="ExceptionEnricher"/>. Only one filter can be set, second
+        /// invocation of this method throws <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <param name="filter">The filter.</param>
         /// <returns>Options builder for method chaining.</returns>
@@ -104,9 +104,9 @@ namespace Serilog.Exceptions.Core
         }
 
         /// <summary>
-        /// Sets a filter that will be used by <see cref="ExceptionEnricher"/>.
-        /// The filter ignores <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/> properties.
-        /// Only one filter can be set, second invocation of this method throws <see cref="InvalidOperationException"/>.
+        /// Sets a filter that will be used by <see cref="ExceptionEnricher"/>. The filter ignores
+        /// <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/> properties. Only one filter can
+        /// be set, second invocation of this method throws <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <returns>Options builder for method chaining.</returns>
         public DestructuringOptionsBuilder WithIgnoreStackTraceAndTargetSiteExceptionFilter() =>
@@ -114,10 +114,10 @@ namespace Serilog.Exceptions.Core
 
         /// <summary>
         /// Sets a property name that will be used by <see cref="ExceptionEnricher"/>.
-        /// Name cannot be <exception cref="ArgumentException">null or empty</exception>.
         /// </summary>
         /// <param name="rootName">The name of root property.</param>
         /// <returns>Options builder for method chaining.</returns>
+        /// <exception cref="ArgumentException">Name cannot be null or empty.</exception>
         public DestructuringOptionsBuilder WithRootName(string rootName)
         {
             if (string.IsNullOrEmpty(rootName))
@@ -130,11 +130,12 @@ namespace Serilog.Exceptions.Core
         }
 
         /// <summary>
-        /// Sets a maximum destructuring depth that <see cref="ExceptionEnricher"/> will reach during destructuring of unknown exception type.
-        /// Given depth must <exception cref="ArgumentOutOfRangeException">be positive</exception>.
+        /// Sets a maximum destructuring depth that <see cref="ExceptionEnricher"/> will reach during destructuring of
+        /// unknown exception type.
         /// </summary>
         /// <param name="destructuringDepth">Maximum depth, must be positive.</param>
         /// <returns>Options builder for method chaining.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Given depth must be positive.</exception>
         public DestructuringOptionsBuilder WithDestructuringDepth(int destructuringDepth)
         {
             if (destructuringDepth <= 0)

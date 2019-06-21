@@ -5,7 +5,6 @@ namespace Serilog.Exceptions.Core
     using Serilog.Core;
     using Serilog.Events;
     using Serilog.Exceptions.Destructurers;
-    using Serilog.Exceptions.Filters;
 
     /// <summary>
     /// Enrich a <see cref="LogEvent"/> with details about an <see cref="LogEvent.Exception"/> if present.
@@ -64,8 +63,8 @@ namespace Serilog.Exceptions.Core
         }
 
         /// <summary>
-        /// Enriches <paramref name="logEvent"/> with a destructured exception's properties.
-        /// If the exception is not present, no action is taken.
+        /// Enriches <paramref name="logEvent"/> with a destructured exception's properties. If the exception is not
+        /// present, no action is taken.
         /// </summary>
         /// <param name="logEvent">Log event that will be enriched.</param>
         /// <param name="propertyFactory">The property factory.</param>

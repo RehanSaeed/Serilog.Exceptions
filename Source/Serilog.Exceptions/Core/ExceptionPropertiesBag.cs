@@ -11,8 +11,10 @@ namespace Serilog.Exceptions.Core
         private readonly IExceptionPropertyFilter filter;
         private readonly Dictionary<string, object> properties = new Dictionary<string, object>();
 
-        // We keep a note on whether the results were collected to be sure that
-        // after that there are no changes. This is the application of fail-fast principle.
+        /// <summary>
+        /// We keep a note on whether the results were collected to be sure that after that there are no changes. This
+        /// is the application of fail-fast principle.
+        /// </summary>
         private bool resultsCollected = false;
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace Serilog.Exceptions.Core
             this.properties.Add(key, value);
         }
 
-        /// <inheritdoc cref="IExceptionPropertiesBag.ContainsProperty"/>
+        /// <inheritdoc />
         public bool ContainsProperty(string key) => this.properties.ContainsKey(key);
     }
 }
