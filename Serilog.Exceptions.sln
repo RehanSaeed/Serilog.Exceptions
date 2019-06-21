@@ -25,6 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{D2CAFFAF-CBF6-493A-AA61-4916FE7D586C}"
 	ProjectSection(SolutionItems) = preProject
 		CONTRIBUTING.md = CONTRIBUTING.md
+		ISSUE_TEMPLATE.md = ISSUE_TEMPLATE.md
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
