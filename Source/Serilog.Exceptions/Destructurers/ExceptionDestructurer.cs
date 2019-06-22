@@ -22,8 +22,6 @@ namespace Serilog.Exceptions.Destructurers
             {
                 var targetTypes = new List<Type>
                     {
-                        typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderException),
-                        typeof(Microsoft.CSharp.RuntimeBinder.RuntimeBinderInternalCompilerException),
 #if NET461
                         typeof(Microsoft.SqlServer.Server.InvalidUdtException),
                         typeof(System.AccessViolationException),
