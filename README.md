@@ -4,9 +4,11 @@
 
 Serilog.Exceptions is an add-on to [Serilog](https://serilog.net) to log exception details and custom properties that are not output in Exception.ToString().
 
-[![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
 [![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/)
-[![MyGet Package](https://img.shields.io/myget/serilog-exceptions/v/Serilog.Exceptions.svg)](http://myget.org/gallery/serilog-exceptions)
+
+[![Azure Pipelines Ubuntu Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=master&stageName=Build&jobName=Build&configuration=Build%20Linux)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=master) [![Azure Pipelines Mac Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=master&stageName=Build&jobName=Build&configuration=Build%20Mac)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=master) [![Azure Pipelines Windows Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=master&stageName=Build&jobName=Build&configuration=Build%20Windows)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=master) [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
+
+[![AppVeyor Build history](https://buildstats.info/appveyor/chart/RehanSaeed/serilog-exceptions?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions)
 
 ## What Does It Do?
 
