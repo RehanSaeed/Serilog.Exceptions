@@ -59,6 +59,21 @@ namespace Serilog.Exceptions.Destructurers
             IExceptionPropertiesBag propertiesBag,
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(propertiesBag));
+            }
+
+            if (propertiesBag == null)
+            {
+                throw new ArgumentNullException(nameof(propertiesBag));
+            }
+
+            if (destructureException == null)
+            {
+                throw new ArgumentNullException(nameof(destructureException));
+            }
+
             var nextCyclicRefId = 1;
             var destructuredObjects = new Dictionary<object, IDictionary<string, object>>();
 

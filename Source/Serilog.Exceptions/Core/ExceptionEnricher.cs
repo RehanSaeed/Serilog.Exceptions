@@ -11,12 +11,6 @@ namespace Serilog.Exceptions.Core
     /// </summary>
     public sealed class ExceptionEnricher : ILogEventEnricher
     {
-        /// <summary>
-        /// Collection of destructurers provided by Serilog.Exceptions itself for standard library exceptions.
-        /// </summary>
-        [Obsolete("Use new fluent configuration API based on the DestructuringOptionsBuilder")]
-        public static readonly IEnumerable<IExceptionDestructurer> DefaultDestructurers = DestructuringOptionsBuilder.DefaultDestructurers;
-
         private readonly IExceptionDestructurer reflectionBasedDestructurer;
         private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
         private readonly IDestructuringOptions destructuringOptions;
@@ -24,20 +18,8 @@ namespace Serilog.Exceptions.Core
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
         /// </summary>
-        [Obsolete("Specify DestructuringOptions explicitly")]
         public ExceptionEnricher()
             : this(new DestructuringOptionsBuilder().WithDefaultDestructurers())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExceptionEnricher"/> class.
-        /// </summary>
-        /// <param name="destructurers">Collection of destructurers.</param>
-        [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
-        public ExceptionEnricher(
-            params IExceptionDestructurer[] destructurers)
-            : this(new DestructuringOptionsBuilder().WithDestructurers(destructurers))
         {
         }
 
@@ -70,6 +52,16 @@ namespace Serilog.Exceptions.Core
         /// <param name="propertyFactory">The property factory.</param>
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
+            if (logEvent == null)
+            {
+                throw new ArgumentNullException(nameof(logEvent));
+            }
+
+            if (propertyFactory == null)
+            {
+                throw new ArgumentNullException(nameof(propertyFactory));
+            }
+
             if (logEvent.Exception != null)
             {
                 logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(

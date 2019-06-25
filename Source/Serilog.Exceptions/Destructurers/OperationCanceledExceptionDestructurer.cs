@@ -25,11 +25,16 @@ namespace Serilog.Exceptions.Destructurers
         public override void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
+            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
-            base.Destructure(exception, propertiesBag, innerDestructure);
-            var oce = (OperationCanceledException)exception;
-            propertiesBag.AddProperty(nameof(OperationCanceledException.CancellationToken), DestructureCancellationToken(oce.CancellationToken));
+            base.Destructure(exception, propertiesBag, destructureException);
+
+#pragma warning disable CA1062 // Validate arguments of public methods
+            var operationCancelledException = (OperationCanceledException)exception;
+            propertiesBag.AddProperty(
+                nameof(OperationCanceledException.CancellationToken),
+                DestructureCancellationToken(operationCancelledException.CancellationToken));
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
 
         /// <summary>

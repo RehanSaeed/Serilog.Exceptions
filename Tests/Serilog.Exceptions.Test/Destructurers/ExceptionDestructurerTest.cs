@@ -1,8 +1,6 @@
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using FluentAssertions;
     using Newtonsoft.Json.Linq;
     using NSubstitute;
@@ -81,14 +79,14 @@ namespace Serilog.Exceptions.Test.Destructurers
             var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
-            JObject rootObject = LogAndDestructureException(applicationException);
-            JObject exceptionDetail = ExtractExceptionDetails(rootObject);
+            var rootObject = LogAndDestructureException(applicationException);
+            var exceptionDetail = ExtractExceptionDetails(rootObject);
 
-            JProperty dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
-            JObject dataObject = Assert.IsType<JObject>(dataProperty.Value);
+            var dataProperty = Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
+            var dataObject = Assert.IsType<JObject>(dataProperty.Value);
 
-            JProperty someKeyProperty = Assert.Single(dataObject.Properties(), x => x.Name == "SOMEKEY");
-            JValue someKeyValue = Assert.IsType<JValue>(someKeyProperty.Value);
+            var someKeyProperty = Assert.Single(dataObject.Properties(), x => x.Name == "SOMEKEY");
+            var someKeyValue = Assert.IsType<JValue>(someKeyProperty.Value);
             Assert.Equal("SOMEVALUE", someKeyValue.Value);
         }
 
@@ -99,10 +97,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             var applicationException = new ArgumentException();
             applicationException.Data["SOMEKEY"] = "SOMEVALUE";
 
-            JObject rootObject = LogAndDestructureException(
+            var rootObject = LogAndDestructureException(
                 applicationException,
                 destructuringOptions: new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName(customRootName));
-            JObject exceptionDetail = ExtractExceptionDetails(rootObject, customRootName);
+            var exceptionDetail = ExtractExceptionDetails(rootObject, customRootName);
 
             Assert.Single(exceptionDetail.Properties(), x => x.Name == "Data");
         }

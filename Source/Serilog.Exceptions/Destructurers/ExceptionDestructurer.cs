@@ -22,7 +22,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 var targetTypes = new List<Type>
                     {
-#if NET461
+#if NET461 || NET472
                         typeof(Microsoft.SqlServer.Server.InvalidUdtException),
                         typeof(System.AccessViolationException),
                         typeof(System.AppDomainUnloadedException),
@@ -30,11 +30,11 @@ namespace Serilog.Exceptions.Destructurers
 #endif
                         typeof(System.ArithmeticException),
                         typeof(System.ArrayTypeMismatchException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.CannotUnloadAppDomainException),
 #endif
                         typeof(System.Collections.Generic.KeyNotFoundException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.ComponentModel.Design.CheckoutException),
                         typeof(System.ComponentModel.InvalidAsynchronousStateException),
                         typeof(System.ComponentModel.InvalidEnumArgumentException),
@@ -43,7 +43,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Configuration.SettingsPropertyWrongTypeException),
                         typeof(System.ContextMarshalException),
 #endif
-#if NET461
+#if NET461 || NET472
                         typeof(System.Data.ConstraintException),
                         typeof(System.Data.DataException),
                         typeof(System.Data.DeletedRowInaccessibleException),
@@ -60,7 +60,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Data.SqlTypes.SqlAlreadyFilledException),
                         typeof(System.Data.SqlTypes.SqlNotFilledException),
 #endif
-#if NET461
+#if NET461 || NET472
                         typeof(System.Data.StrongTypingException),
                         typeof(System.Data.SyntaxErrorException),
                         typeof(System.Data.VersionNotFoundException),
@@ -68,7 +68,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.DataMisalignedException),
                         typeof(System.DivideByZeroException),
                         typeof(System.DllNotFoundException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.DuplicateWaitObjectException),
                         typeof(System.EntryPointNotFoundException),
 #endif
@@ -77,7 +77,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.FormatException),
                         typeof(System.IndexOutOfRangeException),
                         typeof(System.InsufficientExecutionStackException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.InsufficientMemoryException),
 #endif
                         typeof(System.InvalidCastException),
@@ -85,26 +85,26 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.InvalidProgramException),
                         typeof(System.InvalidTimeZoneException),
                         typeof(System.IO.DirectoryNotFoundException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.IO.DriveNotFoundException),
 #endif
                         typeof(System.IO.EndOfStreamException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.IO.InternalBufferOverflowException),
 #endif
                         typeof(System.IO.InvalidDataException),
                         typeof(System.IO.IOException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.IO.IsolatedStorage.IsolatedStorageException),
 #endif
                         typeof(System.IO.PathTooLongException),
                         typeof(System.MemberAccessException),
                         typeof(System.MethodAccessException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.MulticastNotSupportedException),
 #endif
                         typeof(System.Net.CookieException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.Net.NetworkInformation.PingException),
                         typeof(System.Net.ProtocolViolationException),
 #endif
@@ -116,7 +116,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.PlatformNotSupportedException),
                         typeof(System.RankException),
                         typeof(System.Reflection.AmbiguousMatchException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.Reflection.CustomAttributeFormatException),
 #endif
 #if !NETSTANDARD1_3
@@ -133,7 +133,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Runtime.InteropServices.SafeArrayRankMismatchException),
                         typeof(System.Runtime.InteropServices.SafeArrayTypeMismatchException),
                         typeof(System.Runtime.InteropServices.SEHException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.Runtime.Remoting.RemotingException),
                         typeof(System.Runtime.Remoting.RemotingTimeoutException),
                         typeof(System.Runtime.Remoting.ServerException),
@@ -142,12 +142,12 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Security.Authentication.InvalidCredentialException),
 #endif
                         typeof(System.Security.Cryptography.CryptographicException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.Security.Cryptography.CryptographicUnexpectedOperationException),
                         typeof(System.Security.Policy.PolicyException),
 #endif
                         typeof(System.Security.VerificationException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.Security.XmlSyntaxException),
                         typeof(System.StackOverflowException),
                         typeof(System.SystemException),
@@ -157,25 +157,25 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Threading.SemaphoreFullException),
                         typeof(System.Threading.SynchronizationLockException),
                         typeof(System.Threading.Tasks.TaskSchedulerException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.Threading.ThreadInterruptedException),
                         typeof(System.Threading.ThreadStartException),
                         typeof(System.Threading.ThreadStateException),
 #endif
                         typeof(System.Threading.WaitHandleCannotBeOpenedException),
                         typeof(System.TimeoutException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.TimeZoneNotFoundException),
 #endif
                         typeof(System.TypeAccessException),
-#if NET461
+#if NET461 || NET472
                         typeof(System.TypeUnloadedException),
 #endif
                         typeof(System.UnauthorizedAccessException),
                         typeof(System.UriFormatException)
                     };
 
-#if NET461
+#if NET461 || NET472
                 foreach (var dangerousType in GetNotHandledByMonoTypes())
                 {
                     var type = Type.GetType(dangerousType);
@@ -193,14 +193,29 @@ namespace Serilog.Exceptions.Destructurers
         public virtual void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
+            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
+            if (exception == null)
+            {
+                throw new ArgumentNullException(nameof(propertiesBag));
+            }
+
+            if (propertiesBag == null)
+            {
+                throw new ArgumentNullException(nameof(propertiesBag));
+            }
+
+            if (destructureException == null)
+            {
+                throw new ArgumentNullException(nameof(destructureException));
+            }
+
             propertiesBag.AddProperty("Type", exception.GetType().FullName);
 
             DestructureCommonExceptionProperties(
                 exception,
                 propertiesBag,
-                innerDestructure,
+                destructureException,
                 data => data.ToStringObjectDictionary());
         }
 
@@ -237,7 +252,7 @@ namespace Serilog.Exceptions.Destructurers
             propertiesBag.AddProperty(nameof(Exception.Source), exception.Source);
             propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
 
-#if NET461
+#if NET461 || NET472
             if (exception.TargetSite != null)
             {
                 propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());
@@ -250,6 +265,7 @@ namespace Serilog.Exceptions.Destructurers
             }
         }
 
+#if NET461 || NET472
         /// <summary>
         /// Get types that are currently not handled by mono and could raise a LoadTypeException.
         /// </summary>
@@ -266,5 +282,6 @@ namespace Serilog.Exceptions.Destructurers
                 "System.Management.Instrumentation.InstrumentationBaseException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "System.Management.Instrumentation.InstrumentationException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
             };
+#endif
     }
 }

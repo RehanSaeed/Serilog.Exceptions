@@ -24,8 +24,8 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
         {
             base.Destructure(exception, propertiesBag, destructureException);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
             var sqlException = (SqlException)exception;
-
             propertiesBag.AddProperty(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
             propertiesBag.AddProperty(nameof(SqlException.Class), sqlException.Class);
             propertiesBag.AddProperty(nameof(SqlException.LineNumber), sqlException.LineNumber);
@@ -33,6 +33,7 @@ namespace Serilog.Exceptions.SqlServer.Destructurers
             propertiesBag.AddProperty(nameof(SqlException.Server), sqlException.Server);
             propertiesBag.AddProperty(nameof(SqlException.State), sqlException.State);
             propertiesBag.AddProperty(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToArray());
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
     }
 }

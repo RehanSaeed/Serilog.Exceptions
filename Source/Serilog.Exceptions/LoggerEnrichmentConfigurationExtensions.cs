@@ -1,11 +1,9 @@
 namespace Serilog.Exceptions
 {
     using System;
-    using System.Collections.Generic;
     using Serilog.Configuration;
     using Serilog.Core;
     using Serilog.Exceptions.Core;
-    using Serilog.Exceptions.Destructurers;
 
     /// <summary>
     /// Serilog logger enrichment extension methods.
@@ -14,14 +12,19 @@ namespace Serilog.Exceptions
     {
         /// <summary>
         /// Enrich logger output with a destuctured object containing exception's public properties. Default
-        /// destructurers are registered. <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/>
+        /// destructurers are registered. <see cref="Exception.StackTrace"/> and Exception.TargetSite
         /// are omitted by the destructuring process because Serilog already attaches them to log event.
         /// </summary>
         /// <param name="loggerEnrichmentConfiguration">The enrichment configuration.</param>
         /// <returns>Configuration object allowing method chaining.</returns>
-        public static Serilog.LoggerConfiguration WithExceptionDetails(
+        public static LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
         {
+            if (loggerEnrichmentConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(loggerEnrichmentConfiguration));
+            }
+
             var options = new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
                 .WithIgnoreStackTraceAndTargetSiteExceptionFilter();
@@ -33,41 +36,19 @@ namespace Serilog.Exceptions
         /// Enrich logger output with a destuctured object containing exception's public properties.
         /// </summary>
         /// <param name="loggerEnrichmentConfiguration">The enrichment configuration.</param>
-        /// <param name="destructurers">Destructurers that will be used to destructure captured exceptions.</param>
-        /// <returns>Configuration object allowing method chaining.</returns>
-        [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
-        public static Serilog.LoggerConfiguration WithExceptionDetails(
-            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
-            params IExceptionDestructurer[] destructurers) =>
-            loggerEnrichmentConfiguration.With(new ExceptionEnricher(destructurers));
-
-        /// <summary>
-        /// Enrich logger output with a destuctured object containing exception's public properties.
-        /// </summary>
-        /// <param name="loggerEnrichmentConfiguration">The enrichment configuration.</param>
-        /// <param name="destructurers">Destructurers that will be used to destructure captured exceptions.</param>
-        /// <returns>Configuration object allowing method chaining.</returns>
-        [Obsolete("Use new, fluent API based on the DestructuringOptionsBuilder. To specify destructurers, call WithDestructurers method.")]
-        public static Serilog.LoggerConfiguration WithExceptionDetails(
-            this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
-            IEnumerable<IExceptionDestructurer> destructurers)
-        {
-            ILogEventEnricher enricher = new ExceptionEnricher(new DestructuringOptionsBuilder().WithDestructurers(destructurers));
-            return loggerEnrichmentConfiguration.With(enricher);
-        }
-
-        /// <summary>
-        /// Enrich logger output with a destuctured object containing exception's public properties.
-        /// </summary>
-        /// <param name="loggerEnrichmentConfiguration">The enrichment configuration.</param>
         /// <param name="destructuringOptions">
         /// Options that will influence the process of destructuring exception's properties into result object.
         /// </param>
         /// <returns>Configuration object allowing method chaining.</returns>
-        public static Serilog.LoggerConfiguration WithExceptionDetails(
+        public static LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IDestructuringOptions destructuringOptions)
         {
+            if (loggerEnrichmentConfiguration == null)
+            {
+                throw new ArgumentNullException(nameof(loggerEnrichmentConfiguration));
+            }
+
             ILogEventEnricher enricher = new ExceptionEnricher(destructuringOptions);
             return loggerEnrichmentConfiguration.With(enricher);
         }

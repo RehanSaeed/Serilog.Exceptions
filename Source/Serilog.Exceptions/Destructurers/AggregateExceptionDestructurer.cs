@@ -21,11 +21,12 @@ namespace Serilog.Exceptions.Destructurers
         {
             base.Destructure(exception, propertiesBag, destructureException);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
             var aggregateException = (AggregateException)exception;
-
             propertiesBag.AddProperty(
                 nameof(AggregateException.InnerExceptions),
                 aggregateException.InnerExceptions.Select(destructureException).ToList());
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
     }
 }

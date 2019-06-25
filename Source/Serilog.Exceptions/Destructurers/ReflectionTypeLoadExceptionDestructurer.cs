@@ -22,14 +22,15 @@ namespace Serilog.Exceptions.Destructurers
         {
             base.Destructure(exception, propertiesBag, destructureException);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
             var reflectionTypeLoadException = (ReflectionTypeLoadException)exception;
-
             if (reflectionTypeLoadException.LoaderExceptions != null)
             {
                 propertiesBag.AddProperty(
                     nameof(ReflectionTypeLoadException.LoaderExceptions),
                     reflectionTypeLoadException.LoaderExceptions.Select(destructureException).ToList());
             }
+#pragma warning restore CA1062 // Validate arguments of public methods
         }
     }
 }

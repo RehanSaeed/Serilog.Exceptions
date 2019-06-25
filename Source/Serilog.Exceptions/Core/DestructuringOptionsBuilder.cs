@@ -26,12 +26,12 @@ namespace Serilog.Exceptions.Core
         };
 
         /// <summary>
-        /// Filter that ignores <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/> properties.
+        /// Filter that ignores <see cref="Exception.StackTrace"/> and Exception.TargetSite properties.
         /// Usually, they can be safely ignored, because Serilog attaches them tog <see cref="LogEvent"/> already.
         /// </summary>
         public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetSiteExceptionFilter =
 
-#if NET461
+#if NET461 || NET472
             new IgnorePropertyByNameExceptionFilter(
                 nameof(Exception.StackTrace),
                 nameof(Exception.TargetSite));
@@ -105,7 +105,7 @@ namespace Serilog.Exceptions.Core
 
         /// <summary>
         /// Sets a filter that will be used by <see cref="ExceptionEnricher"/>. The filter ignores
-        /// <see cref="Exception.StackTrace"/> and <see cref="Exception.TargetSite"/> properties. Only one filter can
+        /// <see cref="Exception.StackTrace"/> and Exception.TargetSite properties. Only one filter can
         /// be set, second invocation of this method throws <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <returns>Options builder for method chaining.</returns>
