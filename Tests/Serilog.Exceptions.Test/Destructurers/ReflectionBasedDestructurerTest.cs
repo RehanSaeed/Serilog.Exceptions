@@ -477,7 +477,9 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             protected string ProtectedProperty { get; set; }
 
+#pragma warning disable IDE0052 // Remove unread private members
             private string PrivateProperty { get; set; }
+#pragma warning restore IDE0052 // Remove unread private members
 
             public string this[int i] => "IndexerValue";
         }
