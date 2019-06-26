@@ -21,7 +21,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
             // Act
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -47,7 +47,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var exception = new UriException("test", new Uri(uriValue));
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             var properties = propertiesBag.GetResultDictionary();
             var uriPropertyValue = properties[nameof(UriException.Uri)];
@@ -68,7 +68,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             };
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             var properties = propertiesBag.GetResultDictionary();
             var data = (IDictionary)properties[nameof(Exception.Data)];
@@ -84,7 +84,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var exception = new TaskCanceledException(task);
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             var properties = propertiesBag.GetResultDictionary();
             var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
@@ -107,7 +107,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var exception = new TaskException("TASK EXCEPTION MESSAGE", task);
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, InnerDestructure(CreateReflectionBasedDestructurer()));
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, InnerDestructurer(CreateReflectionBasedDestructurer()));
 
             var properties = propertiesBag.GetResultDictionary();
             var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
@@ -147,7 +147,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
             // Act
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -169,7 +169,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
             // Act
-            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, null);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
@@ -203,7 +203,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Act
             var propertiesBag = new ExceptionPropertiesBag(exception);
-            destructurer.Destructure(exception, propertiesBag, null);
+            destructurer.Destructure(exception, propertiesBag, EmptyDestructurer());
 
             // Assert
             // Parent is depth 1
@@ -236,7 +236,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
             var destructurer = new ReflectionBasedDestructurer(10);
-            destructurer.Destructure(exception, result, null);
+            destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
             var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObject"];
@@ -266,7 +266,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
             var destructurer = new ReflectionBasedDestructurer(10);
-            destructurer.Destructure(exception, result, null);
+            destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
             var myObject = (List<object>)result.GetResultDictionary()["MyObjectEnumerable"];
@@ -297,7 +297,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
             var destructurer = new ReflectionBasedDestructurer(10);
-            destructurer.Destructure(exception, result, null);
+            destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
             var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObjectDict"];
@@ -324,7 +324,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Act
             var result = new ExceptionPropertiesBag(exception);
             var destructurer = CreateReflectionBasedDestructurer();
-            destructurer.Destructure(exception, result, InnerDestructure(destructurer));
+            destructurer.Destructure(exception, result, InnerDestructurer(destructurer));
 
             // Assert
             var resultsDictionary = result.GetResultDictionary();
@@ -360,8 +360,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             var reflectionBasedDestructurer = CreateReflectionBasedDestructurer();
 
             // Act
-            reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, InnerDestructure(reflectionBasedDestructurer));
-            customDestructurer.Destructure(exception, customBasedResult, InnerDestructure(new ArgumentExceptionDestructurer()));
+            reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, InnerDestructurer(reflectionBasedDestructurer));
+            customDestructurer.Destructure(exception, customBasedResult, InnerDestructurer(new ArgumentExceptionDestructurer()));
 
             // Assert
             var reflectionBasedDictionary = (Dictionary<string, object>)reflectionBasedResult.GetResultDictionary();
@@ -370,14 +370,19 @@ namespace Serilog.Exceptions.Test.Destructurers
             reflectionBasedDictionary.Should().BeEquivalentTo(customBasedDictionary);
         }
 
-        private static Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructure(IExceptionDestructurer destructurer) => (ex) =>
-        {
-            var resultsBag = new ExceptionPropertiesBag(ex);
+        private static Func<Exception, IReadOnlyDictionary<string, object>> EmptyDestructurer() =>
+            (ex) => new ExceptionPropertiesBag(ex).GetResultDictionary();
 
-            destructurer.Destructure(ex, resultsBag, InnerDestructure(destructurer));
+        private static Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructurer(
+            IExceptionDestructurer destructurer) =>
+            (ex) =>
+            {
+                var resultsBag = new ExceptionPropertiesBag(ex);
 
-            return resultsBag.GetResultDictionary();
-        };
+                destructurer.Destructure(ex, resultsBag, InnerDestructurer(destructurer));
+
+                return resultsBag.GetResultDictionary();
+            };
 
         private static Exception ThrowAndCatchException(Action throwingAction)
         {
