@@ -242,8 +242,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
-            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
-            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference2"])["$ref"]);
+            Assert.Equal(myObject["$id"], ( (Dictionary<string, object>)myObject["Reference"] )["$ref"]);
+            Assert.Equal(myObject["$id"], ( (Dictionary<string, object>)myObject["Reference2"] )["$ref"]);
             Assert.Equal("1", myObject["$id"]);
         }
 
@@ -348,6 +348,23 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             var exception = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
             Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
+        }
+
+        [Fact]
+        public void CanDestructureObjectWithHiddenProperty()
+        {
+            var derived = new DerivedClass<int>
+            {
+                HiddenProperty = 123
+            };
+            var exception = new HiddenException("test", derived);
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
+
+            var properties = propertiesBag.GetResultDictionary();
+            var derivedValue = properties[nameof(HiddenException.Info)] as IDictionary<string, object>;
+            Assert.Equal(derived.HiddenProperty, derivedValue[nameof(DerivedClass<object>.HiddenProperty)]);
         }
 
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
@@ -530,6 +547,27 @@ namespace Serilog.Exceptions.Test.Destructurers
             public int ValueType { get; set; }
 
             public string ReferenceType { get; set; }
+        }
+
+        internal class BaseClass
+        {
+            public virtual int HiddenProperty { get; set; }
+        }
+
+        internal class DerivedClass<T> : BaseClass
+        {
+            public new T HiddenProperty { get; set; }
+        }
+
+        internal class HiddenException : Exception
+        {
+            public HiddenException(string message, object info)
+                : base(message)
+            {
+                Info = info;
+            }
+
+            public object Info { get; set; }
         }
     }
 }

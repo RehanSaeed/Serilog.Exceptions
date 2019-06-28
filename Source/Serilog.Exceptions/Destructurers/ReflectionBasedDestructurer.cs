@@ -329,6 +329,11 @@ namespace Serilog.Exceptions.Destructurers
             {
                 try
                 {
+                    if (values.ContainsKey(property.Name))
+                    {
+                        continue;
+                    }
+
                     var valueToBeDestructured = property.Getter(value);
                     var destructuredValue = this.DestructureValue(
                         valueToBeDestructured,
