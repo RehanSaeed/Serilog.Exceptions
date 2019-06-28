@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
     <TargetFrameworks>netcoreapp2.2</TargetFrameworks>
@@ -14,12 +14,14 @@
   </PropertyGroup>
 
   <ItemGroup Label="Project References">
+    <ProjectReference Include="..\..\Source\Serilog.Exceptions.EntityFrameworkCore\Serilog.Exceptions.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions.SqlServer\Serilog.Exceptions.SqlServer.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
 
   <ItemGroup Label="Package References">
     <PackageReference Include="FluentAssertions" Version="5.7.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="2.2.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0-preview.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />

@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Benchmark", "Benchmarks\Serilog.Exceptions.Benchmark\Serilog.Exceptions.Benchmark.csproj", "{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.EntityFrameworkCore", "Source\Serilog.Exceptions.EntityFrameworkCore\Serilog.Exceptions.EntityFrameworkCore.csproj", "{69C1004B-627D-4B90-8FAD-4B4069115A56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{7C962929-2138-4787-ABA7-94E8D3F9C20C} = {D6E871A8-2DFF-4676-BED8-046B164919B9}
 		{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA} = {5CE72C42-F5C5-405B-BE8A-9AFDA7F43CB2}
+		{69C1004B-627D-4B90-8FAD-4B4069115A56} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}
