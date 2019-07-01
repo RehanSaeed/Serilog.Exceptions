@@ -242,8 +242,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObject"];
 
             Assert.Equal("bar", myObject["Foo"]);
-            Assert.Equal(myObject["$id"], ( (Dictionary<string, object>)myObject["Reference"] )["$ref"]);
-            Assert.Equal(myObject["$id"], ( (Dictionary<string, object>)myObject["Reference2"] )["$ref"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
+            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference2"])["$ref"]);
             Assert.Equal("1", myObject["$id"]);
         }
 
@@ -564,7 +564,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             public HiddenException(string message, object info)
                 : base(message)
             {
-                Info = info;
+                this.Info = info;
             }
 
             public object Info { get; set; }
