@@ -27,7 +27,7 @@ catch (DbEntityValidationException exception)
 
 The code above logs the following:
 
-```
+```json
 {
   "Timestamp": "2015-12-07T12:26:24.0557671+00:00",
   "Level": "Error",
@@ -75,7 +75,7 @@ Install-Package Serilog.Exceptions
 
 When setting up your logger, add the `WithExceptionDetails()` line like so:
 
-```
+```csharp
 using Serilog;
 using Serilog.Exceptions;
 
@@ -97,11 +97,43 @@ Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.
 
 This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
 
+## Additional Destructurers
+
+[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.SqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) 
+
+Add the [Serilog.Exceptions.SqlServer](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) NuGet package to your project to avoid the reflection based destuctorer for `SqlException`
+
+```
+Install-Package Serilog.Exceptions.SqlServer
+```
+
+Add the `SqlExceptionDestructurer` during setup:
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new SqlExceptionDestructurer() }))
+```
+
+---
+
+[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) 
+
+> **WARNING**: If you are using EntityFrameworkCore with Serilog.Exceptions you must add this, otherwise in certien cases your entire database will be logged! (See [#100](https://github.com/RehanSaeed/Serilog.Exceptions/issues/100), [aspnet/EntityFrameworkCore#15214](https://github.com/aspnet/EntityFrameworkCore/issues/15214))
+
+Add the [Serilog.Exceptions.EntityFrameworkCore](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) NuGet package to your project when using EntityFrameworkCore in your project
+
+```
+Install-Package Serilog.Exceptions.EntityFrameworkCore
+```
+
+Add the `DbUpdateExceptionDestructurer` during setup:
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+```
+
 ## Custom Exception Destructurers
 
 You may want to add support for destructuring your own exceptions without relying on reflection. To do this, create your own destructuring class implementing `ExceptionDestructurer` (You can take a look at [this](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/Source/Serilog.Exceptions/Destructurers/ArgumentExceptionDestructurer.cs) for `ArgumentException`), then simply add it like so:
 
-```
+```csharp
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Formatting.Json;
@@ -124,7 +156,7 @@ If you write a destructurer that is not included in this project (even for a thi
 
 You can configure some additional properties of destructuring process, by passing custom destructuring options during setup:
 
-```
+```csharp
 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName("Exception"))
 ```
 
@@ -140,7 +172,7 @@ You may want to skip some properties of all or part your exception classes witho
 
 Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog is already reporting them so you may want Serilog.Exceptions to skip them to save space and processing time. To do that you just need to modify a line in configuration:
 
-```
+```csharp
 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithFilter(someFilter));
 ```
 
