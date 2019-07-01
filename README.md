@@ -156,6 +156,7 @@ Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Ex
 
 ## Special Thanks
 
+- [joelweiss](https://github.com/joelweiss) - Added Entity Framework Core destructurers.
 - [krajek](https://github.com/krajek) & [JeroenDragt](https://github.com/JeroenDragt) - For adding filters to help ignore exception properties you don't want logged.
 - [krajek](https://github.com/krajek) - For helping with cyclic dependencies when using the reflection destructurer.
 - [mraming](https://github.com/mraming) - For logging properties that throw exceptions.
