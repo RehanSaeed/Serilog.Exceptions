@@ -357,14 +357,17 @@ namespace Serilog.Exceptions.Test.Destructurers
             {
                 HiddenProperty = 123
             };
+            var baseClass = (BaseClass)derived;
+            baseClass.HiddenProperty = 456;
             var exception = new HiddenException("test", derived);
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
             CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             var properties = propertiesBag.GetResultDictionary();
-            var derivedValue = properties[nameof(HiddenException.Info)] as IDictionary<string, object>;
-            Assert.Equal(derived.HiddenProperty, derivedValue[nameof(DerivedClass<object>.HiddenProperty)]);
+            var info = properties[nameof(HiddenException.Info)] as IDictionary<string, object>;
+            Assert.Equal(derived.HiddenProperty, info[nameof(DerivedClass<object>.HiddenProperty)]);
+            Assert.Equal(baseClass.HiddenProperty, info[$"{typeof(BaseClass).FullName}.{nameof(BaseClass.HiddenProperty)}"]);
         }
 
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(

@@ -177,6 +177,7 @@ namespace Serilog.Exceptions.Destructurers
             var propertyInfos = properties.Select(p => new ReflectionPropertyInfo()
             {
                 Name = p.Name,
+                DeclaringType = p.DeclaringType,
                 Getter = GenerateFastGetterForProperty(valueType, p),
             }).ToArray();
             var propertiesInfosExceptBaseOnes = propertyInfos
@@ -329,18 +330,14 @@ namespace Serilog.Exceptions.Destructurers
             {
                 try
                 {
-                    if (values.ContainsKey(property.Name))
-                    {
-                        continue;
-                    }
-
                     var valueToBeDestructured = property.Getter(value);
                     var destructuredValue = this.DestructureValue(
                         valueToBeDestructured,
                         level + 1,
                         destructuredObjects,
                         ref nextCyclicRefId);
-                    values.Add(property.Name, destructuredValue);
+                    var key = values.ContainsKey(property.Name) ? $"{property.DeclaringType.FullName}.{property.Name}" : property.Name;
+                    values.Add(key, destructuredValue);
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {
@@ -435,6 +432,8 @@ namespace Serilog.Exceptions.Destructurers
         private class ReflectionPropertyInfo
         {
             public string Name { get; set; }
+
+            public Type DeclaringType { get; set; }
 
             public Func<object, object> Getter { get; set; }
         }
