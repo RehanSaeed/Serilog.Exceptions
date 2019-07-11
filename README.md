@@ -99,6 +99,8 @@ This library has custom code to deal with extra properties on most common except
 
 ## Additional Destructurers
 
+### Serilog.Exceptions.SqlServer
+
 [![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.SqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) 
 
 Add the [Serilog.Exceptions.SqlServer](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) NuGet package to your project to avoid the reflection based destuctorer for `SqlException`
@@ -109,14 +111,16 @@ Install-Package Serilog.Exceptions.SqlServer
 
 Add the `SqlExceptionDestructurer` during setup:
 ```csharp
-.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new SqlExceptionDestructurer() }))
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new SqlExceptionDestructurer() }))
 ```
 
----
+### Serilog.Exceptions.EntityFrameworkCore
 
 [![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) 
 
-> **WARNING**: If you are using EntityFrameworkCore with Serilog.Exceptions you must add this, otherwise in certain cases your entire database will be logged! (See [#100](https://github.com/RehanSaeed/Serilog.Exceptions/issues/100), [aspnet/EntityFrameworkCore#15214](https://github.com/aspnet/EntityFrameworkCore/issues/15214))
+> **WARNING**: If you are using EntityFrameworkCore with Serilog.Exceptions you must add this, otherwise in certain cases your entire database will be logged! This is because the exceptions in Entity Framework Core have properties that link to the entire database schema in them (See [#100](https://github.com/RehanSaeed/Serilog.Exceptions/issues/100), [aspnet/EntityFrameworkCore#15214](https://github.com/aspnet/EntityFrameworkCore/issues/15214))
 
 Add the [Serilog.Exceptions.EntityFrameworkCore](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) NuGet package to your project when using EntityFrameworkCore in your project
 
@@ -126,7 +130,9 @@ Install-Package Serilog.Exceptions.EntityFrameworkCore
 
 Add the `DbUpdateExceptionDestructurer` during setup:
 ```csharp
-.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
 ```
 
 ## Custom Exception Destructurers
@@ -134,20 +140,9 @@ Add the `DbUpdateExceptionDestructurer` during setup:
 You may want to add support for destructuring your own exceptions without relying on reflection. To do this, create your own destructuring class implementing `ExceptionDestructurer` (You can take a look at [this](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/Source/Serilog.Exceptions/Destructurers/ArgumentExceptionDestructurer.cs) for `ArgumentException`), then simply add it like so:
 
 ```csharp
-using Serilog;
-using Serilog.Exceptions;
-using Serilog.Formatting.Json;
-
-var exceptionDestructurers = new List<IExceptionDestructurer>();
-exceptionDestructurers.AddRange(ExceptionEnricher.DefaultDestructurers);  // Add built in destructurers.
-exceptionDestructurers.Add(new MyCustomExceptionDestructurer());          // Add your custom destructurer.
-
-ILogger logger = new LoggerConfiguration()
-    .Enrich.WithExceptionDetails(exceptionDestructurers)
-    .WriteTo.RollingFile(
-        new JsonFormatter(renderMessage: true), 
-        @"C:\logs\log-{Date}.txt")    
-    .CreateLogger();
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new MyCustomExceptionDestructurer() }))
 ```
 
 If you write a destructurer that is not included in this project (even for a third party library), please contribute it.
@@ -157,18 +152,20 @@ If you write a destructurer that is not included in this project (even for a thi
 You can configure some additional properties of destructuring process, by passing custom destructuring options during setup:
 
 ```csharp
-.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithRootName("Exception"))
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithRootName("Exception"))
 ```
 
 Currently following options are supported:
 
-* `RootName`: property name which will hold destructured exception, `ExceptionDetail` by default
-* `Filter`: object implementing `IExceptionPropertyFilter` that will have a chance to filter properties just before they are put in destructured exception object. Go to "Filtering properties" section for details.
-* `DestructuringDepth`: maximum depth of reflection based recursive destructuring process 
+- `RootName`: The property name which will hold destructured exception, `ExceptionDetail` by default.
+- `Filter`: The object implementing `IExceptionPropertyFilter` that will have a chance to filter properties just before they are put in destructured exception object. Go to "Filtering properties" section for details.
+- `DestructuringDepth`: The maximum depth of reflection based recursive destructuring process.
 
 ## Filtering properties
 
-You may want to skip some properties of all or part your exception classes without directly creating or modyfying custom destructurers. Serilog.Exceptions supports this functionality using filter.
+You may want to skip some properties of all or part your exception classes without directly creating or modyfying custom destructurers. Serilog.Exceptions supports this functionality using a filter.
 
 Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog is already reporting them so you may want Serilog.Exceptions to skip them to save space and processing time. To do that you just need to modify a line in configuration:
 
@@ -178,9 +175,9 @@ Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog
 
 Filtering for other scenarios is also supported:
 
- * use `WithIgnoreStackTraceAndTargetSiteExceptionFilter` if you need to filter some other set of named properties
- * implement custom `IExceptionPropertyFilter` if you need some different filtering logic
- * use `CompositeExceptionPropertyFilter` to combine multiple filters
+- Use `WithIgnoreStackTraceAndTargetSiteExceptionFilter` if you need to filter some other set of named properties
+- Implement custom `IExceptionPropertyFilter` if you need some different filtering logic
+- Use `CompositeExceptionPropertyFilter` to combine multiple filters
 
 ## Contributing
 
