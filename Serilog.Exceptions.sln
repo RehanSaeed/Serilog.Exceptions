@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C55080
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6E871A8-2DFF-4676-BED8-046B164919B9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExceptionFinderTool", "Source\ExceptionFinderTool\ExceptionFinderTool.csproj", "{4797AFC9-49E5-4FD5-AEDC-DA954D599507}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions", "Source\Serilog.Exceptions\Serilog.Exceptions.csproj", "{D8034654-4A6F-4857-9637-62098FC9267A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Test", "Tests\Serilog.Exceptions.Test\Serilog.Exceptions.Test.csproj", "{7C962929-2138-4787-ABA7-94E8D3F9C20C}"
@@ -41,16 +39,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Benchmar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.EntityFrameworkCore", "Source\Serilog.Exceptions.EntityFrameworkCore\Serilog.Exceptions.EntityFrameworkCore.csproj", "{69C1004B-627D-4B90-8FAD-4B4069115A56}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8B74D735-C0D8-48BA-8500-7EC6A817610B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExceptionFinderTool", "Tools\ExceptionFinderTool\ExceptionFinderTool.csproj", "{B6603A53-F254-43ED-9A03-08D95F8F3BAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4797AFC9-49E5-4FD5-AEDC-DA954D599507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4797AFC9-49E5-4FD5-AEDC-DA954D599507}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4797AFC9-49E5-4FD5-AEDC-DA954D599507}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4797AFC9-49E5-4FD5-AEDC-DA954D599507}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D8034654-4A6F-4857-9637-62098FC9267A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D8034654-4A6F-4857-9637-62098FC9267A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8034654-4A6F-4857-9637-62098FC9267A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,17 +69,21 @@ Global
 		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69C1004B-627D-4B90-8FAD-4B4069115A56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4797AFC9-49E5-4FD5-AEDC-DA954D599507} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{D8034654-4A6F-4857-9637-62098FC9267A} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{7C962929-2138-4787-ABA7-94E8D3F9C20C} = {D6E871A8-2DFF-4676-BED8-046B164919B9}
 		{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA} = {5CE72C42-F5C5-405B-BE8A-9AFDA7F43CB2}
 		{69C1004B-627D-4B90-8FAD-4B4069115A56} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
+		{B6603A53-F254-43ED-9A03-08D95F8F3BAC} = {8B74D735-C0D8-48BA-8500-7EC6A817610B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}
