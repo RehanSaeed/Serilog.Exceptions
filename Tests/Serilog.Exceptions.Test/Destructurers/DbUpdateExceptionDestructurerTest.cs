@@ -7,7 +7,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Serilog.Exceptions.Core;
-    using Serilog.Exceptions.SqlServer.Destructurers;
+    using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
     using Serilog.Formatting.Json;
     using Xunit;
     using static LogJsonOutputUtils;
