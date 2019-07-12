@@ -1,4 +1,4 @@
-namespace Serilog.Exceptions.SqlServer.Destructurers
+namespace Serilog.Exceptions.EntityFrameworkCore.Destructurers
 {
     using System;
     using System.Collections.Generic;
