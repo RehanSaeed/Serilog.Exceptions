@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
-    <VersionPrefix>5.3.1</VersionPrefix>
+    <VersionPrefix>5.3.2</VersionPrefix>
     <Authors>Muhammad Rehan Saeed (RehanSaeed.com)</Authors>
     <Product>Serilog Exceptions</Product>
     <Description>Log exception details and custom properties that are not output in Exception.ToString().</Description>
