@@ -73,10 +73,11 @@ stages:
           steps:
           - task: DotNetCoreCLI@2
             displayName: 'Dotnet NuGet Push'
+            continueOnError: true
             inputs:
               command: push
               nuGetFeedType: internal
-              packagesToPush: '/home/vsts/work/1/Windows/*.nupkg'
+              packagesToPush: '$(Build.BuildDirectory)/Windows/*.nupkg'
               publishVstsFeed: serilog-exceptions
   - deployment: NuGet
     pool:
@@ -90,8 +91,9 @@ stages:
           # Dotnet NuGet does not work yet https://github.com/Microsoft/azure-pipelines-tasks/issues/7160
           - task: NuGetCommand@2
             displayName: 'Dotnet NuGet Push'
+            continueOnError: true
             inputs:
               command: push
               nuGetFeedType: external
-              packagesToPush: '/home/vsts/work/1/Windows/*.nupkg'
+              packagesToPush: '$(Build.BuildDirectory)/Windows/*.nupkg'
               publishFeedCredentials: NuGet
