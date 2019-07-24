@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions", "Sourc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Test", "Tests\Serilog.Exceptions.Test\Serilog.Exceptions.Test.csproj", "{7C962929-2138-4787-ABA7-94E8D3F9C20C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{D2CAFFAF-CBF6-493A-AA61-4916FE7D586C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{D2CAFFAF-CBF6-493A-AA61-4916FE7D586C}"
 	ProjectSection(SolutionItems) = preProject
 		CONTRIBUTING.md = CONTRIBUTING.md
 		ISSUE_TEMPLATE.md = ISSUE_TEMPLATE.md
