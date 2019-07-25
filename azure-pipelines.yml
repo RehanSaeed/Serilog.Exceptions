@@ -69,14 +69,14 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: DotNetCoreCLI@2
-            displayName: 'Dotnet NuGet Push'
-            continueOnError: true
+          - task: NuGetCommand@2
+            displayName: 'NuGet Push'
             inputs:
               command: push
               nuGetFeedType: internal
               packagesToPush: '$(Build.BuildDirectory)/Windows/*.nupkg'
               publishVstsFeed: serilog-exceptions
+              allowPackageConflicts: true
   - deployment: NuGet
     pool:
       vmImage: ubuntu-latest
@@ -87,10 +87,10 @@ stages:
         deploy:
           steps:
           - task: NuGetCommand@2
-            displayName: 'Dotnet NuGet Push'
-            continueOnError: true
+            displayName: 'NuGet Push'
             inputs:
               command: push
               nuGetFeedType: external
               packagesToPush: '$(Build.BuildDirectory)/Windows/*.nupkg'
               publishFeedCredentials: NuGet
+              allowPackageConflicts: true
