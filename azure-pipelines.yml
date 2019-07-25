@@ -55,11 +55,9 @@ stages:
       inputs:
         testResultsFormat: 'VSTest'
         testResultsFiles: '**/*.trx'
-    - task: PublishPipelineArtifact@0
+    - publish: './Artifacts'
+      artifact: $(matrixName)
       displayName: 'Publish Artifacts'
-      inputs:
-        artifactName: $(matrixName)
-        targetPath: './Artifacts'
 - stage: Deploy
   jobs:
   - deployment: AzureArtifacts
@@ -88,7 +86,6 @@ stages:
       runOnce:
         deploy:
           steps:
-          # Dotnet NuGet does not work yet https://github.com/Microsoft/azure-pipelines-tasks/issues/7160
           - task: NuGetCommand@2
             displayName: 'Dotnet NuGet Push'
             continueOnError: true
