@@ -97,7 +97,7 @@ This library has custom code to deal with extra properties on most common except
 
 ### Serilog.Exceptions.SqlServer
 
-[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.SqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) 
+[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.SqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) [![Serilog.Exceptions.SqlServer package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/67be830c-2c0f-4df8-be30-771d817b382f/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=67be830c-2c0f-4df8-be30-771d817b382f&preferRelease=true)
 
 Add the [Serilog.Exceptions.SqlServer](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) NuGet package to your project to avoid the reflection based destuctorer for `SqlException`
 
@@ -114,7 +114,7 @@ Add the `SqlExceptionDestructurer` during setup:
 
 ### Serilog.Exceptions.EntityFrameworkCore
 
-[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) 
+[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) [![Serilog.Exceptions.EntityFrameworkCore package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/ee2cd6f8-4c93-4774-9398-23c49ba41928/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=ee2cd6f8-4c93-4774-9398-23c49ba41928&preferRelease=true)
 
 > **WARNING**: If you are using EntityFrameworkCore with Serilog.Exceptions you must add this, otherwise in certain cases your entire database will be logged! This is because the exceptions in Entity Framework Core have properties that link to the entire database schema in them (See [#100](https://github.com/RehanSaeed/Serilog.Exceptions/issues/100), [aspnet/EntityFrameworkCore#15214](https://github.com/aspnet/EntityFrameworkCore/issues/15214))
 
