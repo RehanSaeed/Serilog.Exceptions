@@ -189,7 +189,7 @@ Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Ex
 | Azure Pipelines | Overall          | [![Azure Pipelines Overall Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=master)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=master) | |
 | AppVeyor        | Ubuntu & Windows | [![AppVeyor Build status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions) | [![AppVeyor Build history](https://buildstats.info/appveyor/chart/RehanSaeed/serilog-exceptions?branch=master&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions) |
 
-## Special Thanks
+## Contributions and Thanks
 
 - [joelweiss](https://github.com/joelweiss) - Added Entity Framework Core destructurers.
 - [krajek](https://github.com/krajek) & [JeroenDragt](https://github.com/JeroenDragt) - For adding filters to help ignore exception properties you don't want logged.
