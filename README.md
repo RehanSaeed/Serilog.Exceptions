@@ -175,10 +175,6 @@ Filtering for other scenarios is also supported:
 - Implement custom `IExceptionPropertyFilter` if you need some different filtering logic
 - Use `CompositeExceptionPropertyFilter` to combine multiple filters
 
-## Contributing
-
-Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Exceptions/blob/master/CONTRIBUTING.md).
-
 ## Continuous Integration
 
 | Name            | Operating System | Status | History |
@@ -191,7 +187,7 @@ Please look at the [contributing guide](https://github.com/RehanSaeed/Serilog.Ex
 
 ## Contributions and Thanks
 
-Please view the [Contributing](CONTRIBUTING.md) guide for more information.
+Please view the [contributing guide](CONTRIBUTING.md) for more information.
 
 - [joelweiss](https://github.com/joelweiss) - Added Entity Framework Core destructurers.
 - [krajek](https://github.com/krajek) & [JeroenDragt](https://github.com/JeroenDragt) - For adding filters to help ignore exception properties you don't want logged.
