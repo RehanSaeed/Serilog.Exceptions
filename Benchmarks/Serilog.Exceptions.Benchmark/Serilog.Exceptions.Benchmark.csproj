@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References (.NET Core)" Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup Label="References (.NET Framework)" Condition=" '$(TargetFramework)' == 'net461' ">
