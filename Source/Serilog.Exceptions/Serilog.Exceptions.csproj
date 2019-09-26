@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
     <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.3;net461;net472</TargetFrameworks>
@@ -17,7 +17,7 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/RehanSaeed/Serilog.Exceptions</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/RehanSaeed/Serilog.Exceptions/master/Images/Serilog%20Community%20256x256.png</PackageIconUrl>
+    <PackageIcon>Icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/RehanSaeed/Serilog.Exceptions.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Serilog;Exception;Log;Logging;Detail;Details</PackageTags>
@@ -53,6 +53,10 @@
 
   <ItemGroup Label="Package References (.NET Standard)" Condition=" '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netstandard1.6' OR '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup Label="Files">
+    <None Include="..\..\Images\Icon.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>
