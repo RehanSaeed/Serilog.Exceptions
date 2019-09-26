@@ -1,7 +1,6 @@
 namespace Serilog.Exceptions.Test.Filters
 {
     using System;
-    using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Filters;
     using Xunit;
 
@@ -11,30 +10,30 @@ namespace Serilog.Exceptions.Test.Filters
         public void CreationOfCompositeFilter_ForNullFilters_Throws()
         {
             // Arrange
-            Action act = () => new CompositeExceptionPropertyFilter(null);
+            static void Action() => new CompositeExceptionPropertyFilter(null);
 
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(act);
+            Assert.Throws<ArgumentNullException>(Action);
         }
 
         [Fact]
         public void CreationOfCompositeFilter_ForEmptyFilters_Throws()
         {
             // Arrange
-            Action act = () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { });
+            static void Action() => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { });
 
             // Act & Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<ArgumentException>(Action);
         }
 
         [Fact]
         public void CreationOfCompositeFilter_ForOneNullFilter_Throws()
         {
             // Arrange
-            Action act = () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null });
+            static void Action() => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null });
 
             // Act
-            var ex = Assert.Throws<ArgumentException>(act);
+            var ex = Assert.Throws<ArgumentException>(Action);
 
             // Assert
             Assert.Contains("index 0", ex.Message);

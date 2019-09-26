@@ -565,10 +565,8 @@ namespace Serilog.Exceptions.Test.Destructurers
         internal class HiddenException : Exception
         {
             public HiddenException(string message, object info)
-                : base(message)
-            {
+                : base(message) =>
                 this.Info = info;
-            }
 
             public object Info { get; set; }
         }

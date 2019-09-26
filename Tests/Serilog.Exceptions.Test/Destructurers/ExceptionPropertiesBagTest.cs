@@ -11,10 +11,10 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void Constructor_GivenNullException_Throws()
         {
             // Arrange
-            Action act = () => new ExceptionPropertiesBag(null);
+            static void Action() => new ExceptionPropertiesBag(null);
 
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(act);
+            var ex = Assert.Throws<ArgumentNullException>(Action);
 
             // Assert
             Assert.Equal("exception", ex.ParamName);

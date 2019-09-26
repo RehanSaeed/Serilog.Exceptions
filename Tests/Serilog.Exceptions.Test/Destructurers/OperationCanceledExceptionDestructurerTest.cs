@@ -7,12 +7,10 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public class OperationCanceledExceptionDestructurerTest : IDisposable
     {
-        private CancellationTokenSource cancellationTokenSource;
+        private readonly CancellationTokenSource cancellationTokenSource;
 
-        public OperationCanceledExceptionDestructurerTest()
-        {
+        public OperationCanceledExceptionDestructurerTest() =>
             this.cancellationTokenSource = new CancellationTokenSource();
-        }
 
         [Fact]
         public void OperationCanceledException_CancellationTokenIsAttachedAsProperty()

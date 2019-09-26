@@ -22,7 +22,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             // Arrange
             var jsonWriter = new StringWriter();
-            destructuringOptions = destructuringOptions ?? new DestructuringOptionsBuilder().WithDefaultDestructurers();
+            destructuringOptions ??= new DestructuringOptionsBuilder().WithDefaultDestructurers();
             ILogger logger = new LoggerConfiguration()
                 .Enrich.WithExceptionDetails(destructuringOptions)
                 .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
@@ -34,33 +34,33 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Assert
             var writtenJson = jsonWriter.ToString();
             var jsonObj = JsonConvert.DeserializeObject<object>(writtenJson);
-            JObject rootObject = Assert.IsType<JObject>(jsonObj);
+            var rootObject = Assert.IsType<JObject>(jsonObj);
             return rootObject;
         }
 
         public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string propertyValue)
         {
-            JObject rootObject = LogAndDestructureException(exception);
+            var rootObject = LogAndDestructureException(exception);
             Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(rootObject, propertyKey, propertyValue);
         }
 
         public static JArray ExtractInnerExceptionsProperty(JObject jObject)
         {
-            JObject exceptionDetailValue = ExtractExceptionDetails(jObject);
+            var exceptionDetailValue = ExtractExceptionDetails(jObject);
 
-            JProperty innerExceptionsProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "InnerExceptions");
-            JArray innerExceptionsValue = Assert.IsType<JArray>(innerExceptionsProperty.Value);
+            var innerExceptionsProperty = Assert.Single(exceptionDetailValue.Properties(), x => x.Name == "InnerExceptions");
+            var innerExceptionsValue = Assert.IsType<JArray>(innerExceptionsProperty.Value);
 
             return innerExceptionsValue;
         }
 
         public static JObject ExtractExceptionDetails(JObject jObject, string rootName = "ExceptionDetail")
         {
-            JProperty propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
-            JObject propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
+            var propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
+            var propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
 
-            JProperty exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == rootName);
-            JObject exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
+            var exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == rootName);
+            var exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
 
             return exceptionDetailValue;
         }
@@ -71,10 +71,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             string propertyValue)
         {
             var paramNameProperty = ExtractProperty(jObject, propertyKey);
-            JValue paramName = Assert.IsType<JValue>(paramNameProperty.Value);
+            var paramName = Assert.IsType<JValue>(paramNameProperty.Value);
             if (paramName.Value != null)
             {
-                string paramNameString = paramName.Value.Should()
+                var paramNameString = paramName.Value.Should()
                     .BeOfType<string>($"{propertyKey} value was expected to a string").Which;
                 propertyValue.Should().Be(paramNameString, $"{propertyKey} value should match expected value");
             }
@@ -82,7 +82,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public static JProperty ExtractProperty(JObject jObject, string propertyKey)
         {
-            JProperty paramNameProperty = jObject.Properties().Should()
+            var paramNameProperty = jObject.Properties().Should()
                 .ContainSingle(x => x.Name == propertyKey, $"property with name {propertyKey} was expected").Which;
             return paramNameProperty;
         }
@@ -92,7 +92,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             string propertyKey,
             string propertyValue)
         {
-            JObject exceptionDetailValue = ExtractExceptionDetails(jObject);
+            var exceptionDetailValue = ExtractExceptionDetails(jObject);
             Assert_ContainsPropertyWithValue(exceptionDetailValue, propertyKey, propertyValue);
         }
 
@@ -103,13 +103,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             public TestTextWriterSink(TextWriter textWriter, ITextFormatter textFormatter)
             {
-                if (textFormatter == null)
-                {
-                    throw new ArgumentNullException(nameof(textFormatter));
-                }
-
                 this.textWriter = textWriter;
-                this.textFormatter = textFormatter;
+                this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
             }
 
             public void Emit(LogEvent logEvent)

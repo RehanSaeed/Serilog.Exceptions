@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Test
+namespace Serilog.Exceptions.Test
 {
     using System.Collections;
     using System.Collections.Generic;
