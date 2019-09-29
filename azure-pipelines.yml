@@ -55,16 +55,16 @@ stages:
       inputs:
         testResultsFormat: 'VSTest'
         testResultsFiles: '**/*.trx'
-    - publish: './Artifacts'
+    - publish: './Artefacts'
       artifact: $(matrixName)
-      displayName: 'Publish Artifacts'
+      displayName: 'Publish Artefacts'
 - stage: Deploy
   jobs:
-  - deployment: AzureArtifacts
-    displayName: 'Azure Artifacts'
+  - deployment: AzureArtefacts
+    displayName: 'Azure Artefacts'
     pool:
       vmImage: windows-latest
-    environment: 'Azure Artifacts'
+    environment: 'Azure Artefacts'
     strategy:
       runOnce:
         deploy:
