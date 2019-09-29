@@ -78,7 +78,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
-        public async Task CanDestructureTask()
+        public async Task CanDestructureTaskAsync()
         {
             using var cancellationTokenSource = new CancellationTokenSource(0);
 

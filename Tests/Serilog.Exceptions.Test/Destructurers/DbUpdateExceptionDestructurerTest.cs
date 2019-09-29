@@ -23,7 +23,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
                 .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
                 .CreateLogger();
-            var ctx = new TestContext();
+            using var ctx = new TestContext();
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
 
@@ -49,7 +49,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new TestDbUpdateExceptionDestructurer() }))
                 .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
                 .CreateLogger();
-            var ctx = new TestContext();
+            using var ctx = new TestContext();
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
 
