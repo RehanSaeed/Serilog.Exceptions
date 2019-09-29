@@ -55,11 +55,8 @@ stages:
       inputs:
         testResultsFormat: 'VSTest'
         testResultsFiles: '**/*.trx'
-    - publish: './build.cake'
-      artifact: '$(matrixName)CakeScript'
-      displayName: 'Publish Cake Script'
     - publish: './Artifacts'
-      artifact: '$(matrixName)Artifacts'
+      artifact: $(matrixName)
       displayName: 'Publish Artifacts'
 - stage: Deploy
   jobs:
