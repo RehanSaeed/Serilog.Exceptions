@@ -73,7 +73,7 @@ stages:
             displayName: 'NuGet Install'
           - task: NuGetAuthenticate@0
             displayName: 'NuGet Authenticate'
-          - script: nuget push $(Agent.BuildDirectory)\Windows\*.nupkg -Source https://pkgs.dev.azure.com/schema-net/_packaging/schema-net/nuget/v3/index.json -ApiKey AzureArtifacts -SkipDuplicate
+          - script: nuget push $(Agent.BuildDirectory)\Windows\*.nupkg -Source https://pkgs.dev.azure.com/serilog-exceptions/_packaging/serilog-exceptions/nuget/v3/index.json -ApiKey AzureArtifacts -SkipDuplicate
             displayName: 'NuGet Push'
             failOnStderr: true
   - deployment: GitHub
