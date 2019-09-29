@@ -16,13 +16,13 @@ var buildNumber =
     EnvironmentVariable("BuildNumber") != null ? int.Parse(EnvironmentVariable("BuildNumber")) :
     0;
 
-var artifactsDirectory = Directory("./Artifacts");
+var artefactsDirectory = Directory("./Artefacts");
 var versionSuffix = string.IsNullOrEmpty(preReleaseSuffix) ? null : preReleaseSuffix + "-" + buildNumber.ToString("D4");
 
 Task("Clean")
     .Does(() =>
     {
-        CleanDirectory(artifactsDirectory);
+        CleanDirectory(artefactsDirectory);
         DeleteDirectories(GetDirectories("**/bin"), new DeleteDirectorySettings() { Force = true, Recursive = true });
         DeleteDirectories(GetDirectories("**/obj"), new DeleteDirectorySettings() { Force = true, Recursive = true });
     });
@@ -61,7 +61,7 @@ Task("Test")
                     Logger = $"trx;LogFileName={project.GetFilenameWithoutExtension()}.trx",
                     NoBuild = true,
                     NoRestore = true,
-                    ResultsDirectory = artifactsDirectory,
+                    ResultsDirectory = artefactsDirectory,
                     ArgumentCustomization = x => x.Append($"--logger html;LogFileName={project.GetFilenameWithoutExtension()}.html")
                 });
         }
@@ -79,7 +79,7 @@ Task("Pack")
                 MSBuildSettings = new DotNetCoreMSBuildSettings().WithProperty("SymbolPackageFormat", "snupkg"),
                 NoBuild = true,
                 NoRestore = true,
-                OutputDirectory = artifactsDirectory,
+                OutputDirectory = artefactsDirectory,
                 VersionSuffix = versionSuffix,
             });
     });
