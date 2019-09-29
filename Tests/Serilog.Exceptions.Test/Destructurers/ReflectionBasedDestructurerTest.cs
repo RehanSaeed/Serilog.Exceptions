@@ -78,10 +78,19 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
-        public void CanDestructureTask()
+        public async Task CanDestructureTask()
         {
-            Task task = new TaskFactory<int>().StartNew(() => 12, TaskCreationOptions.LongRunning | TaskCreationOptions.PreferFairness);
-            var exception = new TaskCanceledException(task);
+            using var cancellationTokenSource = new CancellationTokenSource(0);
+
+            TaskCanceledException exception = null;
+            try
+            {
+                await Task.Delay(1000, cancellationTokenSource.Token).ConfigureAwait(false);
+            }
+            catch (TaskCanceledException taskCancelledException)
+            {
+                exception = taskCancelledException;
+            }
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
             CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
@@ -92,11 +101,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Be(nameof(TaskStatus.RanToCompletion));
+                .Which.Should().Be(nameof(TaskStatus.Canceled));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Contain(nameof(TaskCreationOptions.LongRunning))
-                .And.Contain(nameof(TaskCreationOptions.PreferFairness));
+                .Which.Should().Contain(nameof(TaskCreationOptions.None));
         }
 
         [Fact]
