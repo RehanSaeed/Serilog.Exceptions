@@ -13,8 +13,6 @@ variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  # Enable the dotnet cake CLI tool built with .NET Core 2 to run on .NET Core 3
-  DOTNET_ROLL_FORWARD_ON_NO_CANDIDATE_FX: 2
 
 stages:
 - stage: Build
@@ -57,8 +55,11 @@ stages:
       inputs:
         testResultsFormat: 'VSTest'
         testResultsFiles: '**/*.trx'
+    - publish: './build.cake'
+      artifact: '$(matrixName)CakeScript'
+      displayName: 'Publish Cake Script'
     - publish: './Artifacts'
-      artifact: $(matrixName)
+      artifact: '$(matrixName)Artifacts'
       displayName: 'Publish Artifacts'
 - stage: Deploy
   jobs:
@@ -72,24 +73,31 @@ stages:
         deploy:
           steps:
           - task: NuGetToolInstaller@1
-            displayName: 'Install NuGet'
-          - script: nuget source Add -Name GitHub -Source https://nuget.pkg.github.com/RehanSaeed/index.json -UserName RehanSaeed -Password $(GitHubPersonalAccessToken)
-            displayName: 'Authenticate with GitHub'
+            displayName: 'NuGet Install'
+          - task: NuGetAuthenticate@0
+            displayName: 'NuGet Authenticate'
+          - script: nuget push $(Agent.BuildDirectory)\Windows\*.nupkg -Source https://pkgs.dev.azure.com/schema-net/_packaging/schema-net/nuget/v3/index.json -ApiKey AzureArtifacts -SkipDuplicate
+            displayName: 'NuGet Push'
+            failOnStderr: true
+  - deployment: GitHub
+    pool:
+      vmImage: windows-latest
+    environment: 'GitHub'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: NuGetToolInstaller@1
+            displayName: 'NuGet Install'
+          - script: nuget source Add -Name GitHub -Source https://nuget.pkg.github.com/RehanSaeed/index.json -UserName $(GitHubUserName) -Password $(GitHubPersonalAccessToken)
+            displayName: 'NuGet Add Source'
             failOnStderr: true
           - script: nuget push $(Agent.BuildDirectory)\Windows\*.nupkg -Source GitHub -SkipDuplicate
-            displayName: 'NuGet Push to GitHub'
+            displayName: 'NuGet Push'
             failOnStderr: true
-          - task: NuGetCommand@2
-            displayName: 'NuGet Push to Azure Artifacts'
-            inputs:
-              command: push
-              nuGetFeedType: internal
-              packagesToPush: '$(Agent.BuildDirectory)/Windows/*.nupkg'
-              publishVstsFeed: serilog-exceptions
-              allowPackageConflicts: true # Only works on Windows
   - deployment: NuGet
     pool:
-      vmImage: ubuntu-latest
+      vmImage: windows-latest
     environment: 'NuGet'
     condition: startsWith(variables['Build.sourceBranch'], 'refs/tags/')
     strategy:
@@ -98,6 +106,6 @@ stages:
           steps:
           - task: NuGetToolInstaller@1
             displayName: 'Install NuGet'
-          - script: nuget push $(Agent.BuildDirectory)/Windows/*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey $(NuGetApiKey) -SkipDuplicate
+          - script: nuget push $(Agent.BuildDirectory)\Windows\*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey $(NuGetApiKey) -SkipDuplicate
             displayName: 'NuGet Push'
             failOnStderr: true
