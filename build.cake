@@ -47,7 +47,7 @@ Task("Build")
             {
                 Configuration = configuration,
                 NoRestore = true,
-                VersionSuffix = versionSuffix
+                VersionSuffix = versionSuffix,
             });
     });
 
@@ -64,7 +64,7 @@ Task("Test")
                 NoBuild = true,
                 NoRestore = true,
                 ResultsDirectory = artefactsDirectory,
-                ArgumentCustomization = x => x.Append($"--logger html;LogFileName={project.GetFilenameWithoutExtension()}.html")
+                ArgumentCustomization = x => x.Append($"--logger html;LogFileName={project.GetFilenameWithoutExtension()}.html"),
             });
     });
 
