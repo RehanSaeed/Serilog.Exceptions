@@ -1,6 +1,7 @@
 namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
+    using System.Collections.Generic;
     using FluentAssertions;
     using Newtonsoft.Json.Linq;
     using NSubstitute;
@@ -137,6 +138,37 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             var applicationException = new ArgumentException();
             Test_LoggedExceptionContainsProperty(applicationException, "Type", "System.ArgumentException");
+        }
+
+        [Fact]
+        public void WhenExceptionContainsDictionaryWithNonScalarValue_ShouldNotThrow()
+        {
+            // Arrange
+            var exception = new ExceptionWithDictNonScalarKey()
+            {
+                Reference = new Dictionary<IEnumerable<int>, object>()
+                {
+                    { new List<int>() { 1, 2, 3 }, "VALUE" }
+                }
+            };
+
+            // Act
+            var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
+
+            // Assert
+            var exceptionDetails = ExtractExceptionDetails(result);
+            var referenceProperty = exceptionDetails.Should().BeOfType<JObject>().Which
+                .Properties().Should().ContainSingle(x => x.Name == "Reference").Which;
+
+            var referenceObject = referenceProperty.Value.Should().BeOfType<JObject>().Which;
+            var kvp = referenceObject.Properties().Should().ContainSingle()
+                .Which.Should().BeOfType<JProperty>()
+                .Which.Name.Should().Be("System.Collections.Generic.List`1[System.Int32]");
+        }
+
+        public class ExceptionWithDictNonScalarKey : Exception
+        {
+            public Dictionary<IEnumerable<int>, object> Reference { get; set; }
         }
     }
 }
