@@ -1,6 +1,4 @@
-<h1>
-    <img src="https://media.githubusercontent.com/media/RehanSaeed/Serilog.Exceptions/master/Images/Icon.png" alt="Serilog.Exceptions Logo" width="30px" height="30px" /> <a href="https://github.com/RehanSaeed/Serilog.Exceptions">Serilog.Exceptions</a>
-</h1>
+![Schema.NET Banner](https://media.githubusercontent.com/media/RehanSaeed/Serilog.Exceptions/master/Images/Banner.png)
 
 [![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/) [![Serilog.Exceptions package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/212043f6-5fe5-4c79-949e-162156b89894/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=212043f6-5fe5-4c79-949e-162156b89894&preferRelease=true) [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/RehanSaeedUK) [![Twitter Follow](https://img.shields.io/twitter/follow/rehansaeeduk.svg?style=social&label=Follow)](https://twitter.com/RehanSaeedUK)
 
@@ -187,7 +185,7 @@ Filtering for other scenarios is also supported:
 
 ## Contributions and Thanks
 
-Please view the [contributing guide](CONTRIBUTING.md) for more information.
+Please view the [contributing guide](/.github/CONTRIBUTING.md) for more information.
 
 - [joelweiss](https://github.com/joelweiss) - Added Entity Framework Core destructurers.
 - [krajek](https://github.com/krajek) & [JeroenDragt](https://github.com/JeroenDragt) - For adding filters to help ignore exception properties you don't want logged.
