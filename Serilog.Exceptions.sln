@@ -25,9 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Test", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{D2CAFFAF-CBF6-493A-AA61-4916FE7D586C}"
 	ProjectSection(SolutionItems) = preProject
-		CONTRIBUTING.md = CONTRIBUTING.md
-		ISSUE_TEMPLATE.md = ISSUE_TEMPLATE.md
-		LICENSE = LICENSE
+		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -42,6 +40,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8B74D735-C0D8-48BA-8500-7EC6A817610B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExceptionFinderTool", "Tools\ExceptionFinderTool\ExceptionFinderTool.csproj", "{B6603A53-F254-43ED-9A03-08D95F8F3BAC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{6C126007-ECA1-4442-9ECA-C5CED430BCB8}"
+	ProjectSection(SolutionItems) = preProject
+		Images\Banner.png = Images\Banner.png
+		Images\Hero.png = Images\Hero.png
+		Images\Icon.png = Images\Icon.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
