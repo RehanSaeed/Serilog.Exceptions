@@ -3,11 +3,12 @@ namespace Serilog.Exceptions.Benchmark
     using System;
     using System.Collections.Generic;
     using BenchmarkDotNet.Attributes;
+    using BenchmarkDotNet.Jobs;
     using Serilog.Exceptions.Destructurers;
 
-    [ClrJob]
-    [CoreJob]
     [MemoryDiagnoser]
+    [SimpleJob(RuntimeMoniker.Net472)]
+    [SimpleJob(RuntimeMoniker.NetCoreApp30)]
     public class DestructuringBenchmark
     {
         private readonly ReflectionBasedDestructurer reflectionBasedDestructurer = new ReflectionBasedDestructurer(10);
