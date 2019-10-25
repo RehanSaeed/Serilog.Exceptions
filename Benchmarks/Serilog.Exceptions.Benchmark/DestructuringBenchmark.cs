@@ -6,7 +6,13 @@ namespace Serilog.Exceptions.Benchmark
     using BenchmarkDotNet.Jobs;
     using Serilog.Exceptions.Destructurers;
 
+    [KeepBenchmarkFiles]
     [MemoryDiagnoser]
+    [MinColumn]
+    [MaxColumn]
+    [HtmlExporter]
+    [CsvMeasurementsExporter]
+    [RPlotExporter]
     [SimpleJob(RuntimeMoniker.Net472)]
     [SimpleJob(RuntimeMoniker.NetCoreApp30)]
     public class DestructuringBenchmark
