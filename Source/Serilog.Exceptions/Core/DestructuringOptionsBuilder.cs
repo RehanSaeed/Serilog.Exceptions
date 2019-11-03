@@ -69,7 +69,7 @@ namespace Serilog.Exceptions.Core
         /// <returns>Options builder for method chaining.</returns>
         public DestructuringOptionsBuilder WithDestructurers(IEnumerable<IExceptionDestructurer> destructurers)
         {
-            if (destructurers == null)
+            if (destructurers is null)
             {
                 throw new ArgumentNullException(nameof(destructurers), "Cannot add null destructurers collection");
             }

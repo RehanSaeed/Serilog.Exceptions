@@ -18,7 +18,7 @@ namespace Serilog.Exceptions
 #if NETSTANDARD1_3
         public static TypeCode GetTypeCode(this Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return TypeCode.Empty;
             }

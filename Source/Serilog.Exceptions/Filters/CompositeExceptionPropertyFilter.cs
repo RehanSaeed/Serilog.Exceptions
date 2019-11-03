@@ -19,7 +19,7 @@ namespace Serilog.Exceptions.Filters
         /// <exception cref="ArgumentException">filters was empty or filter at index {i} is <c>null</c>.</exception>
         public CompositeExceptionPropertyFilter(params IExceptionPropertyFilter[] filters)
         {
-            if (filters == null)
+            if (filters is null)
             {
                 throw new ArgumentNullException(
                     nameof(filters),
@@ -35,7 +35,7 @@ namespace Serilog.Exceptions.Filters
 
             for (var i = 0; i < filters.Length; ++i)
             {
-                if (filters[i] == null)
+                if (filters[i] is null)
                 {
                     throw new ArgumentException(
                         $"Cannot create composite exception properties filter, because filter at index {i} is null",

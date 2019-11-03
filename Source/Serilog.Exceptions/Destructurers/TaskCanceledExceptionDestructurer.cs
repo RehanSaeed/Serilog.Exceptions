@@ -44,7 +44,7 @@ namespace Serilog.Exceptions.Destructurers
             Task task,
             Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
         {
-            if (task == null)
+            if (task is null)
             {
                 return "null";
             }
