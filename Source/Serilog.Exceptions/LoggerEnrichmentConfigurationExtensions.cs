@@ -20,7 +20,7 @@ namespace Serilog.Exceptions
         public static LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
         {
-            if (loggerEnrichmentConfiguration == null)
+            if (loggerEnrichmentConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(loggerEnrichmentConfiguration));
             }
@@ -44,7 +44,7 @@ namespace Serilog.Exceptions
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IDestructuringOptions destructuringOptions)
         {
-            if (loggerEnrichmentConfiguration == null)
+            if (loggerEnrichmentConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(loggerEnrichmentConfiguration));
             }

@@ -8,7 +8,7 @@ Serilog.Exceptions is an add-on to [Serilog](https://serilog.net) to log excepti
 
 Your JSON logs will now be supplemented with detailed exception information and even custom exception properties. Here is an example of what happens when you log a DbEntityValidationException from EntityFramework (This exception is notorious for having deeply nested custom properties which are not included in the `.ToString()`).
 
-```
+```csharp
 try
 {
     ...
@@ -83,7 +83,7 @@ ILogger logger = new LoggerConfiguration()
 
 Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.Console` and many more do not do that by default. You may need to add `{Properties:j}` to your sink's format template. For example, configuration for console sink may look like that:
 
-```
+```csharp
 .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception} {Properties:j}")
 ```
 
@@ -97,7 +97,7 @@ This library has custom code to deal with extra properties on most common except
 
 [![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.SqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) [![Serilog.Exceptions.SqlServer package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/67be830c-2c0f-4df8-be30-771d817b382f/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=67be830c-2c0f-4df8-be30-771d817b382f&preferRelease=true)
 
-Add the [Serilog.Exceptions.SqlServer](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) NuGet package to your project to avoid the reflection based destuctorer for `SqlException`
+Add the [Serilog.Exceptions.SqlServer](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) NuGet package to your project to avoid the reflection based destructurer for `SqlException`
 
 ```
 Install-Package Serilog.Exceptions.SqlServer
@@ -187,6 +187,7 @@ Filtering for other scenarios is also supported:
 
 Please view the [contributing guide](/.github/CONTRIBUTING.md) for more information.
 
+- [304NotModified](https://github.com/304NotModified) - Added Markdown syntax highlighting.
 - [joelweiss](https://github.com/joelweiss) - Added Entity Framework Core destructurers.
 - [krajek](https://github.com/krajek) & [JeroenDragt](https://github.com/JeroenDragt) - For adding filters to help ignore exception properties you don't want logged.
 - [krajek](https://github.com/krajek) - For helping with cyclic dependencies when using the reflection destructurer.

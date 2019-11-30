@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup Label="Analyzer Package References">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="all" Version="2.9.6" />
-    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp1.1'" Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="All" Version="16.4.16" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="all" Version="2.9.8" />
+    <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp1.1'" Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="All" Version="16.4.33" />
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.118" />
   </ItemGroup>
 

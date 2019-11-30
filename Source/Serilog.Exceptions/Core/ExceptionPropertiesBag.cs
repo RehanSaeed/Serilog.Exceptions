@@ -40,7 +40,7 @@ namespace Serilog.Exceptions.Core
         /// <inheritdoc />
         public void AddProperty(string key, object value)
         {
-            if (key == null)
+            if (key is null)
             {
                 throw new ArgumentNullException(nameof(key), "Cannot add exception property without a key");
             }

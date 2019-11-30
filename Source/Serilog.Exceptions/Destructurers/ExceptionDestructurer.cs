@@ -195,17 +195,17 @@ namespace Serilog.Exceptions.Destructurers
             IExceptionPropertiesBag propertiesBag,
             Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
         {
-            if (exception == null)
+            if (exception is null)
             {
                 throw new ArgumentNullException(nameof(propertiesBag));
             }
 
-            if (propertiesBag == null)
+            if (propertiesBag is null)
             {
                 throw new ArgumentNullException(nameof(propertiesBag));
             }
 
-            if (destructureException == null)
+            if (destructureException is null)
             {
                 throw new ArgumentNullException(nameof(destructureException));
             }
