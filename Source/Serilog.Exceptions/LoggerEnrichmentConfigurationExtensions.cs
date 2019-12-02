@@ -11,7 +11,7 @@ namespace Serilog.Exceptions
     public static class LoggerEnrichmentConfigurationExtensions
     {
         /// <summary>
-        /// Enrich logger output with a destuctured object containing exception's public properties. Default
+        /// Enrich logger output with a destructured object containing exception's public properties. Default
         /// destructurers are registered. <see cref="Exception.StackTrace"/> and Exception.TargetSite
         /// are omitted by the destructuring process because Serilog already attaches them to log event.
         /// </summary>

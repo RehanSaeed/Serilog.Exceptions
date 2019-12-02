@@ -53,6 +53,11 @@ namespace Serilog.Exceptions.Core
         public int DestructuringDepth { get; private set; } = 10;
 
         /// <summary>
+        /// Disable reflection based destruturer.
+        /// </summary>
+        public bool DisableReflectionBasedDestructurer { get; private set; } = false;
+
+        /// <summary>
         /// Collection of destructurers that will be used to handle exception.
         /// </summary>
         public IEnumerable<IExceptionDestructurer> Destructurers => this.destructurers;
@@ -147,6 +152,18 @@ namespace Serilog.Exceptions.Core
             }
 
             this.DestructuringDepth = destructuringDepth;
+            return this;
+        }
+
+        /// <summary>
+        /// Disable reflection based destructurer.
+        /// You may want to disable this destructurer if you need full control
+        /// over the process of destructuring and want to provide all the destructurers yourself.
+        /// </summary>
+        /// <returns>Options builder for method chaining.</returns>
+        public DestructuringOptionsBuilder WithoutReflectionBasedDestructurer()
+        {
+            this.DisableReflectionBasedDestructurer = true;
             return this;
         }
     }

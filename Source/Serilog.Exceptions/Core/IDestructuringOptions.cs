@@ -33,5 +33,12 @@ namespace Serilog.Exceptions.Core
         /// Filter is applied to every property regardless of which destructurer was used.
         /// </summary>
         IExceptionPropertyFilter Filter { get; }
+
+        /// <summary>
+        /// Decides whether to disable reflection based destructurer.
+        /// You may want to disable this destructurer if you need full control
+        /// over the process of destructuring and want to provide all the destructurers yourself.
+        /// </summary>
+        bool DisableReflectionBasedDestructurer { get; }
     }
 }

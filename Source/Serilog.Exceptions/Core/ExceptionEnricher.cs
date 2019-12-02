@@ -64,30 +64,41 @@ namespace Serilog.Exceptions.Core
 
             if (logEvent.Exception != null)
             {
-                logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-                    this.destructuringOptions.RootName,
-                    this.DestructureException(logEvent.Exception),
-                    true));
+                var dataDictionary = this.DestructureException(logEvent.Exception);
+
+                if (dataDictionary != null)
+                {
+                    logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
+                        this.destructuringOptions.RootName,
+                        dataDictionary,
+                        true));
+                }
             }
         }
 
         private IReadOnlyDictionary<string, object> DestructureException(Exception exception)
         {
-            var data = new ExceptionPropertiesBag(exception, this.destructuringOptions.Filter);
-
             var exceptionType = exception.GetType();
 
             if (this.destructurers.ContainsKey(exceptionType))
             {
+                var data = new ExceptionPropertiesBag(exception, this.destructuringOptions.Filter);
+
                 var destructurer = this.destructurers[exceptionType];
                 destructurer.Destructure(exception, data, this.DestructureException);
+
+                return data.GetResultDictionary();
             }
-            else
+            else if (!this.destructuringOptions.DisableReflectionBasedDestructurer)
             {
+                var data = new ExceptionPropertiesBag(exception, this.destructuringOptions.Filter);
+
                 this.reflectionBasedDestructurer.Destructure(exception, data, this.DestructureException);
+
+                return data.GetResultDictionary();
             }
 
-            return data.GetResultDictionary();
+            return null;
         }
     }
 }
