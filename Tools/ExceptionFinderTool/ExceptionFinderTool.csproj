@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0-preview.2" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup Label="Analyzer Package References">

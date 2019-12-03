@@ -40,7 +40,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0-preview.2" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" Version="1.0.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="1.0.0" />
     <ProjectReference Include="..\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
