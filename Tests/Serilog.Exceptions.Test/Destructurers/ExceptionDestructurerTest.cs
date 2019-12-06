@@ -121,6 +121,39 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
+        public void WithoutReflectionBasedDestructurer_CustomExceptionIsNotLogged()
+        {
+            // Arrange
+            var exception = new ExceptionWithDictNonScalarKey();
+            var options = new DestructuringOptionsBuilder().WithoutReflectionBasedDestructurer();
+
+            // Act
+            var rootObject = LogAndDestructureException(exception, options);
+
+            // Assert
+            rootObject.Properties().Should().NotContain(x => x.Name == "Properties");
+        }
+
+        [Fact]
+        public void WithoutReflectionBasedDestructurerAndCustomRootName_StandardExceptionIsLogged()
+        {
+            // Arrange
+            var exception = new ArgumentException("ARG", "arg");
+            var options = new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithoutReflectionBasedDestructurer()
+                .WithRootName("CUSTOM-ROOT");
+
+            // Act
+            var rootObject = LogAndDestructureException(exception, options);
+
+            // Assert
+            var exceptionObject = ExtractExceptionDetails(rootObject, "CUSTOM-ROOT");
+            var paramObject = exceptionObject.Properties().Should().ContainSingle(x => x.Name == "ParamName").Which;
+            paramObject.Value.Should().BeOfType<JValue>().Which.Value.Should().Be("arg");
+        }
+
+        [Fact]
         public void ArgumentException_WithStackTrace_ContainsStackTrace()
         {
             try
