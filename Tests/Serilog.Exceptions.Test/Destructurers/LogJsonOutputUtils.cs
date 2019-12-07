@@ -54,15 +54,21 @@ namespace Serilog.Exceptions.Test.Destructurers
             return innerExceptionsValue;
         }
 
-        public static JObject ExtractExceptionDetails(JObject jObject, string rootName = "ExceptionDetail")
+        public static JObject ExtractExceptionDetails(JObject rootObject, string rootName = "ExceptionDetail")
         {
-            var propertiesProperty = Assert.Single(jObject.Properties(), x => x.Name == "Properties");
-            var propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
+            var propertiesObject = ExtractPropertiesObject(rootObject);
 
             var exceptionDetailProperty = Assert.Single(propertiesObject.Properties(), x => x.Name == rootName);
             var exceptionDetailValue = Assert.IsType<JObject>(exceptionDetailProperty.Value);
 
             return exceptionDetailValue;
+        }
+
+        public static JObject ExtractPropertiesObject(JObject rootObject)
+        {
+            var propertiesProperty = Assert.Single(rootObject.Properties(), x => x.Name == "Properties");
+            var propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
+            return propertiesObject;
         }
 
         public static void Assert_ContainsPropertyWithValue(
