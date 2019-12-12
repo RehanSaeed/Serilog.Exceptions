@@ -8,7 +8,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Xunit;
     using static LogJsonOutputUtils;
 
-    public class TaskCanceledExceptionDestructurerTest : IDisposable
+    public sealed class TaskCanceledExceptionDestructurerTest : IDisposable
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 

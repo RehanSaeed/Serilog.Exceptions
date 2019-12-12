@@ -2,6 +2,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using FluentAssertions;
     using Newtonsoft.Json.Linq;
     using NSubstitute;
@@ -11,6 +12,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Xunit;
     using static LogJsonOutputUtils;
 
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
     public class ExceptionDestructurerTest
     {
         [Fact]
@@ -124,7 +126,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void WithoutReflectionBasedDestructurer_CustomExceptionIsNotLogged()
         {
             // Arrange
-            var exception = new ExceptionWithDictNonScalarKey();
+            var exception = new DictNonScalarKeyException();
             var options = new DestructuringOptionsBuilder().WithoutReflectionBasedDestructurer();
 
             // Act
@@ -162,7 +164,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             }
             catch (ArgumentException ex)
             {
-                Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace.ToString());
+                Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace.ToString(CultureInfo.InvariantCulture));
             }
         }
 
@@ -177,13 +179,8 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void WhenExceptionContainsDictionaryWithNonScalarValue_ShouldNotThrow()
         {
             // Arrange
-            var exception = new ExceptionWithDictNonScalarKey()
-            {
-                Reference = new Dictionary<IEnumerable<int>, object>()
-                {
-                    { new List<int>() { 1, 2, 3 }, "VALUE" }
-                }
-            };
+            var exception = new DictNonScalarKeyException();
+            exception.Reference.Add(new List<int>() { 1, 2, 3 }, "VALUE");
 
             // Act
             var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
@@ -199,9 +196,20 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Which.Name.Should().Be("System.Collections.Generic.List`1[System.Int32]");
         }
 
-        public class ExceptionWithDictNonScalarKey : Exception
+        public class DictNonScalarKeyException : Exception
         {
-            public Dictionary<IEnumerable<int>, object> Reference { get; set; }
+            public DictNonScalarKeyException() => this.Reference = new Dictionary<IEnumerable<int>, object>();
+
+            public DictNonScalarKeyException(string message)
+                : base(message) =>
+                this.Reference = new Dictionary<IEnumerable<int>, object>();
+
+            public DictNonScalarKeyException(string message, Exception innerException)
+                : base(message, innerException) =>
+                this.Reference = new Dictionary<IEnumerable<int>, object>();
+
+            public Dictionary<IEnumerable<int>, object> Reference { get; }
         }
     }
 }
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly

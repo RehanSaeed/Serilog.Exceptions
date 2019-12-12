@@ -8,13 +8,11 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Serilog.Core;
     using Serilog.Events;
     using Serilog.Exceptions.Core;
-    using Serilog.Exceptions.Destructurers;
-    using Serilog.Exceptions.Filters;
     using Serilog.Formatting;
     using Serilog.Formatting.Json;
     using Xunit;
 
-    public class LogJsonOutputUtils
+    public static class LogJsonOutputUtils
     {
         public static JObject LogAndDestructureException(
             Exception exception,
@@ -66,6 +64,11 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public static JObject ExtractPropertiesObject(JObject rootObject)
         {
+            if (rootObject is null)
+            {
+                throw new ArgumentNullException(nameof(rootObject));
+            }
+
             var propertiesProperty = Assert.Single(rootObject.Properties(), x => x.Name == "Properties");
             var propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
             return propertiesObject;
@@ -88,6 +91,11 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public static JProperty ExtractProperty(JObject jObject, string propertyKey)
         {
+            if (jObject is null)
+            {
+                throw new ArgumentNullException(nameof(jObject));
+            }
+
             var paramNameProperty = jObject.Properties().Should()
                 .ContainSingle(x => x.Name == propertyKey, $"property with name {propertyKey} was expected").Which;
             return paramNameProperty;

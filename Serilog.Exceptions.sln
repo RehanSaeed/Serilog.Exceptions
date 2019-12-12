@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C5508012-7216-4ABE-AB2F-B166ED5FF94F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D6E871A8-2DFF-4676-BED8-046B164919B9}"
+	ProjectSection(SolutionItems) = preProject
+		Tests\.editorconfig = Tests\.editorconfig
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions", "Source\Serilog.Exceptions\Serilog.Exceptions.csproj", "{D8034654-4A6F-4857-9637-62098FC9267A}"
 EndProject

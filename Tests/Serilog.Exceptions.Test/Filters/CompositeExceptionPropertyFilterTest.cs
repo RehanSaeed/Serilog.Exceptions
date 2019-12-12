@@ -7,36 +7,24 @@ namespace Serilog.Exceptions.Test.Filters
     public class CompositeExceptionPropertyFilterTest
     {
         [Fact]
-        public void CreationOfCompositeFilter_ForNullFilters_Throws()
-        {
-            // Arrange
-            static void Action() => new CompositeExceptionPropertyFilter(null);
-
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(Action);
-        }
+        public void CreationOfCompositeFilter_ForNullFilters_Throws() =>
+            Assert.Throws<ArgumentNullException>(
+                () => new CompositeExceptionPropertyFilter(null));
 
         [Fact]
-        public void CreationOfCompositeFilter_ForEmptyFilters_Throws()
-        {
-            // Arrange
-            static void Action() => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { });
-
-            // Act & Assert
-            Assert.Throws<ArgumentException>(Action);
-        }
+        public void CreationOfCompositeFilter_ForEmptyFilters_Throws() =>
+            Assert.Throws<ArgumentException>(
+                () => new CompositeExceptionPropertyFilter(Array.Empty<IExceptionPropertyFilter>()));
 
         [Fact]
         public void CreationOfCompositeFilter_ForOneNullFilter_Throws()
         {
-            // Arrange
-            static void Action() => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null });
-
             // Act
-            var ex = Assert.Throws<ArgumentException>(Action);
+            var ex = Assert.Throws<ArgumentException>(
+                () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null }));
 
             // Assert
-            Assert.Contains("index 0", ex.Message);
+            Assert.Contains("index 0", ex.Message, StringComparison.Ordinal);
         }
 
         [Fact]
