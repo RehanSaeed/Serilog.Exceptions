@@ -1,0 +1,9 @@
+[*.cs]
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = silent
+
+# CA1034: Nested types should not be visible
+dotnet_diagnostic.CA1034.severity = silent
+
+# CA1032: Implement standard exception constructors
+dotnet_diagnostic.CA1032.severity = silent

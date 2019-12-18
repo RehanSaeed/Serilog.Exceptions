@@ -89,7 +89,7 @@ Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.
 
 ## Performance
 
-This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally.
+This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally. Reflection overhead is present but minimal, because all the expensive relection-based operations are done only once per exception-type.
 
 ## Additional Destructurers
 
@@ -156,6 +156,7 @@ Currently following options are supported:
 - `RootName`: The property name which will hold destructured exception, `ExceptionDetail` by default.
 - `Filter`: The object implementing `IExceptionPropertyFilter` that will have a chance to filter properties just before they are put in destructured exception object. Go to "Filtering properties" section for details.
 - `DestructuringDepth`: The maximum depth of reflection based recursive destructuring process.
+- `ReflectionBasedDestructurer`: Reflection based destructurer is enabled by default, but can be disabled in case you want to have compelete control over destructuring process. You will have to register destructurers for all exceptions explicitly.
 
 ## Filtering properties
 

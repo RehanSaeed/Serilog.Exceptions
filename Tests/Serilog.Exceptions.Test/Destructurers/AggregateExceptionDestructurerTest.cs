@@ -1,4 +1,4 @@
-﻿namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers
 {
     using System;
     using Newtonsoft.Json.Linq;
@@ -10,12 +10,14 @@
         [Fact]
         public void AggregateException_WithTwoArgumentExceptions_TheyAreSerializedInInnerExceptionsProperty()
         {
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
             var argumentException1 = new ArgumentException("MSG1", "testParamName1");
             var argumentException2 = new ArgumentException("MSG1", "testParamName2");
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             var aggregateException = new AggregateException(argumentException1, argumentException2);
 
-            JObject rootObject = LogAndDestructureException(aggregateException);
-            JArray innerExceptions = ExtractInnerExceptionsProperty(rootObject);
+            var rootObject = LogAndDestructureException(aggregateException);
+            var innerExceptions = ExtractInnerExceptionsProperty(rootObject);
 
             Assert.Equal(2, innerExceptions.Count);
             Assert_ContainsPropertyWithValue(Assert.IsType<JObject>(innerExceptions[0]), "ParamName", "testParamName1");

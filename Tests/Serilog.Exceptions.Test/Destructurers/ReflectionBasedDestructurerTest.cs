@@ -27,9 +27,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             var properties = propertiesBag.GetResultDictionary();
             Assert.Equal("PublicValue", properties[nameof(TestException.PublicProperty)]);
             Assert.Equal("threw System.Exception: Exception of type 'System.Exception' was thrown.", properties[nameof(TestException.ExceptionProperty)]);
-            Assert.DoesNotContain(properties, x => string.Equals(x.Key, "InternalProperty"));
-            Assert.DoesNotContain(properties, x => string.Equals(x.Key, "ProtectedProperty"));
-            Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty"));
+            Assert.DoesNotContain(properties, x => string.Equals(x.Key, "InternalProperty", StringComparison.Ordinal));
+            Assert.DoesNotContain(properties, x => string.Equals(x.Key, "ProtectedProperty", StringComparison.Ordinal));
+            Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty", StringComparison.Ordinal));
             Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
 #if NET461 || NET472
             Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
@@ -37,7 +37,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.NotEmpty(properties[nameof(TestException.StackTrace)].ToString());
             Assert.Equal("Serilog.Exceptions.Test", properties[nameof(TestException.Source)]);
             Assert.Equal(-2146233088, properties[nameof(TestException.HResult)]);
-            Assert.Contains(typeof(TestException).FullName, properties["Type"].ToString());
+            Assert.Contains(typeof(TestException).FullName, properties["Type"].ToString(), StringComparison.Ordinal);
         }
 
         [Fact]
@@ -225,8 +225,8 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void ExceptionWithTypeProperty_StillContainsType_JustWithDollarAsPrefixInLabel()
         {
-            var exceptionWithTypeProperty = new ExceptionWithTypeProperty() { Type = 13 };
-            Test_LoggedExceptionContainsProperty(exceptionWithTypeProperty, "$Type", $"Serilog.Exceptions.Test.Destructurers.{nameof(ReflectionBasedDestructurerTest)}+ExceptionWithTypeProperty");
+            var exceptionWithTypeProperty = new TypePropertyException() { Type = 13 };
+            Test_LoggedExceptionContainsProperty(exceptionWithTypeProperty, "$Type", $"Serilog.Exceptions.Test.Destructurers.{nameof(ReflectionBasedDestructurerTest)}+{nameof(TypePropertyException)}");
         }
 
         [Fact]
@@ -259,17 +259,17 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void WhenObjectContainsCyclicReferencesInList_ThenRecursiveDestructureIsImmediatelyStopped()
         {
             // Arrange
-            var cyclic = new MyObjectEnumerable
+            var cyclic = new MyObjectCollection
             {
                 Foo = "Cyclic"
             };
             cyclic.Reference = cyclic;
-            var exception = new CyclicException2
+            var exception = new Cyclic2Exception
             {
-                MyObjectEnumerable = new MyObjectEnumerable()
+                MyObjectCollection = new MyObjectCollection()
             };
-            exception.MyObjectEnumerable.Foo = "bar";
-            exception.MyObjectEnumerable.Reference = cyclic;
+            exception.MyObjectCollection.Foo = "bar";
+            exception.MyObjectCollection.Reference = cyclic;
 
             // Act
             var result = new ExceptionPropertiesBag(new Exception());
@@ -277,12 +277,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
-            var myObject = (List<object>)result.GetResultDictionary()["MyObjectEnumerable"];
+            var myObject = (List<object>)result.GetResultDictionary()[nameof(Cyclic2Exception.MyObjectCollection)];
 
-            // exception.MyObjectEnumerable[0] is still list
+            // exception.MyObjectCollection[0] is still list
             var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
 
-            // exception.MyObjectEnumerable[0][0] we notice that we would again destructure "cyclic"
+            // exception.MyObjectCollection[0][0] we notice that we would again destructure "cyclic"
             var secondLevelList = Assert.IsType<Dictionary<string, object>>(firstLevelList[0]);
             Assert.Equal("Cyclic reference", secondLevelList["$ref"]);
         }
@@ -297,7 +297,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 Reference = new Dictionary<string, object>()
             };
             cyclic.Reference["x"] = cyclic.Reference;
-            var exception = new CyclicExceptionDict
+            var exception = new CyclicDictException
             {
                 MyObjectDict = cyclic
             };
@@ -325,7 +325,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void WhenObjectContainsCyclicReferencesInTask_ThenRecursiveDestructureIsImmediatelyStopped()
         {
             // Arrange
-            var exception = new CyclicExceptionTask();
+            var exception = new CyclicTaskException();
             var task = Task.FromException(exception);
             exception.Task = task;
 
@@ -336,7 +336,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var resultsDictionary = result.GetResultDictionary();
-            var destructuredTask = resultsDictionary[nameof(CyclicExceptionTask.Task)].Should().BeAssignableTo<IDictionary<string, object>>().Which;
+            var destructuredTask = resultsDictionary[nameof(CyclicTaskException.Task)].Should().BeAssignableTo<IDictionary<string, object>>().Which;
             var destructuredCyclicException = destructuredTask.Should().ContainKey(nameof(Task.Exception))
                 .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which.Should().ContainKey(nameof(AggregateException.InnerExceptions))
@@ -345,8 +345,8 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Which.Should().BeAssignableTo<IDictionary<string, object>>().Which;
             destructuredCyclicException.Should().ContainKey(nameof(Exception.Message))
                 .WhichValue.Should().BeOfType<string>()
-                .Which.Should().Contain(nameof(CyclicExceptionTask));
-            destructuredCyclicException.Should().ContainKey(nameof(CyclicExceptionTask.Task))
+                .Which.Should().Contain(nameof(CyclicTaskException));
+            destructuredCyclicException.Should().ContainKey(nameof(CyclicTaskException.Task))
                 .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which.Should().ContainKey("$ref", "task was already destructured, so inner task should just contain ref");
         }
@@ -354,7 +354,9 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void WhenDestruringArgumentException_ResultShouldBeEquivalentToArgumentExceptionDestructurer()
         {
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
             var exception = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
             Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
         }
 
@@ -418,7 +420,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             {
                 throwingAction();
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 return ex;
             }
@@ -444,29 +448,29 @@ namespace Serilog.Exceptions.Test.Destructurers
             public MyObject MyObject { get; set; }
         }
 
-        public class MyObjectEnumerable : IEnumerable<MyObjectEnumerable>
+        public class MyObjectCollection : IEnumerable<MyObjectCollection>
         {
             public string Foo { get; set; }
 
-            public MyObjectEnumerable Reference { get; set; }
+            public MyObjectCollection Reference { get; set; }
 
-            public IEnumerator<MyObjectEnumerable> GetEnumerator() =>
-                new List<MyObjectEnumerable> { this.Reference }.GetEnumerator();
+            public IEnumerator<MyObjectCollection> GetEnumerator() =>
+                new List<MyObjectCollection> { this.Reference }.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
 
-        public class CyclicException2 : Exception
+        public class Cyclic2Exception : Exception
         {
-            public MyObjectEnumerable MyObjectEnumerable { get; set; }
+            public MyObjectCollection MyObjectCollection { get; set; }
         }
 
-        public class CyclicExceptionDict : Exception
+        public class CyclicDictException : Exception
         {
             public MyObjectDict MyObjectDict { get; set; }
         }
 
-        public class CyclicExceptionTask : Exception
+        public class CyclicTaskException : Exception
         {
             public Task Task { get; set; }
         }
@@ -475,12 +479,16 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             public string Foo { get; set; }
 
+#pragma warning disable CA2227 // Collection properties should be read only
             public Dictionary<string, object> Reference { get; set; }
+#pragma warning restore CA2227 // Collection properties should be read only
         }
 
-        public class ExceptionWithTypeProperty : Exception
+        public class TypePropertyException : Exception
         {
+#pragma warning disable CA1721 // Property names should not match get methods
             public int Type { get; set; }
+#pragma warning restore CA1721 // Property names should not match get methods
         }
 
         public class TestException : Exception
@@ -499,7 +507,11 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             public string PublicProperty { get; set; }
 
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
+#pragma warning disable CA1822 // Member does not access instance data and can be marked as static
             public string ExceptionProperty => throw new Exception();
+#pragma warning restore CA1822 // Member does not access instance data and can be marked as static
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 
             internal string InternalProperty { get; set; }
 
@@ -509,7 +521,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             private string PrivateProperty { get; set; }
 #pragma warning restore IDE0052 // Remove unread private members
 
+#pragma warning disable CA1822 // Member does not access instance data and can be marked as static
             public string this[int i] => "IndexerValue";
+#pragma warning restore CA1822 // Member does not access instance data and can be marked as static
         }
 
         public class UriException : Exception
@@ -570,7 +584,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             public new T HiddenProperty { get; set; }
         }
 
+#pragma warning disable CA1064 // Exceptions should be public
         internal class HiddenException : Exception
+#pragma warning restore CA1064 // Exceptions should be public
         {
             public HiddenException(string message, object info)
                 : base(message) =>

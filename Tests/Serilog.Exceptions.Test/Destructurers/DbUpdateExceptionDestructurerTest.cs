@@ -66,12 +66,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             writtenJson.Should().NotContain(TestContext.UserIdIDoNotWantToSee);
         }
 
-        public class User
+        internal class User
         {
             public string UserId { get; set; }
         }
 
-        public class TestContext : DbContext
+        internal class TestContext : DbContext
         {
             public const string UserIdIDoNotWantToSee = "I Don't Want To See You";
 
