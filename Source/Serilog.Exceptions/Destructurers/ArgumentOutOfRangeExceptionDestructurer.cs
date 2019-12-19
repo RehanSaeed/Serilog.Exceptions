@@ -12,7 +12,7 @@ namespace Serilog.Exceptions.Destructurers
         /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public override Type[] TargetTypes => new[]
         {
-            typeof(ArgumentOutOfRangeException)
+            typeof(ArgumentOutOfRangeException),
         };
 
         /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>

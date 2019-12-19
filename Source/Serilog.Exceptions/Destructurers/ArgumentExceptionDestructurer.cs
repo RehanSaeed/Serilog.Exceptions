@@ -13,7 +13,7 @@ namespace Serilog.Exceptions.Destructurers
         public override Type[] TargetTypes => new[]
         {
             typeof(ArgumentException),
-            typeof(ArgumentNullException)
+            typeof(ArgumentNullException),
         };
 
         /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>

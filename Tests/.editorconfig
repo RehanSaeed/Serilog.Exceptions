@@ -1,9 +1,44 @@
+##########################################
+# StyleCop
+##########################################
+
 [*.cs]
-# CA1707: Identifiers should not contain underscores
-dotnet_diagnostic.CA1707.severity = silent
+# SA1600: A C# code element is missing a documentation header.
+# Justification: Comments turned off
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1600.md
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1601: A C# partial element is missing a documentation header.
+# Justification: Comments turned off
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1601.md
+dotnet_diagnostic.SA1601.severity = none
+
+# SA1602: An item within a C# enumeration is missing an XML documentation header.
+# Justification: Comments turned off
+# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1602.md
+dotnet_diagnostic.SA1602.severity = none
+
+##########################################
+# Custom
+##########################################
+
+[*.cs]
+# CA1032: Implement standard exception constructors
+# Justification: These are unit tests
+# https://docs.microsoft.com/en-us/visualstudio/code-quality/ca1032
+dotnet_diagnostic.CA1032.severity = none
 
 # CA1034: Nested types should not be visible
-dotnet_diagnostic.CA1034.severity = silent
+# Justification: These are unit tests
+# https://docs.microsoft.com/en-us/visualstudio/code-quality/ca1034
+dotnet_diagnostic.CA1034.severity = none
 
-# CA1032: Implement standard exception constructors
-dotnet_diagnostic.CA1032.severity = silent
+# CA1303: Do not pass literals as localized parameters
+# Justification: These are unit tests
+# https://docs.microsoft.com/en-us/visualstudio/code-quality/ca1303
+dotnet_diagnostic.CA1303.severity = none
+
+# CA1707: Identifiers should not contain underscores
+# Justification: Test method names contain underscores
+# https://docs.microsoft.com/en-us/visualstudio/code-quality/ca1707
+dotnet_diagnostic.CA1707.severity = none

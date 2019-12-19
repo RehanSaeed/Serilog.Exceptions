@@ -30,7 +30,7 @@ namespace Serilog.Exceptions.Benchmark
                 {
                     ParamInt = 123,
                     ParamString = "some param value",
-                    Point = new Point() { X = 666, Y = 777 }
+                    Point = new Point() { X = 666, Y = 777 },
                 };
             }
             catch (BenchmarkException ex)

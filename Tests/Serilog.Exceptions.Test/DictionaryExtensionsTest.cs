@@ -13,7 +13,7 @@ namespace Serilog.Exceptions.Test
         {
             var dictionary = (IDictionary)new Dictionary<string, object>()
             {
-                { "Key", "Value" }
+                { "Key", "Value" },
             };
 
             var actual = dictionary.ToStringObjectDictionary();
@@ -28,7 +28,7 @@ namespace Serilog.Exceptions.Test
         {
             var dictionary = (IDictionary)new ListDictionary()
             {
-                { "Key", "Value" }
+                { "Key", "Value" },
             };
 
             var actual = dictionary.ToStringObjectDictionary();

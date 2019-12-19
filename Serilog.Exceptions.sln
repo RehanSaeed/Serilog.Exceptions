@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		azure-pipelines.yml = azure-pipelines.yml
 		build.cake = build.cake
 		CHANGELOG.md = CHANGELOG.md
-		MinimumRecommendedRulesWithStyleCop.ruleset = MinimumRecommendedRulesWithStyleCop.ruleset
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C5508012-7216-4ABE-AB2F-B166ED5FF94F}"
@@ -35,6 +34,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.SqlServer", "Source\Serilog.Exceptions.SqlServer\Serilog.Exceptions.SqlServer.csproj", "{F5BBB5C1-5920-40F3-8C44-01A54CC3D6B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Benchmarks", "Benchmarks", "{5CE72C42-F5C5-405B-BE8A-9AFDA7F43CB2}"
+	ProjectSection(SolutionItems) = preProject
+		Benchmarks\.editorconfig = Benchmarks\.editorconfig
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Benchmark", "Benchmarks\Serilog.Exceptions.Benchmark\Serilog.Exceptions.Benchmark.csproj", "{5A82CFFC-EC33-4B7B-A6F6-7FADC0E2DDAA}"
 EndProject

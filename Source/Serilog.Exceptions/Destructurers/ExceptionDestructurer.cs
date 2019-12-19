@@ -11,7 +11,7 @@ namespace Serilog.Exceptions.Destructurers
     public class ExceptionDestructurer : IExceptionDestructurer
     {
         /// <summary>
-        /// Collection of exceptions types from standard library that do not have any custom property,
+        /// Gets a collection of exceptions types from standard library that do not have any custom property,
         /// so they can be destructured using generic exception destructurer.
         /// </summary>
 #pragma warning disable CA1819 // Properties should not return arrays
@@ -172,7 +172,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.TypeUnloadedException),
 #endif
                         typeof(System.UnauthorizedAccessException),
-                        typeof(System.UriFormatException)
+                        typeof(System.UriFormatException),
                     };
 
 #if NET461 || NET472
@@ -280,7 +280,7 @@ namespace Serilog.Exceptions.Destructurers
                 "System.Diagnostics.Tracing.EventSourceException, mscorlib, Version=4.0.0.0, PublicKeyToken=b77a5c561934e089",
                 "System.Management.Instrumentation.InstanceNotFoundException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "System.Management.Instrumentation.InstrumentationBaseException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Management.Instrumentation.InstrumentationException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+                "System.Management.Instrumentation.InstrumentationException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
             };
 #endif
     }

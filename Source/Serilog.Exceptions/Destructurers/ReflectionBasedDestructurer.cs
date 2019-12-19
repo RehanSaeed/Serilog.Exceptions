@@ -40,11 +40,10 @@ namespace Serilog.Exceptions.Destructurers
                 throw new ArgumentOutOfRangeException(
                     nameof(destructuringDepth),
                     destructuringDepth,
-                    "Destructuring depth must be positive");
+                    Resources.DestructuringDepthMustBeMoreThanZero);
             }
 
             this.destructuringDepth = destructuringDepth;
-
             this.baseExceptionPropertiesForDestructuring = GetExceptionPropertiesForDestructuring(typeof(Exception));
         }
 
@@ -187,7 +186,7 @@ namespace Serilog.Exceptions.Destructurers
             var reflectionInfo = new ReflectionInfo()
             {
                 Properties = propertyInfos,
-                PropertiesExceptBaseOnes = propertiesInfosExceptBaseOnes
+                PropertiesExceptBaseOnes = propertiesInfosExceptBaseOnes,
             };
             return reflectionInfo;
         }
@@ -259,7 +258,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 return new Dictionary<string, object>
                 {
-                    { RefLabel, CyclicReferenceMessage }
+                    { RefLabel, CyclicReferenceMessage },
                 };
             }
 
@@ -287,7 +286,7 @@ namespace Serilog.Exceptions.Destructurers
 
                 return new Dictionary<string, object>
                 {
-                    { RefLabel, refId }
+                    { RefLabel, refId },
                 };
             }
 
@@ -317,7 +316,7 @@ namespace Serilog.Exceptions.Destructurers
 
                 return new Dictionary<string, object>()
                 {
-                    { RefLabel, refId }
+                    { RefLabel, refId },
                 };
             }
 
@@ -370,7 +369,7 @@ namespace Serilog.Exceptions.Destructurers
 
                 return new SortedList<string, object>()
                 {
-                    { RefLabel, refId }
+                    { RefLabel, refId },
                 };
             }
 

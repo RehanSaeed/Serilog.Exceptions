@@ -26,18 +26,22 @@ namespace Serilog.Exceptions.EntityFrameworkCore.Destructurers
 
 #pragma warning disable CA1062 // Validate arguments of public methods
             var dbUpdateException = (DbUpdateException)exception;
-            var entriesValue = dbUpdateException.Entries?.Select(e => new
-            {
-                EntryProperties = e.Properties.Select(p => new
-                {
-                    PropertyName = p.Metadata.Name,
-                    p.OriginalValue,
-                    p.CurrentValue,
-                    p.IsTemporary,
-                    p.IsModified
-                }),
-                e.State
-            }).ToList();
+            var entriesValue = dbUpdateException.Entries?
+                .Select(
+                    e => new
+                    {
+                        EntryProperties = e.Properties.Select(
+                            p => new
+                            {
+                                PropertyName = p.Metadata.Name,
+                                p.OriginalValue,
+                                p.CurrentValue,
+                                p.IsTemporary,
+                                p.IsModified,
+                            }),
+                        e.State,
+                    })
+                .ToList();
             propertiesBag.AddProperty(nameof(DbUpdateException.Entries), entriesValue);
 #pragma warning restore CA1062 // Validate arguments of public methods
         }

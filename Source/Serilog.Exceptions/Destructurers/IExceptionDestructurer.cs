@@ -11,7 +11,7 @@ namespace Serilog.Exceptions.Destructurers
     public interface IExceptionDestructurer
     {
         /// <summary>
-        /// Collection of types of exception that the destructurer can handle.
+        /// Gets a collection of types of exception that the destructurer can handle.
         /// </summary>
 #pragma warning disable CA1819 // Properties should not return arrays
         Type[] TargetTypes { get; }

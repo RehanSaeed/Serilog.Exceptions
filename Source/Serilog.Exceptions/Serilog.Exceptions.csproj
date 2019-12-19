@@ -2,9 +2,9 @@
 
   <PropertyGroup Label="Build">
     <TargetFrameworks>netstandard2.0;netstandard1.6;netstandard1.3;net461;net472</TargetFrameworks>
-    <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>latest</LangVersion>
+    <NeutralLanguage>en-gb</NeutralLanguage>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
@@ -57,6 +57,15 @@
 
   <ItemGroup Label="Files">
     <None Include="..\..\Images\Icon.png" Pack="true" PackagePath="\" />
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

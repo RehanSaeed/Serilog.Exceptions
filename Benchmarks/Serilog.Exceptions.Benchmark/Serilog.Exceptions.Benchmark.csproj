@@ -3,11 +3,9 @@
   <PropertyGroup Label="Build">
     <OutputType>Exe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
-    <CodeAnalysisRuleSet>../../MinimumRecommendedRulesWithStyleCop.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>SA1600;SA1601;SA1602</NoWarn>
+    <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup Label="Project References">

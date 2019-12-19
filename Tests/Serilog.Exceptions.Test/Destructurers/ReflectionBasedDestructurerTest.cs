@@ -63,8 +63,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             {
                 Data =
                 {
-                    { "UriDataItem", new Uri(uriValue) }
-                }
+                    { "UriDataItem", new Uri(uriValue) },
+                },
             };
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
@@ -150,7 +150,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.Data["data"] = new TestStruct()
             {
                 ValueType = 10,
-                ReferenceType = "ABC"
+                ReferenceType = "ABC",
             };
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
@@ -172,7 +172,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             exception.Data["data"] = new TestClass()
             {
                 ValueType = 10,
-                ReferenceType = "ABC"
+                ReferenceType = "ABC",
             };
             var propertiesBag = new ExceptionPropertiesBag(exception);
 
@@ -202,10 +202,10 @@ namespace Serilog.Exceptions.Test.Destructurers
                         Name = "CHILD 1",
                         Child = new RecursiveNode()
                         {
-                            Name = "CHILD 2"
-                        }
-                    }
-                }
+                            Name = "CHILD 2",
+                        },
+                    },
+                },
             };
             var destructurer = new ReflectionBasedDestructurer(1);
 
@@ -235,7 +235,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Arrange
             var exception = new CyclicException
             {
-                MyObject = new MyObject()
+                MyObject = new MyObject(),
             };
             exception.MyObject.Foo = "bar";
             exception.MyObject.Reference = exception.MyObject;
@@ -261,12 +261,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Arrange
             var cyclic = new MyObjectCollection
             {
-                Foo = "Cyclic"
+                Foo = "Cyclic",
             };
             cyclic.Reference = cyclic;
             var exception = new Cyclic2Exception
             {
-                MyObjectCollection = new MyObjectCollection()
+                MyObjectCollection = new MyObjectCollection(),
             };
             exception.MyObjectCollection.Foo = "bar";
             exception.MyObjectCollection.Reference = cyclic;
@@ -294,12 +294,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             var cyclic = new MyObjectDict
             {
                 Foo = "Cyclic",
-                Reference = new Dictionary<string, object>()
+                Reference = new Dictionary<string, object>(),
             };
             cyclic.Reference["x"] = cyclic.Reference;
             var exception = new CyclicDictException
             {
-                MyObjectDict = cyclic
+                MyObjectDict = cyclic,
             };
 
             // Act
@@ -365,7 +365,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             var derived = new DerivedClass<int>
             {
-                HiddenProperty = 123
+                HiddenProperty = 123,
             };
             var baseClass = (BaseClass)derived;
             baseClass.HiddenProperty = 456;

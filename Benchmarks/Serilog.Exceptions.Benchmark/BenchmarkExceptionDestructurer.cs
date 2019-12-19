@@ -29,7 +29,7 @@ namespace Serilog.Exceptions.Benchmark
             propertiesBag.AddProperty("Point", new Dictionary<string, object>
             {
                 { "X", benchmarkException.Point.X },
-                { "Y", benchmarkException.Point.Y }
+                { "Y", benchmarkException.Point.Y },
             });
 #pragma warning restore CA1062 // Validate arguments of public methods
         }

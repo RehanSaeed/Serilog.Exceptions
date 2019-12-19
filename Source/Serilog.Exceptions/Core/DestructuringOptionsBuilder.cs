@@ -2,6 +2,7 @@ namespace Serilog.Exceptions.Core
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using Serilog.Events;
     using Serilog.Exceptions.Destructurers;
     using Serilog.Exceptions.Filters;
@@ -43,27 +44,27 @@ namespace Serilog.Exceptions.Core
         private readonly List<IExceptionDestructurer> destructurers = new List<IExceptionDestructurer>();
 
         /// <summary>
-        /// Name of the property which value will be filled with destructured exception.
+        /// Gets the name of the property which value will be filled with destructured exception.
         /// </summary>
         public string RootName { get; private set; } = "ExceptionDetail";
 
         /// <summary>
-        /// Maximum depth of destructuring to which reflection destructurer will proceed.
+        /// Gets the maximum depth of destructuring to which reflection destructurer will proceed.
         /// </summary>
         public int DestructuringDepth { get; private set; } = 10;
 
         /// <summary>
-        /// Disable reflection based destruturer.
+        /// Gets a value indicating whether to disable the reflection based destructurer.
         /// </summary>
         public bool DisableReflectionBasedDestructurer { get; private set; } = false;
 
         /// <summary>
-        /// Collection of destructurers that will be used to handle exception.
+        /// Gets a collection of destructurers that will be used to handle exception.
         /// </summary>
         public IEnumerable<IExceptionDestructurer> Destructurers => this.destructurers;
 
         /// <summary>
-        /// Global filter, that will be applied to every destructured property just before it is added to the result.
+        /// Gets a global filter, that will be applied to every destructured property just before it is added to the result.
         /// </summary>
         public IExceptionPropertyFilter Filter { get; private set; }
 
@@ -76,7 +77,7 @@ namespace Serilog.Exceptions.Core
         {
             if (destructurers is null)
             {
-                throw new ArgumentNullException(nameof(destructurers), "Cannot add null destructurers collection");
+                throw new ArgumentNullException(nameof(destructurers));
             }
 
             this.destructurers.AddRange(destructurers);
@@ -101,7 +102,7 @@ namespace Serilog.Exceptions.Core
             if (this.Filter != null)
             {
                 throw new InvalidOperationException(
-                    $"Filter was already set, only one filter can be configured. Use {nameof(CompositeExceptionPropertyFilter)} or other aggregate to combine filters");
+                    string.Format(CultureInfo.InvariantCulture, Resources.FilterAlreadySet, nameof(CompositeExceptionPropertyFilter)));
             }
 
             this.Filter = filter;
@@ -125,9 +126,14 @@ namespace Serilog.Exceptions.Core
         /// <exception cref="ArgumentException">Name cannot be null or empty.</exception>
         public DestructuringOptionsBuilder WithRootName(string rootName)
         {
-            if (string.IsNullOrEmpty(rootName))
+            if (rootName is null)
             {
-                throw new ArgumentException("Cannot accept null or empty root property name", nameof(rootName));
+                throw new ArgumentNullException(nameof(rootName));
+            }
+
+            if (rootName.Length == 0)
+            {
+                throw new ArgumentException(Resources.CannotBeEmpty, nameof(rootName));
             }
 
             this.RootName = rootName;
@@ -148,7 +154,7 @@ namespace Serilog.Exceptions.Core
                 throw new ArgumentOutOfRangeException(
                     nameof(destructuringDepth),
                     destructuringDepth,
-                    "Destructuring depth must be positive");
+                    Resources.DestructuringDepthMustBeMoreThanZero);
             }
 
             this.DestructuringDepth = destructuringDepth;

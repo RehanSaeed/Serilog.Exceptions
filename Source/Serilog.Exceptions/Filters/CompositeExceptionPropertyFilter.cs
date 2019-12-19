@@ -21,16 +21,12 @@ namespace Serilog.Exceptions.Filters
         {
             if (filters is null)
             {
-                throw new ArgumentNullException(
-                    nameof(filters),
-                    "Cannot create composite exception properties filter, because null collection of filters was given");
+                throw new ArgumentNullException(nameof(filters));
             }
 
             if (filters.Length == 0)
             {
-                throw new ArgumentException(
-                    "Cannot create composite exception properties filter, because empty collection of filters was given",
-                    nameof(filters));
+                throw new ArgumentException(Resources.CannotBeEmpty, nameof(filters));
             }
 
             for (var i = 0; i < filters.Length; ++i)

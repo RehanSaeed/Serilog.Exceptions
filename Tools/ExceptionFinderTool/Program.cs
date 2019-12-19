@@ -76,7 +76,7 @@ namespace ExceptionFinderTool
                 Assembly.Load(new AssemblyName("System.Threading.Tasks")),
                 Assembly.Load(new AssemblyName("System.Threading.Timer")),
                 Assembly.Load(new AssemblyName("System.Xml.ReaderWriter")),
-                Assembly.Load(new AssemblyName("System.Xml.XDocument"))
+                Assembly.Load(new AssemblyName("System.Xml.XDocument")),
             };
 #else
             AppDomain.CurrentDomain.GetAssemblies();

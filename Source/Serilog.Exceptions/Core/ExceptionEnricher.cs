@@ -29,9 +29,7 @@ namespace Serilog.Exceptions.Core
         /// <param name="destructuringOptions">The destructuring options, cannot be null.</param>
         public ExceptionEnricher(IDestructuringOptions destructuringOptions)
         {
-            this.destructuringOptions = destructuringOptions ?? throw new ArgumentNullException(
-                nameof(destructuringOptions),
-                "Destructuring options cannot be null");
+            this.destructuringOptions = destructuringOptions ?? throw new ArgumentNullException(nameof(destructuringOptions));
             this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
 
             this.destructurers = new Dictionary<Type, IExceptionDestructurer>();

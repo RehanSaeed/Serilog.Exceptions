@@ -24,9 +24,7 @@ namespace Serilog.Exceptions.Core
         /// <param name="filter">Filter that should be applied to each property just before adding it to the bag.</param>
         public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
         {
-            this.exception = exception ?? throw new ArgumentNullException(
-                nameof(exception),
-                $"Cannot create {nameof(ExceptionPropertiesBag)} for null exception");
+            this.exception = exception ?? throw new ArgumentNullException(nameof(exception));
             this.filter = filter;
         }
 
@@ -42,7 +40,7 @@ namespace Serilog.Exceptions.Core
         {
             if (key is null)
             {
-                throw new ArgumentNullException(nameof(key), "Cannot add exception property without a key");
+                throw new ArgumentNullException(nameof(key));
             }
 
             if (this.resultsCollected)

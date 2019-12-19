@@ -12,7 +12,7 @@ namespace Serilog.Exceptions.Destructurers
     {
         private static readonly Type[] TargetExceptionTypes =
         {
-            typeof(TaskCanceledException)
+            typeof(TaskCanceledException),
         };
 
         /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>

@@ -59,7 +59,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             var ex = Assert.Throws<ArgumentNullException>(() => properties.AddProperty(null, "value"));
 
             // Assert
-            Assert.StartsWith("Cannot add exception property without a key", ex.Message, StringComparison.Ordinal);
             Assert.Equal("key", ex.ParamName);
         }
 

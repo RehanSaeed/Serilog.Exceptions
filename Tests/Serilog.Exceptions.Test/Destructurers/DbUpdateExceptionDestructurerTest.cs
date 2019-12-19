@@ -29,7 +29,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             var entry = ctx.Add(new User
             {
-                UserId = Guid.NewGuid().ToString()
+                UserId = Guid.NewGuid().ToString(),
             });
 
             // Act
@@ -55,7 +55,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             var entry = ctx.Add(new User
             {
-                UserId = Guid.NewGuid().ToString()
+                UserId = Guid.NewGuid().ToString(),
             });
 
             // Act
@@ -85,12 +85,12 @@ namespace Serilog.Exceptions.Test.Destructurers
                 {
                     new User
                     {
-                        UserId = "FirstUser"
+                        UserId = "FirstUser",
                     },
                     new User
                     {
-                        UserId = UserIdIDoNotWantToSee
-                    }
+                        UserId = UserIdIDoNotWantToSee,
+                    },
                 };
 
                 modelBuilder.Entity<User>().HasData(users);
