@@ -27,22 +27,18 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
-    - name: 'Install Cake Tool'
-      run: 'dotnet tool install --global Cake.Tool'
-      shell: pwsh
-      #failOnStderr: true $ErrorActionPreference = 'stop'
     - name: 'Dotnet Cake Build'
-      run: 'dotnet cake --target=Build'
-      shell: pwsh
-      #failOnStderr: true
+      uses: ecampidoglio/cake-action@v1.1.1
+      with:
+        target: Build
     - name: 'Dotnet Cake Test'
-      run: 'dotnet cake --target=Test'
-      shell: pwsh
-      #failOnStderr: true
+      uses: ecampidoglio/cake-action@v1.1.1
+      with:
+        target: Test
     - name: 'Dotnet Cake Pack'
-      run: 'dotnet cake --target=Pack'
-      shell: pwsh
-      #failOnStderr: true
+      uses: ecampidoglio/cake-action@v1.1.1
+      with:
+        target: Pack
     #- task: PublishTestResults@2
     #  displayName: 'Publish Test Results'
     #  inputs:
