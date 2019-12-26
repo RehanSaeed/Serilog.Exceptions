@@ -41,11 +41,8 @@ jobs:
       uses: ecampidoglio/cake-action@v1.1.1
       with:
         target: Pack
-    #- task: PublishTestResults@2
-    #  displayName: 'Publish Test Results'
-    #  inputs:
-    #    testResultsFormat: 'VSTest'
-    #    testResultsFiles: '**/*.trx'
-    #- publish: './Artefacts'
-    #  artifact: $(matrixName)
-    #  displayName: 'Publish Artefacts'
+    - name: 'Publish Artefacts'
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: $(matrixName)
+        path: './Artefacts'
