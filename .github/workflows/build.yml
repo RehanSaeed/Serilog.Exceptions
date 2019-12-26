@@ -44,5 +44,5 @@ jobs:
     - name: 'Publish Artefacts'
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: $(matrixName)
+        name: ${{matrix.os}}
         path: './Artefacts'
