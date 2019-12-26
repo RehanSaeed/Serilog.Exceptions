@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  - create
+  - pull_request
+  - push
+
+jobs:
+  build:
+    name: Build-${{matrix.os}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+    - uses: actions/checkout@v1
+    - name: 'Install .NET Core SDK'
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: 'Install Cake Tool'
+      run: 'dotnet tool install --global Cake.Tool'
+      shell: pwsh
+      #failOnStderr: true $ErrorActionPreference = 'stop'
+    - name: 'Dotnet Cake Build'
+      run: 'dotnet cake --target=Build'
+      shell: pwsh
+      #failOnStderr: true
+    - name: 'Dotnet Cake Test'
+      run: 'dotnet cake --target=Test'
+      shell: pwsh
+      #failOnStderr: true
+    - name: 'Dotnet Cake Pack'
+      run: 'dotnet cake --target=Pack'
+      shell: pwsh
+      #failOnStderr: true
+    #- task: PublishTestResults@2
+    #  displayName: 'Publish Test Results'
+    #  inputs:
+    #    testResultsFormat: 'VSTest'
+    #    testResultsFiles: '**/*.trx'
+    #- publish: './Artefacts'
+    #  artifact: $(matrixName)
+    #  displayName: 'Publish Artefacts'
