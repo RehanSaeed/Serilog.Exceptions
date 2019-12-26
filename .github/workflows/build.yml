@@ -29,15 +29,15 @@ jobs:
       shell: pwsh
       #failOnStderr: true $ErrorActionPreference = 'stop'
     - name: 'Dotnet Cake Build'
-      run: 'dotnet cake --target=Build'
+      run: 'dotnet-cake --target=Build'
       shell: pwsh
       #failOnStderr: true
     - name: 'Dotnet Cake Test'
-      run: 'dotnet cake --target=Test'
+      run: 'dotnet-cake --target=Test'
       shell: pwsh
       #failOnStderr: true
     - name: 'Dotnet Cake Pack'
-      run: 'dotnet cake --target=Pack'
+      run: 'dotnet-cake --target=Pack'
       shell: pwsh
       #failOnStderr: true
     #- task: PublishTestResults@2
