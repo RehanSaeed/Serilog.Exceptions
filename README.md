@@ -1,4 +1,4 @@
-![Schema.NET Banner](https://media.githubusercontent.com/media/RehanSaeed/Serilog.Exceptions/master/Images/Banner.png)
+![Schema.NET Banner](Images/Banner.png)
 
 [![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.svg)](https://www.nuget.org/packages/Serilog.Exceptions/) [![Serilog.Exceptions package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/212043f6-5fe5-4c79-949e-162156b89894/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=212043f6-5fe5-4c79-949e-162156b89894&preferRelease=true) [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/RehanSaeedUK) [![Twitter Follow](https://img.shields.io/twitter/follow/rehansaeeduk.svg?style=social&label=Follow)](https://twitter.com/RehanSaeedUK)
 
@@ -6,7 +6,7 @@ Serilog.Exceptions is an add-on to [Serilog](https://serilog.net) to log excepti
 
 ## What Does It Do?
 
-Your JSON logs will now be supplemented with detailed exception information and even custom exception properties. Here is an example of what happens when you log a DbEntityValidationException from EntityFramework (This exception is notorious for having deeply nested custom properties which are not included in the `.ToString()`).
+Your JSON logs will now be supplemented with detailed exception information and even custom exception properties. Here is an example of what happens when you log a `DbEntityValidationException` from EntityFramework (This exception is notorious for having deeply nested custom properties which are not included in the `.ToString()`).
 
 ```csharp
 try
@@ -63,7 +63,7 @@ The code above logs the following:
 
 Add the [Serilog.Exceptions](https://www.nuget.org/packages/Serilog.Exceptions/) NuGet package to your project using the NuGet Package Manager or run the following command in the Package Console Window:
 
-```
+```powershell
 Install-Package Serilog.Exceptions
 ```
 
@@ -156,11 +156,11 @@ Currently following options are supported:
 - `RootName`: The property name which will hold destructured exception, `ExceptionDetail` by default.
 - `Filter`: The object implementing `IExceptionPropertyFilter` that will have a chance to filter properties just before they are put in destructured exception object. Go to "Filtering properties" section for details.
 - `DestructuringDepth`: The maximum depth of reflection based recursive destructuring process.
-- `ReflectionBasedDestructurer`: Reflection based destructurer is enabled by default, but can be disabled in case you want to have compelete control over destructuring process. You will have to register destructurers for all exceptions explicitly.
+- `ReflectionBasedDestructurer`: Reflection based destructurer is enabled by default, but can be disabled in case you want to have complete control over destructuring process. You will have to register destructurers for all exceptions explicitly.
 
 ## Filtering properties
 
-You may want to skip some properties of all or part your exception classes without directly creating or modyfying custom destructurers. Serilog.Exceptions supports this functionality using a filter.
+You may want to skip some properties of all or part your exception classes without directly creating or modifying custom destructurers. Serilog.Exceptions supports this functionality using a filter.
 
 Most typical use case is the need to skip `StackTrace` and `TargetSite`. Serilog is already reporting them so you may want Serilog.Exceptions to skip them to save space and processing time. To do that you just need to modify a line in configuration:
 
