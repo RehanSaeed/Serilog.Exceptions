@@ -12,8 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		azure-pipelines.yml = azure-pipelines.yml
 		build.cake = build.cake
 		.github\workflows\build.yml = .github\workflows\build.yml
-		CHANGELOG.md = CHANGELOG.md
 		dotnet-tools.json = dotnet-tools.json
+		Key.snk = Key.snk
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{C5508012-7216-4ABE-AB2F-B166ED5FF94F}"
