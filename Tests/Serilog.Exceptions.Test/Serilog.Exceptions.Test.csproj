@@ -2,14 +2,11 @@
 
   <PropertyGroup Label="Build">
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Label="Signing">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../Key.snk</AssemblyOriginatorKeyFile>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
   </PropertyGroup>
 
   <ItemGroup Label="Project References">
@@ -31,12 +28,6 @@
     <PackageReference Include="NSubstitute" Version="4.2.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-  </ItemGroup>
-
-  <ItemGroup Label="Analyzer Package References">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" PrivateAssets="All" Version="2.9.8" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="All" Version="16.5.132" />
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.1.118" />
   </ItemGroup>
 
   <ItemGroup>
