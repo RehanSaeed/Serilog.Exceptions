@@ -4,8 +4,8 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System.Collections.Generic;
     using System.Globalization;
     using FluentAssertions;
+    using Moq;
     using Newtonsoft.Json.Linq;
-    using NSubstitute;
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
     using Serilog.Exceptions.Filters;
@@ -113,13 +113,13 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             // Arrange
             var exception = new Exception();
-            var filter = Substitute.For<IExceptionPropertyFilter>();
+            var filterMock = new Mock<IExceptionPropertyFilter>();
 
             // Act
-            LogAndDestructureException(exception, new DestructuringOptionsBuilder().WithFilter(filter));
+            LogAndDestructureException(exception, new DestructuringOptionsBuilder().WithFilter(filterMock.Object));
 
             // Assert
-            filter.Received().ShouldPropertyBeFiltered(exception, "StackTrace", null);
+            filterMock.Verify(x => x.ShouldPropertyBeFiltered(exception, "StackTrace", null));
         }
 
         [Fact]
