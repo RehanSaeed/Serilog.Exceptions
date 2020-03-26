@@ -3,7 +3,6 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using FluentAssertions;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Serilog.Exceptions.Core;
@@ -37,7 +36,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var writtenJson = jsonWriter.ToString();
-            writtenJson.Should().Contain(TestContext.UserIdIDoNotWantToSee);
+            Assert.Contains(TestContext.UserIdIDoNotWantToSee, writtenJson, StringComparison.Ordinal);
         }
 
         [Fact]
@@ -63,7 +62,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var writtenJson = jsonWriter.ToString();
-            writtenJson.Should().NotContain(TestContext.UserIdIDoNotWantToSee);
+            Assert.DoesNotContain(TestContext.UserIdIDoNotWantToSee, writtenJson, StringComparison.Ordinal);
         }
 
         internal class User
