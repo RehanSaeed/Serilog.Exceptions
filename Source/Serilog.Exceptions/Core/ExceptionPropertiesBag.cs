@@ -48,7 +48,7 @@ namespace Serilog.Exceptions.Core
                 throw new InvalidOperationException($"Cannot add exception property '{key}' to bag, after results were already collected");
             }
 
-            if (this.filter != null)
+            if (this.filter is object)
             {
                 if (this.filter.ShouldPropertyBeFiltered(this.exception, key, value))
                 {

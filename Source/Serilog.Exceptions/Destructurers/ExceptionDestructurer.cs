@@ -179,7 +179,7 @@ namespace Serilog.Exceptions.Destructurers
                 foreach (var dangerousType in GetNotHandledByMonoTypes())
                 {
                     var type = Type.GetType(dangerousType);
-                    if (type != null)
+                    if (type is object)
                     {
                         targetTypes.Add(type);
                     }
@@ -253,13 +253,13 @@ namespace Serilog.Exceptions.Destructurers
             propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
 
 #if NET461 || NET472
-            if (exception.TargetSite != null)
+            if (exception.TargetSite is object)
             {
                 propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());
             }
 #endif
 
-            if (exception.InnerException != null)
+            if (exception.InnerException is object)
             {
                 propertiesBag.AddProperty(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
             }
