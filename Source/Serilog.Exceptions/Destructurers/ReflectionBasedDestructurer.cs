@@ -92,7 +92,7 @@ namespace Serilog.Exceptions.Destructurers
                 level: 0,
                 nextCyclicRefId: ref nextCyclicRefId);
 
-            this.AppendTypeIfPossible(propertiesBag, exception.GetType());
+            AppendTypeIfPossible(propertiesBag, exception.GetType());
         }
 
         private static string GetOrGenerateRefId(ref int nextCyclicRefId, IDictionary<string, object> destructuredObject)
@@ -130,6 +130,26 @@ namespace Serilog.Exceptions.Destructurers
                 .ToArray();
 
         private static object DestructureUri(Uri value) => value.ToString();
+
+        private static void AppendTypeIfPossible(IExceptionPropertiesBag propertiesBag, Type valueType)
+        {
+            if (propertiesBag.ContainsProperty("Type"))
+            {
+                if (!propertiesBag.ContainsProperty("$Type"))
+                {
+                    propertiesBag.AddProperty("$Type", valueType.FullName);
+                }
+                else
+                {
+                    // If both "Type" and "$Type" are present
+                    // we just give up appending exception type
+                }
+            }
+            else
+            {
+                propertiesBag.AddProperty("Type", valueType.FullName);
+            }
+        }
 
         private void AppendProperties(
             object value,
@@ -398,26 +418,6 @@ namespace Serilog.Exceptions.Destructurers
                 }
 
                 return reflectionInfo;
-            }
-        }
-
-        private void AppendTypeIfPossible(IExceptionPropertiesBag propertiesBag, Type valueType)
-        {
-            if (propertiesBag.ContainsProperty("Type"))
-            {
-                if (!propertiesBag.ContainsProperty("$Type"))
-                {
-                    propertiesBag.AddProperty("$Type", valueType.FullName);
-                }
-                else
-                {
-                    // If both "Type" and "$Type" are present
-                    // we just give up appending exception type
-                }
-            }
-            else
-            {
-                propertiesBag.AddProperty("Type", valueType.FullName);
             }
         }
 
