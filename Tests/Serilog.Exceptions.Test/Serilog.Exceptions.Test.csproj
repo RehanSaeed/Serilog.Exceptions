@@ -11,7 +11,6 @@
 
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\..\Source\Serilog.Exceptions.EntityFrameworkCore\Serilog.Exceptions.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\Source\Serilog.Exceptions.SqlServer\Serilog.Exceptions.SqlServer.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
 

@@ -88,6 +88,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\release-drafter.yml = .github\workflows\release-drafter.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.MsSqlServer", "Source\Serilog.Exceptions.MsSqlServer\Serilog.Exceptions.MsSqlServer.csproj", "{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,10 @@ Global
 		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6603A53-F254-43ED-9A03-08D95F8F3BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,6 +139,7 @@ Global
 		{C50E9892-B2DF-43A6-9E00-BA2952933FA4} = {D2CAFFAF-CBF6-493A-AA61-4916FE7D586C}
 		{2C245036-D7F6-4F7C-9BB6-5AFBCCE480F7} = {76FBEEA2-0F88-487E-99C3-5D865CBE79B6}
 		{4F089B23-3121-4935-B24E-7A9A497BD9FE} = {2C245036-D7F6-4F7C-9BB6-5AFBCCE480F7}
+		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}
