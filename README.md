@@ -112,7 +112,8 @@ Add the `SqlExceptionDestructurer` during setup:
 
 ### Serilog.Exceptions.MsSqlServer
 
-[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.MsSqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.MsSqlServer/) [![Serilog.Exceptions.MsSqlServer package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/67be830c-2c0f-4df8-be30-771d817b382f/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=67be830c-2c0f-4df8-be30-771d817b382f&preferRelease=true)
+[![NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.MsSqlServer.svg)](https://www.nuget.org/packages/Serilog.Exceptions.MsSqlServer/) 
+[![Serilog.Exceptions.MsSqlServer package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/dce98084-312a-4939-b879-07bc25734572/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=dce98084-312a-4939-b879-07bc25734572&preferRelease=true)
 
 Add the [Serilog.Exceptions.MsSqlServer](https://www.nuget.org/packages/Serilog.Exceptions.MsSqlServer/) NuGet package to your project to avoid the reflection based destructurer for `SqlException` when using [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient/):
 
