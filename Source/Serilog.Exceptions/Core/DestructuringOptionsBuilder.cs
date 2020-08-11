@@ -56,7 +56,7 @@ namespace Serilog.Exceptions.Core
         /// <summary>
         /// Gets a value indicating whether to disable the reflection based destructurer.
         /// </summary>
-        public bool DisableReflectionBasedDestructurer { get; private set; } = false;
+        public bool DisableReflectionBasedDestructurer { get; private set; }
 
         /// <summary>
         /// Gets a collection of destructurers that will be used to handle exception.
