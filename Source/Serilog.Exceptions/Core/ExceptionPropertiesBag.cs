@@ -15,7 +15,7 @@ namespace Serilog.Exceptions.Core
         /// We keep a note on whether the results were collected to be sure that after that there are no changes. This
         /// is the application of fail-fast principle.
         /// </summary>
-        private bool resultsCollected = false;
+        private bool resultsCollected;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionPropertiesBag"/> class.
