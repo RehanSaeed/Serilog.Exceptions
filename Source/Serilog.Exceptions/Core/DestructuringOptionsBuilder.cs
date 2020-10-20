@@ -24,6 +24,7 @@ namespace Serilog.Exceptions.Core
             new ReflectionTypeLoadExceptionDestructurer(),
             new OperationCanceledExceptionDestructurer(),
             new TaskCanceledExceptionDestructurer(),
+            new SocketExceptionDestructurer(),
         };
 
         /// <summary>
