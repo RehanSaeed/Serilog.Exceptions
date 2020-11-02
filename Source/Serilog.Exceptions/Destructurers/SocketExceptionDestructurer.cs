@@ -79,9 +79,11 @@ namespace Serilog.Exceptions.Destructurers
 
 #pragma warning disable CA1062 // Validate arguments of public methods
             var socketException = (SocketException)exception;
-            _ = SocketErrorDocumentationBySocketError.TryGetValue(socketException.SocketErrorCode, out var documentation);
             propertiesBag.AddProperty(nameof(SocketException.SocketErrorCode), socketException.SocketErrorCode);
-            propertiesBag.AddProperty(nameof(SocketException.SocketErrorCode) + "Documentation", documentation ?? "Unknown SocketErrorCode value " + socketException.SocketErrorCode);
+            if (SocketErrorDocumentationBySocketError.TryGetValue(socketException.SocketErrorCode, out var documentation))
+            {
+                propertiesBag.AddProperty(nameof(SocketException.SocketErrorCode) + "Message", documentation);
+            }
 #pragma warning restore CA1062 // Validate arguments of public methods
         }
     }
