@@ -42,6 +42,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(rootObject, propertyKey, propertyValue);
         }
 
+        public static void Test_LoggedExceptionDoesNotContainProperty(Exception exception, string propertyKey)
+        {
+            var rootObject = LogAndDestructureException(exception);
+            Assert_JObjectContainsPropertiesExceptionDetailsWithoutProperty(rootObject, propertyKey);
+        }
+
         public static JArray ExtractInnerExceptionsProperty(JObject jObject)
         {
             var exceptionDetailValue = ExtractExceptionDetails(jObject);
@@ -89,6 +95,19 @@ namespace Serilog.Exceptions.Test.Destructurers
             }
         }
 
+        public static void Assert_DoesNotContainProperty(
+            JObject jObject,
+            string propertyKey)
+        {
+            if (jObject is null)
+            {
+                throw new ArgumentNullException(nameof(jObject));
+            }
+
+            jObject.Properties().Should()
+                .NotContain(x => x.Name == propertyKey, $"property with name {propertyKey} was not expected");
+        }
+
         public static JProperty ExtractProperty(JObject jObject, string propertyKey)
         {
             if (jObject is null)
@@ -108,6 +127,14 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             var exceptionDetailValue = ExtractExceptionDetails(jObject);
             Assert_ContainsPropertyWithValue(exceptionDetailValue, propertyKey, propertyValue);
+        }
+
+        public static void Assert_JObjectContainsPropertiesExceptionDetailsWithoutProperty(
+            JObject jObject,
+            string propertyKey)
+        {
+            var exceptionDetailValue = ExtractExceptionDetails(jObject);
+            Assert_DoesNotContainProperty(exceptionDetailValue, propertyKey);
         }
 
         internal class TestTextWriterSink : ILogEventSink

@@ -19,5 +19,12 @@ namespace Serilog.Exceptions.Test.Destructurers
             var socketException = new SocketException((int)SocketError.ConnectionRefused);
             Test_LoggedExceptionContainsProperty(socketException, nameof(SocketException.SocketErrorCode) + "Message", "The remote host is actively refusing a connection.");
         }
+
+        [Fact]
+        public void SocketException_SocketErrorCodeDocumentationWhenSocketErrorCodeUnknown()
+        {
+            var socketException = new SocketException(42);
+            Test_LoggedExceptionDoesNotContainProperty(socketException, nameof(SocketException.SocketErrorCode) + "Message");
+        }
     }
 }
