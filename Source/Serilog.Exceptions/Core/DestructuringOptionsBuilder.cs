@@ -100,7 +100,7 @@ namespace Serilog.Exceptions.Core
         /// <returns>Options builder for method chaining.</returns>
         public DestructuringOptionsBuilder WithFilter(IExceptionPropertyFilter filter)
         {
-            if (this.Filter is object)
+            if (this.Filter is not null)
             {
                 throw new InvalidOperationException(
                     string.Format(CultureInfo.InvariantCulture, Resources.FilterAlreadySet, nameof(CompositeExceptionPropertyFilter)));

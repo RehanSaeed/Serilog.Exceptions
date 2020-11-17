@@ -176,7 +176,7 @@ namespace Serilog.Exceptions.Destructurers
                 catch (TargetInvocationException targetInvocationException)
                 {
                     var innerException = targetInvocationException.InnerException;
-                    if (innerException is object)
+                    if (innerException is not null)
                     {
                         addPropertyAction(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }
@@ -361,7 +361,7 @@ namespace Serilog.Exceptions.Destructurers
                 catch (TargetInvocationException targetInvocationException)
                 {
                     var innerException = targetInvocationException.InnerException;
-                    if (innerException is object)
+                    if (innerException is not null)
                     {
                         values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                     }

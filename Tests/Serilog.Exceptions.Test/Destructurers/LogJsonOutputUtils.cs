@@ -87,7 +87,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             var paramNameProperty = ExtractProperty(jObject, propertyKey);
             var paramName = Assert.IsType<JValue>(paramNameProperty.Value);
-            if (paramName.Value is object)
+            if (paramName.Value is not null)
             {
                 var paramNameString = paramName.Value.Should()
                     .BeOfType<string>($"{propertyKey} value was expected to a string").Which;

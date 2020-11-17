@@ -60,11 +60,11 @@ namespace Serilog.Exceptions.Core
                 throw new ArgumentNullException(nameof(propertyFactory));
             }
 
-            if (logEvent.Exception is object)
+            if (logEvent.Exception is not null)
             {
                 var dataDictionary = this.DestructureException(logEvent.Exception);
 
-                if (dataDictionary is object)
+                if (dataDictionary is not null)
                 {
                     logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
                         this.destructuringOptions.RootName,
