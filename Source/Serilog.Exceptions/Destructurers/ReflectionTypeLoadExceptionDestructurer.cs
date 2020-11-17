@@ -24,7 +24,7 @@ namespace Serilog.Exceptions.Destructurers
 
 #pragma warning disable CA1062 // Validate arguments of public methods
             var reflectionTypeLoadException = (ReflectionTypeLoadException)exception;
-            if (reflectionTypeLoadException.LoaderExceptions is object)
+            if (reflectionTypeLoadException.LoaderExceptions is not null)
             {
                 propertiesBag.AddProperty(
                     nameof(ReflectionTypeLoadException.LoaderExceptions),

@@ -52,7 +52,7 @@ namespace Serilog.Exceptions.Destructurers
             var taskStatus = task.Status.ToString("G");
             var taskCreationOptions = task.CreationOptions.ToString("F");
 
-            if (task.IsFaulted && task.Exception is object)
+            if (task.IsFaulted && task.Exception is not null)
             {
                 return new
                 {
