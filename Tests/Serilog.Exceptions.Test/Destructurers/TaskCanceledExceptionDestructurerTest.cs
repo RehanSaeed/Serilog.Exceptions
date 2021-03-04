@@ -10,7 +10,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
     public sealed class TaskCanceledExceptionDestructurerTest : IDisposable
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource cancellationTokenSource = new();
 
         [Fact]
         public void TaskCanceledException_SimplePropertiesAreAttached()

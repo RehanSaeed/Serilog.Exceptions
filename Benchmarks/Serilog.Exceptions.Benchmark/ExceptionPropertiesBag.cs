@@ -9,7 +9,7 @@ namespace Serilog.Exceptions.Benchmark
     {
         private readonly Exception exception;
         private readonly IExceptionPropertyFilter filter;
-        private readonly Dictionary<string, object> properties = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> properties = new();
 
         // We keep a note on whether the results were collected to be sure that
         // after that there are no changes. This is the application of fail-fast principle.

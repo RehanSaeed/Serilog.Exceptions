@@ -42,7 +42,7 @@ namespace Serilog.Exceptions.Core
                 nameof(Exception.StackTrace));
 #endif
 
-        private readonly List<IExceptionDestructurer> destructurers = new List<IExceptionDestructurer>();
+        private readonly List<IExceptionDestructurer> destructurers = new();
 
         /// <summary>
         /// Gets the name of the property which value will be filled with destructured exception.

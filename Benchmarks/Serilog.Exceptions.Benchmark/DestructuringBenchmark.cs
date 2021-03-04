@@ -17,8 +17,8 @@ namespace Serilog.Exceptions.Benchmark
     [SimpleJob(RuntimeMoniker.NetCoreApp30)]
     public class DestructuringBenchmark
     {
-        private readonly ReflectionBasedDestructurer reflectionBasedDestructurer = new ReflectionBasedDestructurer(10);
-        private readonly BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new BenchmarkExceptionDestructurer();
+        private readonly ReflectionBasedDestructurer reflectionBasedDestructurer = new(10);
+        private readonly BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new();
         private BenchmarkException benchmarkException;
 
         [GlobalSetup]
