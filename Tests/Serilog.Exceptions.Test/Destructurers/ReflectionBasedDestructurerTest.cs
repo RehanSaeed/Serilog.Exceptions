@@ -432,7 +432,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         private static ReflectionBasedDestructurer CreateReflectionBasedDestructurer() =>
-            new ReflectionBasedDestructurer(10);
+            new(10);
 
         public class MyObject
         {

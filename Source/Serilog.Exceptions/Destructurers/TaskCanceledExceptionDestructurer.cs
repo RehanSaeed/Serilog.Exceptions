@@ -54,7 +54,9 @@ namespace Serilog.Exceptions.Destructurers
 
             if (task.IsFaulted && task.Exception is not null)
             {
+#pragma warning disable IDE0050 // Convert to tuple
                 return new
+#pragma warning restore IDE0050 // Convert to tuple
                 {
                     task.Id,
                     Status = taskStatus,
@@ -63,7 +65,9 @@ namespace Serilog.Exceptions.Destructurers
                 };
             }
 
+#pragma warning disable IDE0050 // Convert to tuple
             return new
+#pragma warning restore IDE0050 // Convert to tuple
             {
                 task.Id,
                 Status = taskStatus,
