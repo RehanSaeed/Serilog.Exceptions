@@ -67,7 +67,7 @@ namespace Serilog.Exceptions.Core
         /// <summary>
         /// Gets a global filter, that will be applied to every destructured property just before it is added to the result.
         /// </summary>
-        public IExceptionPropertyFilter Filter { get; private set; }
+        public IExceptionPropertyFilter? Filter { get; private set; }
 
         /// <summary>
         /// Accumulates destructurers to be used by <see cref="ExceptionEnricher"/>.

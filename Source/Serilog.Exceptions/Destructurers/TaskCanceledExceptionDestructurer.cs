@@ -22,7 +22,7 @@ namespace Serilog.Exceptions.Destructurers
         public override void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
+            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
         {
 #pragma warning disable CA1062 // Validate arguments of public methods
             base.Destructure(exception, propertiesBag, destructureException);
@@ -41,8 +41,8 @@ namespace Serilog.Exceptions.Destructurers
         /// <param name="innerDestructure">The inner destructure.</param>
         /// <returns>The destructured task.</returns>
         internal static object DestructureTask(
-            Task task,
-            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure)
+            Task? task,
+            Func<Exception, IReadOnlyDictionary<string, object?>?> innerDestructure)
         {
             if (task is null)
             {

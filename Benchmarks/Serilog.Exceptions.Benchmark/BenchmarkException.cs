@@ -27,10 +27,10 @@ namespace Serilog.Exceptions.Benchmark
         {
         }
 
-        public string ParamString { get; set; }
+        public string? ParamString { get; set; }
 
         public int ParamInt { get; set; }
 
-        public Point Point { get; set; }
+        public Point? Point { get; set; }
     }
 }

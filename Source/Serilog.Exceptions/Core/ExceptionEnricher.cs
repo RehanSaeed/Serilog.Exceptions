@@ -74,7 +74,7 @@ namespace Serilog.Exceptions.Core
             }
         }
 
-        private IReadOnlyDictionary<string, object> DestructureException(Exception exception)
+        private IReadOnlyDictionary<string, object?>? DestructureException(Exception exception)
         {
             var exceptionType = exception.GetType();
 

@@ -13,14 +13,14 @@ namespace Serilog.Exceptions.Core
         /// method.
         /// </summary>
         /// <returns>Dictionary with all the properties names and values that were added.</returns>
-        IReadOnlyDictionary<string, object> GetResultDictionary();
+        IReadOnlyDictionary<string, object?> GetResultDictionary();
 
         /// <summary>
         /// Adds a property to the bag.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        void AddProperty(string key, object value);
+        void AddProperty(string key, object? value);
 
         /// <summary>
         /// Returns <c>true</c> if given key is already present in the bag.

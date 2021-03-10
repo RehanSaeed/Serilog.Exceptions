@@ -73,7 +73,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void ArgumentException_WithoutStackTrace_ContainsNullStackTrace()
         {
             var applicationException = new ArgumentException();
-            Test_LoggedExceptionContainsProperty(applicationException, "StackTrace", null);
+            Test_LoggedExceptionContainsProperty(applicationException, "StackTrace", null!);
         }
 
         [Fact]
@@ -164,7 +164,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             }
             catch (ArgumentException ex)
             {
-                Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace.ToString(CultureInfo.InvariantCulture));
+                Test_LoggedExceptionContainsProperty(ex, "StackTrace", ex.StackTrace?.ToString(CultureInfo.InvariantCulture));
             }
         }
 

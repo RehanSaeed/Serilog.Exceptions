@@ -2,7 +2,6 @@ namespace Serilog.Exceptions.Destructurers
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using Serilog.Exceptions.Core;
 
@@ -18,7 +17,7 @@ namespace Serilog.Exceptions.Destructurers
         public override void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
+            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
         {
             base.Destructure(exception, propertiesBag, destructureException);
 
@@ -28,9 +27,29 @@ namespace Serilog.Exceptions.Destructurers
             {
                 propertiesBag.AddProperty(
                     nameof(ReflectionTypeLoadException.LoaderExceptions),
-                    reflectionTypeLoadException.LoaderExceptions.Select(destructureException).ToList());
+                    GetLoaderExceptionsValue(reflectionTypeLoadException.LoaderExceptions, destructureException));
             }
 #pragma warning restore CA1062 // Validate arguments of public methods
+        }
+
+        private static List<IReadOnlyDictionary<string, object?>> GetLoaderExceptionsValue(
+            Exception?[] exceptions,
+            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
+        {
+            var loaderExceptionValues = new List<IReadOnlyDictionary<string, object?>>();
+            foreach (var exception in exceptions)
+            {
+                if (exception is not null)
+                {
+                    var dictionary = destructureException(exception);
+                    if (dictionary is not null)
+                    {
+                        loaderExceptionValues.Add(dictionary);
+                    }
+                }
+            }
+
+            return loaderExceptionValues;
         }
     }
 }
