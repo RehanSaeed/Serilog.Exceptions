@@ -8,26 +8,26 @@ namespace Serilog.Exceptions.Benchmark
     internal class ExceptionPropertiesBag : IExceptionPropertiesBag
     {
         private readonly Exception exception;
-        private readonly IExceptionPropertyFilter filter;
-        private readonly Dictionary<string, object> properties = new();
+        private readonly IExceptionPropertyFilter? filter;
+        private readonly Dictionary<string, object?> properties = new();
 
         // We keep a note on whether the results were collected to be sure that
         // after that there are no changes. This is the application of fail-fast principle.
         private bool resultsCollected;
 
-        public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
+        public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter? filter = null)
         {
             this.exception = exception ?? throw new ArgumentNullException(nameof(exception));
             this.filter = filter;
         }
 
-        public IReadOnlyDictionary<string, object> GetResultDictionary()
+        public IReadOnlyDictionary<string, object?> GetResultDictionary()
         {
             this.resultsCollected = true;
             return this.properties;
         }
 
-        public void AddProperty(string key, object value)
+        public void AddProperty(string key, object? value)
         {
             if (key is null)
             {

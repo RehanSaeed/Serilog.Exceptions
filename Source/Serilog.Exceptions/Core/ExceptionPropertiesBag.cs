@@ -8,8 +8,8 @@ namespace Serilog.Exceptions.Core
     internal class ExceptionPropertiesBag : IExceptionPropertiesBag
     {
         private readonly Exception exception;
-        private readonly IExceptionPropertyFilter filter;
-        private readonly Dictionary<string, object> properties = new();
+        private readonly IExceptionPropertyFilter? filter;
+        private readonly Dictionary<string, object?> properties = new();
 
         /// <summary>
         /// We keep a note on whether the results were collected to be sure that after that there are no changes. This
@@ -22,21 +22,21 @@ namespace Serilog.Exceptions.Core
         /// </summary>
         /// <param name="exception">The exception which properties will be added to the bag.</param>
         /// <param name="filter">Filter that should be applied to each property just before adding it to the bag.</param>
-        public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter filter = null)
+        public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter? filter = null)
         {
             this.exception = exception ?? throw new ArgumentNullException(nameof(exception));
             this.filter = filter;
         }
 
         /// <inheritdoc />
-        public IReadOnlyDictionary<string, object> GetResultDictionary()
+        public IReadOnlyDictionary<string, object?> GetResultDictionary()
         {
             this.resultsCollected = true;
             return this.properties;
         }
 
         /// <inheritdoc />
-        public void AddProperty(string key, object value)
+        public void AddProperty(string key, object? value)
         {
             if (key is null)
             {

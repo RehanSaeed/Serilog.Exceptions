@@ -9,7 +9,7 @@ namespace Serilog.Exceptions.Test.Filters
         [Fact]
         public void CreationOfCompositeFilter_ForNullFilters_Throws() =>
             Assert.Throws<ArgumentNullException>(
-                () => new CompositeExceptionPropertyFilter(null));
+                () => new CompositeExceptionPropertyFilter(null!));
 
         [Fact]
         public void CreationOfCompositeFilter_ForEmptyFilters_Throws() =>
@@ -21,7 +21,7 @@ namespace Serilog.Exceptions.Test.Filters
         {
             // Act
             var ex = Assert.Throws<ArgumentException>(
-                () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null }));
+                () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null! }));
 
             // Assert
             Assert.Contains("index 0", ex.Message, StringComparison.Ordinal);

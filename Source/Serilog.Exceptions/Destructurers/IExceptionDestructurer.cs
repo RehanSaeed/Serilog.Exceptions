@@ -28,6 +28,6 @@ namespace Serilog.Exceptions.Destructurers
         void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> destructureException);
+            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException);
     }
 }

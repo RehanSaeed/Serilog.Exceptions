@@ -32,7 +32,7 @@ namespace Serilog.Exceptions.Core
         /// they are about to be written to a result structure. If no filter is set no properties are going to be
         /// rejected. Filter is applied to every property regardless of which destructurer was used.
         /// </summary>
-        IExceptionPropertyFilter Filter { get; }
+        IExceptionPropertyFilter? Filter { get; }
 
         /// <summary>
         /// Gets a value indicating whether to disable the reflection based destructurer.

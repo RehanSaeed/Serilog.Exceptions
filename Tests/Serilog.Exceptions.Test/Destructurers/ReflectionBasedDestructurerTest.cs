@@ -34,10 +34,10 @@ namespace Serilog.Exceptions.Test.Destructurers
 #if NET461 || NET472
             Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
-            Assert.NotEmpty(properties[nameof(TestException.StackTrace)].ToString());
+            Assert.NotEmpty(properties[nameof(TestException.StackTrace)]?.ToString());
             Assert.Equal("Serilog.Exceptions.Test", properties[nameof(TestException.Source)]);
             Assert.Equal(-2146233088, properties[nameof(TestException.HResult)]);
-            Assert.Contains(typeof(TestException).FullName, properties["Type"].ToString(), StringComparison.Ordinal);
+            Assert.Contains(typeof(TestException).FullName, properties["Type"]?.ToString(), StringComparison.Ordinal);
         }
 
         [Fact]
@@ -71,8 +71,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             var properties = propertiesBag.GetResultDictionary();
-            var data = (IDictionary)properties[nameof(Exception.Data)];
-            var uriDataValue = data["UriDataItem"];
+            var data = (IDictionary?)properties[nameof(Exception.Data)];
+            var uriDataValue = data?["UriDataItem"];
             Assert.IsType<string>(uriDataValue);
             Assert.Equal(uriValue, uriDataValue);
         }
@@ -82,10 +82,12 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             using var cancellationTokenSource = new CancellationTokenSource(0);
 
-            TaskCanceledException exception = null;
+            TaskCanceledException exception;
             try
             {
                 await Task.Delay(1000, cancellationTokenSource.Token).ConfigureAwait(false);
+                Assert.True(false, "TaskCanceledException was not thrown.");
+                return;
             }
             catch (TaskCanceledException taskCancelledException)
             {
@@ -96,7 +98,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
             var properties = propertiesBag.GetResultDictionary();
-            var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
+            var destructuredTaskObject = (IDictionary?)properties[nameof(TaskCanceledException.Task)];
             var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
@@ -118,7 +120,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, InnerDestructurer(CreateReflectionBasedDestructurer()));
 
             var properties = propertiesBag.GetResultDictionary();
-            var destructuredTaskObject = (IDictionary)properties[nameof(TaskCanceledException.Task)];
+            var destructuredTaskObject = (IDictionary?)properties[nameof(TaskCanceledException.Task)];
             var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
@@ -159,8 +161,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
-            var data = (IDictionary)properties[nameof(Exception.Data)];
-            var testStructDataValue = data["data"];
+            var data = (IDictionary?)properties[nameof(Exception.Data)];
+            var testStructDataValue = data?["data"];
             Assert.IsAssignableFrom<TestStruct>(testStructDataValue);
         }
 
@@ -181,8 +183,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var properties = propertiesBag.GetResultDictionary();
-            var data = (IDictionary)properties[nameof(Exception.Data)];
-            var testStructDataValue = data["data"];
+            var data = (IDictionary?)properties[nameof(Exception.Data)];
+            var testStructDataValue = data?["data"];
             var destructuredStructDictionary = Assert.IsAssignableFrom<IDictionary<string, object>>(testStructDataValue);
             Assert.Equal(10, destructuredStructDictionary[nameof(TestClass.ValueType)]);
             Assert.Equal("ABC", destructuredStructDictionary[nameof(TestClass.ReferenceType)]);
@@ -217,9 +219,9 @@ namespace Serilog.Exceptions.Test.Destructurers
             // Parent is depth 1
             // First child is depth 2
             var properties = propertiesBag.GetResultDictionary();
-            var parent = (IDictionary<string, object>)properties[nameof(RecursiveException.Node)];
-            Assert.Equal("PARENT", parent[nameof(RecursiveNode.Name)]);
-            Assert.IsType<RecursiveNode>(parent[nameof(RecursiveNode.Child)]);
+            var parent = (IDictionary<string, object?>?)properties[nameof(RecursiveException.Node)];
+            Assert.Equal("PARENT", parent?[nameof(RecursiveNode.Name)]);
+            Assert.IsType<RecursiveNode>(parent?[nameof(RecursiveNode.Child)]);
         }
 
         [Fact]
@@ -247,12 +249,14 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
-            var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObject"];
+            var myObject = (Dictionary<string, object?>?)result.GetResultDictionary()["MyObject"];
 
-            Assert.Equal("bar", myObject["Foo"]);
-            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference"])["$ref"]);
-            Assert.Equal(myObject["$id"], ((Dictionary<string, object>)myObject["Reference2"])["$ref"]);
-            Assert.Equal("1", myObject["$id"]);
+            Assert.Equal("bar", myObject?["Foo"]);
+            var reference1 = (Dictionary<string, object?>?)myObject?["Reference"];
+            Assert.Equal(myObject?["$id"], reference1?["$ref"]);
+            var reference2 = (Dictionary<string, object?>?)myObject?["Reference2"];
+            Assert.Equal(myObject?["$id"], reference2?["$ref"]);
+            Assert.Equal("1", myObject?["$id"]);
         }
 
         [Fact]
@@ -277,10 +281,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
-            var myObject = (List<object>)result.GetResultDictionary()[nameof(Cyclic2Exception.MyObjectCollection)];
+            var myObject = (List<object?>?)result.GetResultDictionary()[nameof(Cyclic2Exception.MyObjectCollection)];
 
             // exception.MyObjectCollection[0] is still list
-            var firstLevelList = Assert.IsType<List<object>>(myObject[0]);
+            var firstLevelList = Assert.IsType<List<object>>(myObject?[0]);
 
             // exception.MyObjectCollection[0][0] we notice that we would again destructure "cyclic"
             var secondLevelList = Assert.IsType<Dictionary<string, object>>(firstLevelList[0]);
@@ -308,10 +312,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             destructurer.Destructure(exception, result, EmptyDestructurer());
 
             // Assert
-            var myObject = (Dictionary<string, object>)result.GetResultDictionary()["MyObjectDict"];
+            var myObject = (Dictionary<string, object?>?)result.GetResultDictionary()["MyObjectDict"];
 
             // exception.MyObjectDict["Reference"] is still regular dictionary
-            var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject["Reference"]);
+            var firstLevelDict = Assert.IsType<Dictionary<string, object>>(myObject?["Reference"]);
             var id = firstLevelDict["$id"];
             Assert.Equal("1", id);
 
@@ -376,8 +380,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             var properties = propertiesBag.GetResultDictionary();
             var info = properties[nameof(HiddenException.Info)] as IDictionary<string, object>;
-            Assert.Equal(derived.HiddenProperty, info[nameof(DerivedClass<object>.HiddenProperty)]);
-            Assert.Equal(baseClass.HiddenProperty, info[$"{typeof(BaseClass).FullName}.{nameof(BaseClass.HiddenProperty)}"]);
+            Assert.Equal(derived.HiddenProperty, info?[nameof(DerivedClass<object>.HiddenProperty)]);
+            Assert.Equal(baseClass.HiddenProperty, info?[$"{typeof(BaseClass).FullName}.{nameof(BaseClass.HiddenProperty)}"]);
         }
 
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
@@ -400,10 +404,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             reflectionBasedDictionary.Should().BeEquivalentTo(customBasedDictionary);
         }
 
-        private static Func<Exception, IReadOnlyDictionary<string, object>> EmptyDestructurer() =>
+        private static Func<Exception, IReadOnlyDictionary<string, object?>> EmptyDestructurer() =>
             (ex) => new ExceptionPropertiesBag(ex).GetResultDictionary();
 
-        private static Func<Exception, IReadOnlyDictionary<string, object>> InnerDestructurer(
+        private static Func<Exception, IReadOnlyDictionary<string, object?>?> InnerDestructurer(
             IExceptionDestructurer destructurer) =>
             (ex) =>
             {
@@ -428,7 +432,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             }
 
             Assert.True(false, $"{nameof(throwingAction)} did not throw");
-            return null;
+            return null!; // We should never reach this line.
         }
 
         private static ReflectionBasedDestructurer CreateReflectionBasedDestructurer() =>
@@ -436,58 +440,58 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public class MyObject
         {
-            public string Foo { get; set; }
+            public string? Foo { get; set; }
 
-            public MyObject Reference { get; set; }
+            public MyObject? Reference { get; set; }
 
-            public MyObject Reference2 { get; set; }
+            public MyObject? Reference2 { get; set; }
         }
 
         public class CyclicException : Exception
         {
-            public MyObject MyObject { get; set; }
+            public MyObject? MyObject { get; set; }
         }
 
         public class MyObjectCollection : IEnumerable<MyObjectCollection>
         {
-            public string Foo { get; set; }
+            public string? Foo { get; set; }
 
-            public MyObjectCollection Reference { get; set; }
+            public MyObjectCollection? Reference { get; set; }
 
             public IEnumerator<MyObjectCollection> GetEnumerator() =>
-                new List<MyObjectCollection> { this.Reference }.GetEnumerator();
+                new List<MyObjectCollection?> { this.Reference }.GetEnumerator();
 
             IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         }
 
         public class Cyclic2Exception : Exception
         {
-            public MyObjectCollection MyObjectCollection { get; set; }
+            public MyObjectCollection? MyObjectCollection { get; set; }
         }
 
         public class CyclicDictException : Exception
         {
-            public MyObjectDict MyObjectDict { get; set; }
+            public MyObjectDict? MyObjectDict { get; set; }
         }
 
         public class CyclicTaskException : Exception
         {
-            public Task Task { get; set; }
+            public Task? Task { get; set; }
         }
 
         public class MyObjectDict
         {
-            public string Foo { get; set; }
+            public string? Foo { get; set; }
 
 #pragma warning disable CA2227 // Collection properties should be read only
-            public Dictionary<string, object> Reference { get; set; }
+            public Dictionary<string, object>? Reference { get; set; }
 #pragma warning restore CA2227 // Collection properties should be read only
         }
 
         public class TypePropertyException : Exception
         {
 #pragma warning disable CA1721 // Property names should not match get methods
-            public int Type { get; set; }
+            public int? Type { get; set; }
 #pragma warning restore CA1721 // Property names should not match get methods
         }
 
@@ -503,7 +507,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 this.PrivateProperty = "PrivateValue";
             }
 
-            public static string StaticProperty { get; set; }
+            public static string? StaticProperty { get; set; }
 
             public string PublicProperty { get; set; }
 
@@ -546,14 +550,14 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public class RecursiveNode
         {
-            public string Name { get; set; }
+            public string? Name { get; set; }
 
-            public RecursiveNode Child { get; set; }
+            public RecursiveNode? Child { get; set; }
         }
 
         public class RecursiveException : Exception
         {
-            public RecursiveNode Node { get; set; }
+            public RecursiveNode? Node { get; set; }
         }
 
         [Serializable]
@@ -571,7 +575,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         {
             public int ValueType { get; set; }
 
-            public string ReferenceType { get; set; }
+            public string? ReferenceType { get; set; }
         }
 
         internal class BaseClass
@@ -581,7 +585,7 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         internal class DerivedClass<T> : BaseClass
         {
-            public new T HiddenProperty { get; set; }
+            public new T? HiddenProperty { get; set; }
         }
 
 #pragma warning disable CA1064 // Exceptions should be public

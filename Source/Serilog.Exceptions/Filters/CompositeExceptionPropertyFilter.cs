@@ -43,7 +43,7 @@ namespace Serilog.Exceptions.Filters
         }
 
         /// <inheritdoc />
-        public bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object value)
+        public bool ShouldPropertyBeFiltered(Exception exception, string propertyName, object? value)
         {
             for (var i = 0; i < this.filters.Length; ++i)
             {

@@ -11,7 +11,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public void Constructor_GivenNullException_Throws()
         {
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => new ExceptionPropertiesBag(null));
+            var ex = Assert.Throws<ArgumentNullException>(() => new ExceptionPropertiesBag(null!));
 
             // Assert
             Assert.Equal("exception", ex.ParamName);
@@ -56,7 +56,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var properties = new ExceptionPropertiesBag(new Exception(), null);
 
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => properties.AddProperty(null, "value"));
+            var ex = Assert.Throws<ArgumentNullException>(() => properties.AddProperty(null!, "value"));
 
             // Assert
             Assert.Equal("key", ex.ParamName);

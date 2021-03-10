@@ -20,7 +20,7 @@ namespace Serilog.Exceptions.MsSqlServer.Destructurers
         public override void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
+            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
         {
             base.Destructure(exception, propertiesBag, destructureException);
 

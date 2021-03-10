@@ -22,6 +22,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 var targetTypes = new List<Type>
                     {
+#pragma warning disable IDE0001 // Simplify Names
 #if NET461 || NET472
                         typeof(Microsoft.SqlServer.Server.InvalidUdtException),
                         typeof(System.AccessViolationException),
@@ -174,6 +175,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.UnauthorizedAccessException),
                         typeof(System.UriFormatException),
                     };
+#pragma warning restore IDE0001 // Simplify Names
 
 #if NET461 || NET472
                 foreach (var dangerousType in GetNotHandledByMonoTypes())
@@ -193,7 +195,7 @@ namespace Serilog.Exceptions.Destructurers
         public virtual void Destructure(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> destructureException)
+            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
         {
             if (exception is null)
             {
@@ -230,7 +232,7 @@ namespace Serilog.Exceptions.Destructurers
         internal static void DestructureCommonExceptionProperties(
             Exception exception,
             IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object>> innerDestructure,
+            Func<Exception, IReadOnlyDictionary<string, object?>?> innerDestructure,
             Func<System.Collections.IDictionary, object> destructureDataProperty)
         {
             if (exception.Data.Count != 0)

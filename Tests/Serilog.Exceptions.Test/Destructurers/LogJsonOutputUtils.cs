@@ -16,7 +16,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     {
         public static JObject LogAndDestructureException(
             Exception exception,
-            IDestructuringOptions destructuringOptions = null)
+            IDestructuringOptions? destructuringOptions = null)
         {
             // Arrange
             var jsonWriter = new StringWriter();
@@ -36,7 +36,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             return rootObject;
         }
 
-        public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string propertyValue)
+        public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string? propertyValue)
         {
             var rootObject = LogAndDestructureException(exception);
             Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(rootObject, propertyKey, propertyValue);
@@ -83,7 +83,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public static void Assert_ContainsPropertyWithValue(
             JObject jObject,
             string propertyKey,
-            string propertyValue)
+            string? propertyValue)
         {
             var paramNameProperty = ExtractProperty(jObject, propertyKey);
             var paramName = Assert.IsType<JValue>(paramNameProperty.Value);
@@ -123,7 +123,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         public static void Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(
             JObject jObject,
             string propertyKey,
-            string propertyValue)
+            string? propertyValue)
         {
             var exceptionDetailValue = ExtractExceptionDetails(jObject);
             Assert_ContainsPropertyWithValue(exceptionDetailValue, propertyKey, propertyValue);

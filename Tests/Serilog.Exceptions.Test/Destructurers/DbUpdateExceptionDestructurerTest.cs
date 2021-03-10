@@ -67,14 +67,14 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         internal class User
         {
-            public string UserId { get; set; }
+            public string? UserId { get; set; }
         }
 
         internal class TestContext : DbContext
         {
             public const string UserIdIDoNotWantToSee = "I Don't Want To See You";
 
-            public DbSet<User> Users { get; set; }
+            public DbSet<User>? Users { get; set; }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseInMemoryDatabase(databaseName: "TestDebUpdateException");
 
@@ -101,7 +101,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             private readonly IReadOnlyList<EntityEntry> entityEntries;
 
             public TestDbUpdateException(string message, EntityEntry entityEntry)
-                : base(message, (Exception)null) => this.entityEntries = new List<EntityEntry> { entityEntry }.AsReadOnly();
+                : base(message, (Exception)null!) => this.entityEntries = new List<EntityEntry> { entityEntry }.AsReadOnly();
 
             public override IReadOnlyList<EntityEntry> Entries => this.entityEntries;
         }

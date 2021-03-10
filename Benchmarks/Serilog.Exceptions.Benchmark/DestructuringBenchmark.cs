@@ -19,7 +19,7 @@ namespace Serilog.Exceptions.Benchmark
     {
         private readonly ReflectionBasedDestructurer reflectionBasedDestructurer = new(10);
         private readonly BenchmarkExceptionDestructurer benchmarkExceptionDestructurer = new();
-        private BenchmarkException benchmarkException;
+        private BenchmarkException benchmarkException = default!;
 
         [GlobalSetup]
         public void Setup()
@@ -39,36 +39,36 @@ namespace Serilog.Exceptions.Benchmark
             }
         }
 
-        public IReadOnlyDictionary<string, object> DestructureUsingReflectionDestructurer(Exception ex)
+        public IReadOnlyDictionary<string, object?> DestructureUsingReflectionDestructurer(Exception ex)
         {
             var bag = new ExceptionPropertiesBag(ex);
 
             this.reflectionBasedDestructurer.Destructure(
                 ex,
                 bag,
-                null);
+                null!);
 
             return bag.GetResultDictionary();
         }
 
         [Benchmark]
-        public IReadOnlyDictionary<string, object> ReflectionDestructurer() =>
+        public IReadOnlyDictionary<string, object?> ReflectionDestructurer() =>
             this.DestructureUsingReflectionDestructurer(this.benchmarkException);
 
-        public IReadOnlyDictionary<string, object> DestructureUsingCustomDestructurer(Exception ex)
+        public IReadOnlyDictionary<string, object?> DestructureUsingCustomDestructurer(Exception ex)
         {
             var bag = new ExceptionPropertiesBag(ex);
 
             this.benchmarkExceptionDestructurer.Destructure(
                 ex,
                 bag,
-                null);
+                null!);
 
             return bag.GetResultDictionary();
         }
 
         [Benchmark]
-        public IReadOnlyDictionary<string, object> CustomDestructurer() =>
+        public IReadOnlyDictionary<string, object?> CustomDestructurer() =>
             this.DestructureUsingCustomDestructurer(this.benchmarkException);
     }
 }
