@@ -1,0 +1,27 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: Microsoft.EntityFrameworkCore
+    versions:
+    - "> 2.2.0, < 2.3"
+  - dependency-name: Microsoft.EntityFrameworkCore.InMemory
+    versions:
+    - "> 2.2.4, < 2.3"
+  - dependency-name: Microsoft.EntityFrameworkCore.InMemory
+    versions:
+    - 5.0.3
+    - 5.0.4
+    - 5.0.5
+  - dependency-name: Microsoft.EntityFrameworkCore
+    versions:
+    - 5.0.3
+    - 5.0.4
+    - 5.0.5
+  - dependency-name: Microsoft.Data.SqlClient
+    versions:
+    - 2.1.2
