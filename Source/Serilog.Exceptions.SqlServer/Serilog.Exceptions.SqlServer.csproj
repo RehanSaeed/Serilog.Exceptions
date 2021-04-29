@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References (.NET)" Condition="'$(TargetFramework)' == 'net5.0' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netstandard1.6' OR '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
 </Project>
