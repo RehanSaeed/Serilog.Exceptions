@@ -9,6 +9,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
     using Xunit;
+    using Xunit.Abstractions;
     using static LogJsonOutputUtils;
 
     public class ReflectionBasedDestructurerTest
@@ -189,6 +190,8 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal(10, destructuredStructDictionary[nameof(TestClass.ValueType)]);
             Assert.Equal("ABC", destructuredStructDictionary[nameof(TestClass.ReferenceType)]);
         }
+
+
 
         [Fact]
         public void DestructuringDepthIsLimitedByConfiguredDepth()
@@ -384,6 +387,21 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal(baseClass.HiddenProperty, info?[$"{typeof(BaseClass).FullName}.{nameof(BaseClass.HiddenProperty)}"]);
         }
 
+        [Fact]
+        public void CanDestructureObjectWithRedefinedProperty()
+        {
+
+            var exception = new TestExceptionClassWithNewDefinition() { PublicProperty = 20 };
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
+
+            var properties = propertiesBag.GetResultDictionary();
+            var info = properties[nameof(TestExceptionClassWithNewDefinition.PublicProperty)];
+        }
+
+        
+
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
             IExceptionDestructurer customDestructurer)
@@ -576,6 +594,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             public int ValueType { get; set; }
 
             public string? ReferenceType { get; set; }
+        }
+
+        internal class TestExceptionClassWithNewDefinition : TestException
+        {
+            public new int PublicProperty { get; set; }
         }
 
         internal class BaseClass
