@@ -191,8 +191,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             Assert.Equal("ABC", destructuredStructDictionary[nameof(TestClass.ReferenceType)]);
         }
 
-
-
         [Fact]
         public void DestructuringDepthIsLimitedByConfiguredDepth()
         {
@@ -390,7 +388,6 @@ namespace Serilog.Exceptions.Test.Destructurers
         [Fact]
         public void CanDestructureObjectWithRedefinedProperty()
         {
-
             var exception = new TestExceptionClassWithNewDefinition() { PublicProperty = 20 };
 
             var propertiesBag = new ExceptionPropertiesBag(exception);
@@ -399,8 +396,6 @@ namespace Serilog.Exceptions.Test.Destructurers
             var properties = propertiesBag.GetResultDictionary();
             var info = properties[nameof(TestExceptionClassWithNewDefinition.PublicProperty)];
         }
-
-        
 
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
