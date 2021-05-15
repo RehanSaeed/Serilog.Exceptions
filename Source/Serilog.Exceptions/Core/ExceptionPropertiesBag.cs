@@ -78,6 +78,7 @@ namespace Serilog.Exceptions.Core
 #endif
         }
 
+#if !NET5_0
         /// <summary>
         /// We want to be as robust as possible
         /// so even in case of multiple properties with the same name
@@ -95,4 +96,5 @@ namespace Serilog.Exceptions.Core
             return key;
         }
     }
+#endif
 }
