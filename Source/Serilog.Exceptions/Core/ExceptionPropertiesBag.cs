@@ -95,6 +95,6 @@ namespace Serilog.Exceptions.Core
 
             return key;
         }
-    }
 #endif
+    }
 }
