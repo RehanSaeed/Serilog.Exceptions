@@ -56,9 +56,23 @@ namespace Serilog.Exceptions.Core
                 }
             }
 
+            this.AddPairToProperties(key, value);
+        }
+
+        private void AddPairToProperties(string key, object? value)
+        {
+#if NET5_0
+            int i = 0;
+            while (!this.properties.TryAdd(key, value) && i < 5)
+            {
+                key += "$";
+                i++;
+            }
+#else
             key = this.MakeSureKeyIsUnique(key);
 
             this.properties.Add(key, value);
+#endif
         }
 
         /// <summary>
@@ -68,6 +82,7 @@ namespace Serilog.Exceptions.Core
         /// </summary>
         private string MakeSureKeyIsUnique(string key)
         {
+
             var i = 0;
             while (this.properties.ContainsKey(key) && i < 5)
             {
