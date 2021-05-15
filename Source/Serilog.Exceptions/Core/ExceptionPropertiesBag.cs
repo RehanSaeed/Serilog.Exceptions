@@ -56,7 +56,26 @@ namespace Serilog.Exceptions.Core
                 }
             }
 
+            key = this.MakeSureKeyIsUnique(key);
+
             this.properties.Add(key, value);
+        }
+
+        /// <summary>
+        /// We want to be as robust as possible
+        /// so even in case of multiple properties with the same name
+        /// we want to at least try carrying on and keep working.
+        /// </summary>
+        private string MakeSureKeyIsUnique(string key)
+        {
+            var i = 0;
+            while (this.properties.ContainsKey(key) && i < 5)
+            {
+                key += "$";
+                i++;
+            }
+
+            return key;
         }
 
         /// <inheritdoc />
