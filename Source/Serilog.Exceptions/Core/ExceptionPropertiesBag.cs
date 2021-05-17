@@ -69,6 +69,9 @@ namespace Serilog.Exceptions.Core
         /// <inheritdoc />
         public bool ContainsProperty(string key) => this.properties.ContainsKey(key);
 
+        private static string GetReplacementKey(string key) => key + "$";
+
+
         /// <summary>
         /// We want to be as robust as possible
         /// so even in case of multiple properties with the same name
@@ -80,7 +83,7 @@ namespace Serilog.Exceptions.Core
             var i = 0;
             while (!this.properties.TryAdd(key, value) && i < AcceptableNumberOfSameNameProperties)
             {
-                key += "$";
+                key = GetReplacementKey(key);
                 i++;
             }
 #else
@@ -97,12 +100,13 @@ namespace Serilog.Exceptions.Core
             var i = 0;
             while (this.properties.ContainsKey(key) && i < AcceptableNumberOfSameNameProperties)
             {
-                key += "$";
+                key = GetReplacementKey(key);
                 i++;
             }
 
             return key;
         }
 #endif
+
     }
 }
