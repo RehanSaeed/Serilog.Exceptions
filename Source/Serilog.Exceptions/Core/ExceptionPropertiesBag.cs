@@ -7,9 +7,16 @@ namespace Serilog.Exceptions.Core
     /// <inheritdoc />
     internal class ExceptionPropertiesBag : IExceptionPropertiesBag
     {
+        /// <summary>
+        /// In theory there should not be any properties with same names passed
+        /// but just as a defensive and robustness measure, we allow small amount
+        /// so that library can keep working in case of minor error (or unexpected
+        /// scenario) on the properties provider side.
+        /// </summary>
+        private const int AcceptableNumberOfSameNameProperties = 5;
         private readonly Exception exception;
         private readonly IExceptionPropertyFilter? filter;
-        private readonly Dictionary<string, object?> properties = new();
+        private readonly Dictionary<string, object?> properties = new ();
 
         /// <summary>
         /// We keep a note on whether the results were collected to be sure that after that there are no changes. This
@@ -62,11 +69,16 @@ namespace Serilog.Exceptions.Core
         /// <inheritdoc />
         public bool ContainsProperty(string key) => this.properties.ContainsKey(key);
 
+        /// <summary>
+        /// We want to be as robust as possible
+        /// so even in case of multiple properties with the same name
+        /// we want to at least try carrying on and keep working.
+        /// </summary>
         private void AddPairToProperties(string key, object? value)
         {
 #if NET5_0
             var i = 0;
-            while (!this.properties.TryAdd(key, value) && i < 5)
+            while (!this.properties.TryAdd(key, value) && i < AcceptableNumberOfSameNameProperties)
             {
                 key += "$";
                 i++;
@@ -79,15 +91,11 @@ namespace Serilog.Exceptions.Core
         }
 
 #if !NET5_0
-        /// <summary>
-        /// We want to be as robust as possible
-        /// so even in case of multiple properties with the same name
-        /// we want to at least try carrying on and keep working.
-        /// </summary>
+        
         private string MakeSureKeyIsUnique(string key)
         {
             var i = 0;
-            while (this.properties.ContainsKey(key) && i < 5)
+            while (this.properties.ContainsKey(key) && i < AcceptableNumberOfSameNameProperties)
             {
                 key += "$";
                 i++;
