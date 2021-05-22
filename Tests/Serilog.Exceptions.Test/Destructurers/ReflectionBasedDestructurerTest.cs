@@ -397,6 +397,25 @@ namespace Serilog.Exceptions.Test.Destructurers
             var info = properties[nameof(TestExceptionClassWithNewDefinition.PublicProperty)];
         }
 
+        [Fact]
+        public void CanDestructureObjectWithDataWithRedefinedProperty()
+        {
+            var exception = new RecursiveException
+            {
+                Node = new RecursiveNodeWithRedefinedProperty
+                {
+                    Name = 123,
+                },
+            };
+
+            var propertiesBag = new ExceptionPropertiesBag(exception);
+            CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
+
+            var properties = propertiesBag.GetResultDictionary();
+            var parent = (IDictionary<string, object?>?)properties[nameof(RecursiveException.Node)];
+            Assert.Equal(123, parent?[nameof(RecursiveNode.Name)]);
+        }
+
         private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
             Exception exception,
             IExceptionDestructurer customDestructurer)
@@ -566,6 +585,11 @@ namespace Serilog.Exceptions.Test.Destructurers
             public string? Name { get; set; }
 
             public RecursiveNode? Child { get; set; }
+        }
+
+        public class RecursiveNodeWithRedefinedProperty : RecursiveNode
+        {
+            public new int Name { get; set; }
         }
 
         public class RecursiveException : Exception
