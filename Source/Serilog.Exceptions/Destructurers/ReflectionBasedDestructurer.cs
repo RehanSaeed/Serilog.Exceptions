@@ -316,8 +316,7 @@ namespace Serilog.Exceptions.Destructurers
                         level + 1,
                         destructuredObjects,
                         ref nextCyclicRefId);
-                    var key = values.ContainsKey(property.Name) ? $"{property.DeclaringType?.FullName}.{property.Name}" : property.Name;
-                    values.Add(key, destructuredValue);
+                    values.Add(property.Name, destructuredValue);
                 }
                 catch (TargetInvocationException targetInvocationException)
                 {

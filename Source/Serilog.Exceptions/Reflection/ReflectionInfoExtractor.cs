@@ -8,16 +8,11 @@ namespace Serilog.Exceptions.Reflection
 
     internal class ReflectionInfoExtractor
     {
-
         private readonly object lockObj = new();
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new();
-        private readonly PropertyInfo[] baseExceptionPropertiesForDestructuring;
+        private readonly IList<PropertyInfo> baseExceptionPropertiesForDestructuring;
 
-        public ReflectionInfoExtractor()
-        {
-            this.baseExceptionPropertiesForDestructuring = GetExceptionPropertiesForDestructuring(typeof(Exception));
-
-        }
+        public ReflectionInfoExtractor() => this.baseExceptionPropertiesForDestructuring = GetExceptionPropertiesForDestructuring(typeof(Exception));
 
 
         public ReflectionInfo GetOrCreateReflectionInfo(Type valueType)
@@ -44,11 +39,15 @@ namespace Serilog.Exceptions.Reflection
             return resultLambda.Compile();
         }
 
-        private static PropertyInfo[] GetExceptionPropertiesForDestructuring(Type valueType) =>
-            valueType
+        private static List<PropertyInfo> GetExceptionPropertiesForDestructuring(Type valueType)
+        {
+            var allProperties = valueType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
-                .ToArray();
+                .ToList();
+
+            return allProperties;
+        }
 
         private ReflectionInfo GenerateReflectionInfoForType(Type valueType)
         {
@@ -56,11 +55,42 @@ namespace Serilog.Exceptions.Reflection
             var propertyInfos = properties
                 .Select(p => new ReflectionPropertyInfo(p.Name, p.DeclaringType, GenerateFastGetterForProperty(valueType, p)))
                 .ToArray();
+
+            var groupedByName = new Dictionary<string, List<ReflectionPropertyInfo>>();
+            foreach (var propertyInfo in propertyInfos)
+            {
+                if (groupedByName.ContainsKey(propertyInfo.Name))
+                {
+                    groupedByName[propertyInfo.Name].Add(propertyInfo);
+                }
+                else
+                {
+                    groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> { propertyInfo };
+                }
+            }
+
+            foreach (var nameGroup in groupedByName)
+            {
+                if (nameGroup.Value.Count > 1)
+                {
+                    foreach (var propertyInfoInGroupName in nameGroup.Value)
+                    {
+                        foreach (var otherPropertyInfoInGroupName in nameGroup.Value)
+                        {
+                            propertyInfoInGroupName.MarkNameWithFullNameIRedefineThatProperty(otherPropertyInfoInGroupName);
+                        }
+                    }
+                }
+            }
+
             var propertiesInfosExceptBaseOnes = propertyInfos
                 .Where(p => this.baseExceptionPropertiesForDestructuring.All(bp => bp.Name != p.Name))
                 .ToArray();
 
             return new ReflectionInfo(propertyInfos, propertiesInfosExceptBaseOnes);
         }
+
+
+
     }
 }
