@@ -34,19 +34,6 @@ namespace Serilog.Exceptions.Reflection
             }
         }
 
-        private ReflectionInfo GenerateReflectionInfoForType(Type valueType)
-        {
-            var properties = GetExceptionPropertiesForDestructuring(valueType);
-            var propertyInfos = properties
-                .Select(p => new ReflectionPropertyInfo(p.Name, p.DeclaringType, GenerateFastGetterForProperty(valueType, p)))
-                .ToArray();
-            var propertiesInfosExceptBaseOnes = propertyInfos
-                .Where(p => this.baseExceptionPropertiesForDestructuring.All(bp => bp.Name != p.Name))
-                .ToArray();
-
-            return new ReflectionInfo(propertyInfos, propertiesInfosExceptBaseOnes);
-        }
-
         private static Func<object, object> GenerateFastGetterForProperty(Type type, PropertyInfo property)
         {
             var objParam = Expression.Parameter(typeof(object), "num");
@@ -62,5 +49,18 @@ namespace Serilog.Exceptions.Reflection
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.CanRead && x.GetIndexParameters().Length == 0)
                 .ToArray();
+
+        private ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        {
+            var properties = GetExceptionPropertiesForDestructuring(valueType);
+            var propertyInfos = properties
+                .Select(p => new ReflectionPropertyInfo(p.Name, p.DeclaringType, GenerateFastGetterForProperty(valueType, p)))
+                .ToArray();
+            var propertiesInfosExceptBaseOnes = propertyInfos
+                .Where(p => this.baseExceptionPropertiesForDestructuring.All(bp => bp.Name != p.Name))
+                .ToArray();
+
+            return new ReflectionInfo(propertyInfos, propertiesInfosExceptBaseOnes);
+        }
     }
 }

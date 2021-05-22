@@ -367,7 +367,5 @@ namespace Serilog.Exceptions.Destructurers
 
             return values;
         }
-
-        
     }
 }
