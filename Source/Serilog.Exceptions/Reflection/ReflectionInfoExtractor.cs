@@ -53,13 +53,9 @@ namespace Serilog.Exceptions.Reflection
             return allProperties;
         }
 
-        private ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        private static void MarkRedefinedPropertiesWithFullName(ReflectionPropertyInfo[] propertyInfos)
         {
-            var properties = GetExceptionPropertiesForDestructuring(valueType);
-            var propertyInfos = properties
-                .Select(p => new ReflectionPropertyInfo(p.Name, p.DeclaringType, GenerateFastGetterForProperty(valueType, p)))
-                .ToArray();
-
+            // First group by name 
             var groupedByName = new Dictionary<string, List<ReflectionPropertyInfo>>();
             foreach (var propertyInfo in propertyInfos)
             {
@@ -69,10 +65,11 @@ namespace Serilog.Exceptions.Reflection
                 }
                 else
                 {
-                    groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> { propertyInfo };
+                    groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> {propertyInfo};
                 }
             }
 
+            // Fix groups that have more than one property in it
             foreach (var nameGroup in groupedByName)
             {
                 if (nameGroup.Value.Count > 1)
@@ -86,6 +83,16 @@ namespace Serilog.Exceptions.Reflection
                     }
                 }
             }
+        }
+
+        private ReflectionInfo GenerateReflectionInfoForType(Type valueType)
+        {
+            var properties = GetExceptionPropertiesForDestructuring(valueType);
+            var propertyInfos = properties
+                .Select(p => new ReflectionPropertyInfo(p.Name, p.DeclaringType, GenerateFastGetterForProperty(valueType, p)))
+                .ToArray();
+
+            MarkRedefinedPropertiesWithFullName(propertyInfos);
 
             var propertiesInfosExceptBaseOnes = propertyInfos
                 .Where(p => this.baseExceptionPropertiesForDestructuring.All(bp => bp.Name != p.Name))
