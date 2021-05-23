@@ -24,8 +24,7 @@ namespace Serilog.Exceptions.Destructurers
         private const string RefLabel = "$ref";
         private const string CyclicReferenceMessage = "Cyclic reference";
         private readonly int destructuringDepth;
-        private ReflectionInfoExtractor reflectionInfoExtractor = new ();
-
+        private ReflectionInfoExtractor reflectionInfoExtractor = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.

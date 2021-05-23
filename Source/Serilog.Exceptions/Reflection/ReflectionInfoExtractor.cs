@@ -6,6 +6,10 @@ namespace Serilog.Exceptions.Reflection
     using System.Linq.Expressions;
     using System.Reflection;
 
+    /// <summary>
+    /// Utility class that analyzes type using reflection and provides
+    /// information about properties to be used in destructuring process.
+    /// </summary>
     internal class ReflectionInfoExtractor
     {
         private readonly object lockObj = new();
@@ -89,8 +93,5 @@ namespace Serilog.Exceptions.Reflection
 
             return new ReflectionInfo(propertyInfos, propertiesInfosExceptBaseOnes);
         }
-
-
-
     }
 }

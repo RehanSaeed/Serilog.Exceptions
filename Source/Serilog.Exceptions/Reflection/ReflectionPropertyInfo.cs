@@ -3,6 +3,9 @@ namespace Serilog.Exceptions.Reflection
     using System;
     using System.Reflection;
 
+    /// <summary>
+    /// Class that holds reflection information about a single property.
+    /// </summary>
     internal class ReflectionPropertyInfo
     {
         public ReflectionPropertyInfo(string name, Type? declaringType, Func<object, object> getter)
