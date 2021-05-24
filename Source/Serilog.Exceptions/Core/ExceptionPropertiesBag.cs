@@ -91,6 +91,7 @@ namespace Serilog.Exceptions.Core
             this.properties.Add(key, value);
 #endif
         }
+
 #if !NET5_0
         private string MakeSureKeyIsUnique(string key)
         {
