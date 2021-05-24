@@ -9,7 +9,7 @@ namespace Serilog.Exceptions.Destructurers
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using Reflection;
+    using Serilog.Exceptions.Reflection;
     using Serilog.Exceptions.Core;
 
     /// <summary>
@@ -48,7 +48,6 @@ namespace Serilog.Exceptions.Destructurers
 #pragma warning disable CA1819 // Properties should not return arrays
         public Type[] TargetTypes => new[] { typeof(Exception) };
 #pragma warning restore CA1819 // Properties should not return arrays
-
         /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
         public void Destructure(
             Exception exception,

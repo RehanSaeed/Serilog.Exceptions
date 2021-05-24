@@ -18,7 +18,6 @@ namespace Serilog.Exceptions.Reflection
 
         public ReflectionInfoExtractor() => this.baseExceptionPropertiesForDestructuring = GetExceptionPropertiesForDestructuring(typeof(Exception));
 
-
         public ReflectionInfo GetOrCreateReflectionInfo(Type valueType)
         {
             lock (this.lockObj)
@@ -55,7 +54,7 @@ namespace Serilog.Exceptions.Reflection
 
         private static void MarkRedefinedPropertiesWithFullName(ReflectionPropertyInfo[] propertyInfos)
         {
-            // First group by name 
+            // First group by name
             var groupedByName = new Dictionary<string, List<ReflectionPropertyInfo>>();
             foreach (var propertyInfo in propertyInfos)
             {
@@ -65,7 +64,7 @@ namespace Serilog.Exceptions.Reflection
                 }
                 else
                 {
-                    groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> {propertyInfo};
+                    groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> { propertyInfo };
                 }
             }
 
