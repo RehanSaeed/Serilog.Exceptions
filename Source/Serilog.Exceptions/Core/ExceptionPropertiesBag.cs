@@ -16,7 +16,7 @@ namespace Serilog.Exceptions.Core
         private const int AcceptableNumberOfSameNameProperties = 5;
         private readonly Exception exception;
         private readonly IExceptionPropertyFilter? filter;
-        private readonly Dictionary<string, object?> properties = new ();
+        private readonly Dictionary<string, object?> properties = new();
 
         /// <summary>
         /// We keep a note on whether the results were collected to be sure that after that there are no changes. This
@@ -71,7 +71,6 @@ namespace Serilog.Exceptions.Core
 
         private static string GetReplacementKey(string key) => key + "$";
 
-
         /// <summary>
         /// We want to be as robust as possible
         /// so even in case of multiple properties with the same name
@@ -94,7 +93,6 @@ namespace Serilog.Exceptions.Core
         }
 
 #if !NET5_0
-        
         private string MakeSureKeyIsUnique(string key)
         {
             var i = 0;
