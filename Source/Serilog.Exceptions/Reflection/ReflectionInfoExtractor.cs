@@ -54,7 +54,7 @@ namespace Serilog.Exceptions.Reflection
 
         private static void MarkRedefinedPropertiesWithFullName(ReflectionPropertyInfo[] propertyInfos)
         {
-            // First group by name
+            // First, prepare a dictionary of properties grouped by name
             var groupedByName = new Dictionary<string, List<ReflectionPropertyInfo>>();
             foreach (var propertyInfo in propertyInfos)
             {
@@ -68,18 +68,30 @@ namespace Serilog.Exceptions.Reflection
                 }
             }
 
-            // Fix groups that have more than one property in it
-            foreach (var nameGroup in groupedByName)
+            // Then, fix groups that have more than one property in it
+            // It means that there is a name uniqueness conflict which needs to be resolved
+            foreach (var nameAndProperties in groupedByName)
             {
-                if (nameGroup.Value.Count > 1)
+                var properties = nameAndProperties.Value;
+                if (properties.Count > 1)
                 {
-                    foreach (var propertyInfoInGroupName in nameGroup.Value)
-                    {
-                        foreach (var otherPropertyInfoInGroupName in nameGroup.Value)
-                        {
-                            propertyInfoInGroupName.MarkNameWithFullNameIRedefineThatProperty(otherPropertyInfoInGroupName);
-                        }
-                    }
+                    FixGroupOfPropertiesWithConflictingNames(properties);
+                }
+            }
+        }
+
+        private static void FixGroupOfPropertiesWithConflictingNames(List<ReflectionPropertyInfo> properties)
+        {
+            // Very simplistic approach, just check each pair separately.
+            // The implementation has O(N^2) complexity but in practice
+            // N will be extremely rarely other than 2.
+            for (var i = 0; i < properties.Count; i++)
+            {
+                for (var j = i + 1; j < properties.Count; j++)
+                {
+                    var property1 = properties[i];
+                    var property2 = properties[j];
+                    property2.MarkNameWithFullNameIfRedefinesThatProperty(property1);
                 }
             }
         }

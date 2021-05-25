@@ -63,7 +63,7 @@ namespace Serilog.Exceptions.Reflection
         /// name uniqueness conflict.
         /// </summary>
         /// <param name="otherPropertyInfo">Other property info that is be compared to detect name uniqueness conflict.</param>
-        public void MarkNameWithFullNameIRedefineThatProperty(ReflectionPropertyInfo otherPropertyInfo)
+        public void MarkNameWithFullNameIfRedefinesThatProperty(ReflectionPropertyInfo otherPropertyInfo)
         {
             if (otherPropertyInfo == this)
             {
