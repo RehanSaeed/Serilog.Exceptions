@@ -85,13 +85,11 @@ namespace Serilog.Exceptions.Reflection
             // Very simplistic approach, just check each pair separately.
             // The implementation has O(N^2) complexity but in practice
             // N will be extremely rarely other than 2.
-            for (var i = 0; i < properties.Count; i++)
+            foreach (var property in properties)
             {
-                for (var j = i + 1; j < properties.Count; j++)
+                foreach (var otherProperty in properties)
                 {
-                    var property1 = properties[i];
-                    var property2 = properties[j];
-                    property2.MarkNameWithFullNameIfRedefinesThatProperty(property1);
+                    property.MarkNameWithFullNameIfRedefinesThatProperty(otherProperty);
                 }
             }
         }
