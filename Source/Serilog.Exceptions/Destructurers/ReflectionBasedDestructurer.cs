@@ -1,16 +1,15 @@
 namespace Serilog.Exceptions.Destructurers
 {
+    using Serilog.Exceptions.Core;
+    using Serilog.Exceptions.Reflection;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using Serilog.Exceptions.Reflection;
-    using Serilog.Exceptions.Core;
 
     /// <summary>
     /// Destructures exceptions by gathering all public non-indexer properties using reflection and then dynamically
@@ -24,7 +23,7 @@ namespace Serilog.Exceptions.Destructurers
         private const string RefLabel = "$ref";
         private const string CyclicReferenceMessage = "Cyclic reference";
         private readonly int destructuringDepth;
-        private ReflectionInfoExtractor reflectionInfoExtractor = new();
+        private readonly ReflectionInfoExtractor reflectionInfoExtractor = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
@@ -303,7 +302,7 @@ namespace Serilog.Exceptions.Destructurers
             var values = new Dictionary<string, object?>();
             destructuredObjects.Add(value, values);
 
-            var reflectionInfo = reflectionInfoExtractor.GetOrCreateReflectionInfo(valueType);
+            var reflectionInfo = this.reflectionInfoExtractor.GetOrCreateReflectionInfo(valueType);
 
             foreach (var property in reflectionInfo.Properties)
             {

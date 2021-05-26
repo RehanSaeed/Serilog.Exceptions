@@ -16,8 +16,17 @@ namespace Serilog.Exceptions.Reflection
         private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new();
         private readonly IList<PropertyInfo> baseExceptionPropertiesForDestructuring;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReflectionInfoExtractor"/> class.
+        /// </summary>
         public ReflectionInfoExtractor() => this.baseExceptionPropertiesForDestructuring = GetExceptionPropertiesForDestructuring(typeof(Exception));
 
+        /// <summary>
+        /// Gets reflection info for relevant properties of <paramref name="valueType"/>"/>
+        /// from cache or by generating it if they are not yet present in cache.
+        /// </summary>
+        /// <param name="valueType">The type for which properties are to be analyzed.</param>
+        /// <returns>The reflection info for relevant properties of <paramref name="valueType"/>.</returns>
         public ReflectionInfo GetOrCreateReflectionInfo(Type valueType)
         {
             lock (this.lockObj)
