@@ -28,7 +28,7 @@ namespace Serilog.Exceptions.Destructurers
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
         /// </summary>
-        /// <param name="destructuringDepth">Maximum depth to which destructurer will go when destructuring exception
+        /// <param name="destructuringDepth">Maximum depth to which the destructurer will go when destructuring exception
         /// object graph.</param>
         public ReflectionBasedDestructurer(int destructuringDepth)
         {
