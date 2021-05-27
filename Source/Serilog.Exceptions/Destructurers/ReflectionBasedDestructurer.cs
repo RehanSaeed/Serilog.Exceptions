@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Destructurers
 {
-    using Serilog.Exceptions.Core;
-    using Serilog.Exceptions.Reflection;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -10,6 +8,8 @@ namespace Serilog.Exceptions.Destructurers
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using Serilog.Exceptions.Core;
+    using Serilog.Exceptions.Reflection;
 
     /// <summary>
     /// Destructures exceptions by gathering all public non-indexer properties using reflection and then dynamically
