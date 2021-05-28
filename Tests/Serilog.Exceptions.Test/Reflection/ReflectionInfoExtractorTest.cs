@@ -1,8 +1,8 @@
 namespace Serilog.Exceptions.Test.Reflection
 {
     using System.Linq;
-    using Exceptions.Reflection;
     using FluentAssertions;
+    using Serilog.Exceptions.Reflection;
     using Xunit;
 
     public class ReflectionInfoExtractorTest
