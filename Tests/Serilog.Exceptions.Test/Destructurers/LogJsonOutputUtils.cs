@@ -16,15 +16,23 @@ namespace Serilog.Exceptions.Test.Destructurers
     {
         public static JObject LogAndDestructureException(
             Exception exception,
-            IDestructuringOptions? destructuringOptions = null)
+            IDestructuringOptions? destructuringOptions = null,
+            Func<LoggerConfiguration, LoggerConfiguration>? configureLogger = null)
         {
             // Arrange
             var jsonWriter = new StringWriter();
             destructuringOptions ??= new DestructuringOptionsBuilder().WithDefaultDestructurers();
-            ILogger logger = new LoggerConfiguration()
+            var loggerConfiguration = new LoggerConfiguration()
                 .Enrich.WithExceptionDetails(destructuringOptions)
-                .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
-                .CreateLogger();
+                .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()));
+
+            if (configureLogger != null)
+            {
+                loggerConfiguration = configureLogger.Invoke(loggerConfiguration);
+            }
+
+
+            var logger = loggerConfiguration.CreateLogger();
 
             // Act
             logger.Error(exception, "EXCEPTION MESSAGE");
