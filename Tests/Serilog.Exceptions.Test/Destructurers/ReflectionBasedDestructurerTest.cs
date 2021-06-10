@@ -382,7 +382,7 @@ namespace Serilog.Exceptions.Test.Destructurers
             var properties = propertiesBag.GetResultDictionary();
             var info = properties[nameof(HiddenException.Info)] as IDictionary<string, object>;
             Assert.Equal(derived.HiddenProperty, info?[nameof(DerivedClass<object>.HiddenProperty)]);
-            Assert.Equal(baseClass.HiddenProperty, info?[$"{typeof(BaseClass).FullName}.{nameof(BaseClass.HiddenProperty)}"]);
+            Assert.Equal(baseClass.HiddenProperty, info?[$"{nameof(BaseClass)}.{nameof(BaseClass.HiddenProperty)}"]);
         }
 
         [Fact]

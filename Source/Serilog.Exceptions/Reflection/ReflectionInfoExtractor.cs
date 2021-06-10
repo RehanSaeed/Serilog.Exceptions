@@ -98,7 +98,7 @@ namespace Serilog.Exceptions.Reflection
             {
                 foreach (var otherProperty in properties)
                 {
-                    property.MarkNameWithFullNameIfRedefinesThatProperty(otherProperty);
+                    property.MarkNameWithTypeNameIfRedefinesThatProperty(otherProperty);
                 }
             }
         }

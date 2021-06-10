@@ -26,7 +26,7 @@ namespace Serilog.Exceptions.Test.Reflection
             testObjectName.Should().BeOfType<int>().Which.Should().Be(123);
 
             var baseClassPropertyInfo = reflectionInfo
-                .Properties.Should().ContainSingle(x => x.Name == "Serilog.Exceptions.Test.Reflection.ReflectionInfoExtractorTest+TestObject.Name").Which;
+                .Properties.Should().ContainSingle(x => x.Name == "TestObject.Name").Which;
             var baseClassNameGetter = baseClassPropertyInfo.Getter;
             var baseClassTestObjectName = baseClassNameGetter(testObject);
             baseClassTestObjectName.Should().BeNull();
@@ -46,8 +46,8 @@ namespace Serilog.Exceptions.Test.Reflection
                 new[]
                 {
                     "Name",
-                    "Serilog.Exceptions.Test.Reflection.ReflectionInfoExtractorTest+TestObjectWithRedefinedProperty.Name",
-                    "Serilog.Exceptions.Test.Reflection.ReflectionInfoExtractorTest+TestObject.Name",
+                    "TestObjectWithRedefinedProperty.Name",
+                    "TestObject.Name",
                 },
                 x => x.WithoutStrictOrdering());
             var namePropertyInfo = reflectionInfo.Properties.Should().ContainSingle(x => x.Name == "Name").Which;

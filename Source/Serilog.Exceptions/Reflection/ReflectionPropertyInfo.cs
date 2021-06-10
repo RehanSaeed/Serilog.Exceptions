@@ -14,7 +14,7 @@ namespace Serilog.Exceptions.Reflection
         /// Marker that represents a decision whether to extend property name
         /// with type name of declaring type, to avoid name uniqueness conflicts.
         /// </summary>
-        private bool markedWithFullName;
+        private bool markedWithTypeName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReflectionPropertyInfo"/> class.
@@ -49,12 +49,12 @@ namespace Serilog.Exceptions.Reflection
         /// Idempotent action that extends property name with a type name
         /// of its declaring type to avoid name uniqueness conflict.
         /// </summary>
-        public void MarkNameWithFullName()
+        public void MarkNameWithTypeName()
         {
-            if (!this.markedWithFullName)
+            if (!this.markedWithTypeName)
             {
-                this.markedWithFullName = true;
-                this.Name = $"{this.DeclaringType?.FullName}.{this.Name}";
+                this.markedWithTypeName = true;
+                this.Name = $"{this.DeclaringType?.Name}.{this.Name}";
             }
         }
 
@@ -63,7 +63,7 @@ namespace Serilog.Exceptions.Reflection
         /// name uniqueness conflict.
         /// </summary>
         /// <param name="otherPropertyInfo">Other property info that is be compared to detect name uniqueness conflict.</param>
-        public void MarkNameWithFullNameIfRedefinesThatProperty(ReflectionPropertyInfo otherPropertyInfo)
+        public void MarkNameWithTypeNameIfRedefinesThatProperty(ReflectionPropertyInfo otherPropertyInfo)
         {
             if (otherPropertyInfo == this)
             {
@@ -80,18 +80,18 @@ namespace Serilog.Exceptions.Reflection
                 return;
             }
 
-            if (this.markedWithFullName)
+            if (this.markedWithTypeName)
             {
                 return;
             }
 
-            var shouldMarkWithFullName = IsSubTypeOf(
+            var shouldMarkWithTypeName = IsSubTypeOf(
                 otherPropertyInfo.DeclaringType,
                 this.DeclaringType);
 
-            if (shouldMarkWithFullName)
+            if (shouldMarkWithTypeName)
             {
-                this.MarkNameWithFullName();
+                this.MarkNameWithTypeName();
             }
         }
 
