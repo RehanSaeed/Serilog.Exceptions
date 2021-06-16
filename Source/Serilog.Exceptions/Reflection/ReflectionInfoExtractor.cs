@@ -1,6 +1,7 @@
 namespace Serilog.Exceptions.Reflection
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
@@ -12,8 +13,7 @@ namespace Serilog.Exceptions.Reflection
     /// </summary>
     internal class ReflectionInfoExtractor
     {
-        private readonly object lockObj = new();
-        private readonly Dictionary<Type, ReflectionInfo> reflectionInfoCache = new();
+        private readonly ConcurrentDictionary<Type, ReflectionInfo> reflectionInfoCache = new();
         private readonly IList<PropertyInfo> baseExceptionPropertiesForDestructuring;
 
         /// <summary>
@@ -29,16 +29,16 @@ namespace Serilog.Exceptions.Reflection
         /// <returns>The reflection info for relevant properties of <paramref name="valueType"/>.</returns>
         public ReflectionInfo GetOrCreateReflectionInfo(Type valueType)
         {
-            lock (this.lockObj)
+            if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
             {
-                if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
-                {
-                    reflectionInfo = this.GenerateReflectionInfoForType(valueType);
-                    this.reflectionInfoCache.Add(valueType, reflectionInfo);
-                }
-
-                return reflectionInfo;
+                reflectionInfo = this.GenerateReflectionInfoForType(valueType);
+                this.reflectionInfoCache.AddOrUpdate(
+                    key: valueType,
+                    addValueFactory: type => reflectionInfo,
+                    updateValueFactory: (type, info) => reflectionInfo);
             }
+
+            return reflectionInfo;
         }
 
         private static Func<object, object> GenerateFastGetterForProperty(Type type, PropertyInfo property)
