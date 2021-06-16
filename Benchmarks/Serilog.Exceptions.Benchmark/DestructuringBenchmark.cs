@@ -14,7 +14,7 @@ namespace Serilog.Exceptions.Benchmark
     [CsvMeasurementsExporter]
     [RPlotExporter]
     [SimpleJob(RuntimeMoniker.Net472)]
-    [SimpleJob(RuntimeMoniker.NetCoreApp30)]
+    [SimpleJob(RuntimeMoniker.Net50)]
     public class DestructuringBenchmark
     {
         private readonly ReflectionBasedDestructurer reflectionBasedDestructurer = new(10);
@@ -46,7 +46,7 @@ namespace Serilog.Exceptions.Benchmark
             this.reflectionBasedDestructurer.Destructure(
                 ex,
                 bag,
-                null!);
+                _ => new Dictionary<string, object?>());
 
             return bag.GetResultDictionary();
         }
@@ -62,7 +62,7 @@ namespace Serilog.Exceptions.Benchmark
             this.benchmarkExceptionDestructurer.Destructure(
                 ex,
                 bag,
-                null!);
+                _ => new Dictionary<string, object?>());
 
             return bag.GetResultDictionary();
         }
