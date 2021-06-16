@@ -27,19 +27,7 @@ namespace Serilog.Exceptions.Reflection
         /// </summary>
         /// <param name="valueType">The type for which properties are to be analyzed.</param>
         /// <returns>The reflection info for relevant properties of <paramref name="valueType"/>.</returns>
-        public ReflectionInfo GetOrCreateReflectionInfo(Type valueType)
-        {
-            if (!this.reflectionInfoCache.TryGetValue(valueType, out var reflectionInfo))
-            {
-                reflectionInfo = this.GenerateReflectionInfoForType(valueType);
-                this.reflectionInfoCache.AddOrUpdate(
-                    key: valueType,
-                    addValueFactory: type => reflectionInfo,
-                    updateValueFactory: (type, info) => reflectionInfo);
-            }
-
-            return reflectionInfo;
-        }
+        public ReflectionInfo GetOrCreateReflectionInfo(Type valueType) => this.reflectionInfoCache.GetOrAdd(valueType, valueFactory: this.GenerateReflectionInfoForType);
 
         private static Func<object, object> GenerateFastGetterForProperty(Type type, PropertyInfo property)
         {
