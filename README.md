@@ -87,6 +87,21 @@ Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.
 .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception} {Properties:j}")
 ```
 
+	
+### JSON `appSettings.json` configuration
+Alternatively to fluent configuration seeting can be stored in `appSettings.json` using [_Serilog.Settings.Configuration_](https://github.com/serilog/serilog-settings-configuration):
+```json
+{
+  "Serilog": {
+    "Using": [ "Serilog.Exceptions" ],
+    "Enrich": [ "WithExceptionDetails" ],
+    "WriteTo": [
+      { "Name": "Console" }
+    ]
+  }
+}
+```
+
 ## Performance
 
 This library has custom code to deal with extra properties on most common exception types and only falls back to using reflection to get the extra information if the exception is not supported by Serilog.Exceptions internally. Reflection overhead is present but minimal, because all the expensive relection-based operations are done only once per exception-type.
