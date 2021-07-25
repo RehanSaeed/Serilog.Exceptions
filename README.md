@@ -87,8 +87,8 @@ Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.
 .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception} {Properties:j}")
 ```
 
-	
 ### JSON `appSettings.json` configuration
+
 Alternatively to fluent configuration seeting can be stored in `appSettings.json` using [_Serilog.Settings.Configuration_](https://github.com/serilog/serilog-settings-configuration):
 ```json
 {
