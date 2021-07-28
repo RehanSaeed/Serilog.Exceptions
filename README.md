@@ -89,7 +89,7 @@ Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.
 
 ### JSON `appSettings.json` configuration
 
-Alternatively to fluent configuration seeting can be stored in `appSettings.json` using [_Serilog.Settings.Configuration_](https://github.com/serilog/serilog-settings-configuration):
+Alternatively to fluent configuration setting can be stored in application configuration using [_Serilog.Settings.Configuration_](https://github.com/serilog/serilog-settings-configuration):
 ```json
 {
   "Serilog": {
