@@ -9,7 +9,6 @@ namespace Serilog.Exceptions.Test.Destructurers
     using Serilog.Exceptions.Core;
     using Serilog.Exceptions.Destructurers;
     using Xunit;
-    using Xunit.Abstractions;
     using static LogJsonOutputUtils;
 
     public class ReflectionBasedDestructurerTest

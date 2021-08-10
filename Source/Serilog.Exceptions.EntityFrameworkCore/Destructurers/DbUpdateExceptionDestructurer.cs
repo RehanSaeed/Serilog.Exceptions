@@ -28,14 +28,10 @@ namespace Serilog.Exceptions.EntityFrameworkCore.Destructurers
             var dbUpdateException = (DbUpdateException)exception;
             var entriesValue = dbUpdateException.Entries?
                 .Select(
-#pragma warning disable IDE0050 // Convert to tuple
                     e => new
-#pragma warning restore IDE0050 // Convert to tuple
                     {
                         EntryProperties = e.Properties.Select(
-#pragma warning disable IDE0050 // Convert to tuple
                             p => new
-#pragma warning restore IDE0050 // Convert to tuple
                             {
                                 PropertyName = p.Metadata.Name,
                                 p.OriginalValue,
