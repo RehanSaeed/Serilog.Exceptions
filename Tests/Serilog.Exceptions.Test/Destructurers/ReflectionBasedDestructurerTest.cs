@@ -102,10 +102,10 @@ namespace Serilog.Exceptions.Test.Destructurers
             var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Be(nameof(TaskStatus.Canceled));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Contain(nameof(TaskCreationOptions.None));
         }
 
@@ -124,23 +124,23 @@ namespace Serilog.Exceptions.Test.Destructurers
             var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Be(nameof(TaskStatus.Faulted));
             destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Be(nameof(TaskCreationOptions.None));
             var taskFirstLevelExceptionDictionary = destructuredTaskProperties.Should().ContainKey(nameof(Task.Exception))
-                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .WhoseValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which;
             taskFirstLevelExceptionDictionary.Should().ContainKey("Message")
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Contain("One or more errors occurred.", "task's first level exception is aggregate exception");
             taskFirstLevelExceptionDictionary.Should().ContainKey("InnerExceptions")
-                .WhichValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
+                .WhoseValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
                 .Which.Should().ContainSingle()
                 .Which.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which.Should().ContainKey("Message")
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Be("INNER EXCEPTION MESSAGE");
         }
 
@@ -342,16 +342,16 @@ namespace Serilog.Exceptions.Test.Destructurers
             var resultsDictionary = result.GetResultDictionary();
             var destructuredTask = resultsDictionary[nameof(CyclicTaskException.Task)].Should().BeAssignableTo<IDictionary<string, object>>().Which;
             var destructuredCyclicException = destructuredTask.Should().ContainKey(nameof(Task.Exception))
-                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .WhoseValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which.Should().ContainKey(nameof(AggregateException.InnerExceptions))
-                .WhichValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
+                .WhoseValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
                 .Which.Should().ContainSingle()
                 .Which.Should().BeAssignableTo<IDictionary<string, object>>().Which;
             destructuredCyclicException.Should().ContainKey(nameof(Exception.Message))
-                .WhichValue.Should().BeOfType<string>()
+                .WhoseValue.Should().BeOfType<string>()
                 .Which.Should().Contain(nameof(CyclicTaskException));
             destructuredCyclicException.Should().ContainKey(nameof(CyclicTaskException.Task))
-                .WhichValue.Should().BeAssignableTo<IDictionary<string, object>>()
+                .WhoseValue.Should().BeAssignableTo<IDictionary<string, object>>()
                 .Which.Should().ContainKey("$ref", "task was already destructured, so inner task should just contain ref");
         }
 
