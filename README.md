@@ -147,6 +147,33 @@ Add the `DbUpdateExceptionDestructurer` during setup:
     .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
 ```
 
+### Serilog.Exceptions.Refit
+
+[![Serilog.Exceptions.Refit NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.Refit.svg)](https://www.nuget.org/packages/Serilog.Exceptions.Refit/) 
+[![Serilog.Exceptions.Refit package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/dce98084-312a-4939-b879-07bc25734572/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=dce98084-312a-4939-b879-07bc25734572&preferRelease=true) [![Serilog.Exceptions.Refit NuGet Package Downloads](https://img.shields.io/nuget/dt/Serilog.Exceptions.Refit)](https://www.nuget.org/packages/Serilog.Exceptions.Refit)
+
+Add the [Serilog.Exceptions.Refit](https://www.nuget.org/packages/Serilog.Exceptions.Refit/) NuGet package to your project to provide detailed logging for the `ApiException` when using [Refit](https://www.nuget.org/packages/Refit/):
+
+```
+Install-Package Serilog.Exceptions.Refit
+```
+
+Add the `ApiExceptionDestructurer` during setup:
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new ApiExceptionDestructurer() }))
+```
+
+Depending on your Serilog setup, common `System.Exception` properties may already be logged. To omit the logging of these properties, use the overloaded
+constructor as follows:
+
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new ApiExceptionDestructurer(destructureCommonExceptionProperties = false) }))
+```
+
 ## Custom Exception Destructurers
 
 You may want to add support for destructuring your own exceptions without relying on reflection. To do this, create your own destructuring class implementing `ExceptionDestructurer` (You can take a look at [this](https://github.com/RehanSaeed/Serilog.Exceptions/blob/main/Source/Serilog.Exceptions/Destructurers/ArgumentExceptionDestructurer.cs) for `ArgumentException`), then simply add it like so:

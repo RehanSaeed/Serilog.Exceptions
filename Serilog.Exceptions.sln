@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31423.177
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{76FBEEA2-0F88-487E-99C3-5D865CBE79B6}"
 	ProjectSection(SolutionItems) = preProject
@@ -90,6 +90,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.MsSqlServer", "Source\Serilog.Exceptions.MsSqlServer\Serilog.Exceptions.MsSqlServer.csproj", "{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Refit", "Source\Serilog.Exceptions.Refit\Serilog.Exceptions.Refit.csproj", "{0EABF22F-F070-4F8D-B165-DD4C4AB62820}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,10 @@ Global
 		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{2C245036-D7F6-4F7C-9BB6-5AFBCCE480F7} = {76FBEEA2-0F88-487E-99C3-5D865CBE79B6}
 		{4F089B23-3121-4935-B24E-7A9A497BD9FE} = {2C245036-D7F6-4F7C-9BB6-5AFBCCE480F7}
 		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
+		{0EABF22F-F070-4F8D-B165-DD4C4AB62820} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}

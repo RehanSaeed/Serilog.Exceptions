@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Build">
+    <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package">
+    <Product>Serilog Exceptions Refit</Product>
+    <Description>Log exception details and custom properties that are not output in Exception.ToString(). Contains custom destructurers for Refit exceptions.</Description>
+    <PackageTags>Serilog;Exception;Log;Logging;Detail;Details;Refit</PackageTags>
+  </PropertyGroup>
+ 
+  <ItemGroup Label="Project References">
+    <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Package References">
+    <PackageReference Include="Refit" Version="6.0.94" />
+  </ItemGroup>
+  
+</Project>
