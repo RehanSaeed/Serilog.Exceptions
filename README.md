@@ -171,8 +171,23 @@ constructor as follows:
 ```csharp
 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
     .WithDefaultDestructurers()
-    .WithDestructurers(new[] { new ApiExceptionDestructurer(destructureCommonExceptionProperties = false) }))
+    .WithDestructurers(new[] { new ApiExceptionDestructurer(destructureCommonExceptionProperties: false) }))
 ```
+
+The default configuration logs the following properties of an `ApiException`:
+
+- `Uri`
+- `StatusCode`
+
+In addition, the `ApiException.Content` property can be logged with the following setup:
+
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new ApiExceptionDestructurer(destructureHttpContent: true) }))
+```
+
+Be careful with this option as the HTTP body could be very large and/or contain sensitive information.
 
 ## Custom Exception Destructurers
 
