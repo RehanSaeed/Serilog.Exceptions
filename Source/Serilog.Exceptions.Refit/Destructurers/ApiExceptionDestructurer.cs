@@ -13,12 +13,18 @@ namespace Serilog.Exceptions.Refit.Destructurers
     public class ApiExceptionDestructurer : ExceptionDestructurer
     {
         private readonly bool destructureCommonExceptionProperties = true;
+        private readonly bool destructureHttpContent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApiExceptionDestructurer"/> class.
         /// </summary>
         /// <param name="destructureCommonExceptionProperties">Destructure common public Exception properties or not.</param>
-        public ApiExceptionDestructurer(bool destructureCommonExceptionProperties = true) => this.destructureCommonExceptionProperties = destructureCommonExceptionProperties;
+        /// <param name="destructureHttpContent">Destructure the HTTP body. This is left optional due to possible security and log size concerns.</param>
+        public ApiExceptionDestructurer(bool destructureCommonExceptionProperties = true, bool destructureHttpContent = false)
+        {
+            this.destructureCommonExceptionProperties = destructureCommonExceptionProperties;
+            this.destructureHttpContent = destructureHttpContent;
+        }
 
         /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
         public override Type[] TargetTypes => new[] { typeof(ApiException) };
@@ -52,8 +58,12 @@ namespace Serilog.Exceptions.Refit.Destructurers
 
 #pragma warning disable CA1062 // Validate arguments of public methods
             var apiException = (ApiException)exception;
+            if (this.destructureHttpContent)
+            {
+                propertiesBag.AddProperty(nameof(ApiException.Content), apiException.Content);
+            }
+
             propertiesBag.AddProperty(nameof(ApiException.Uri), apiException.Uri);
-            propertiesBag.AddProperty(nameof(ApiException.Content), apiException.Content);
             propertiesBag.AddProperty(nameof(ApiException.StatusCode), apiException.StatusCode);
 #pragma warning restore CA1062 // Validate arguments of public methods
         }
