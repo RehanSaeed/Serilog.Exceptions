@@ -36,15 +36,15 @@ namespace Serilog.Exceptions.Test.Destructurers
             return rootObject;
         }
 
-        public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string? propertyValue)
+        public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string? propertyValue, IDestructuringOptions? destructuringOptions = null)
         {
-            var rootObject = LogAndDestructureException(exception);
+            var rootObject = LogAndDestructureException(exception, destructuringOptions);
             Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(rootObject, propertyKey, propertyValue);
         }
 
-        public static void Test_LoggedExceptionDoesNotContainProperty(Exception exception, string propertyKey)
+        public static void Test_LoggedExceptionDoesNotContainProperty(Exception exception, string propertyKey, IDestructuringOptions? destructuringOptions = null)
         {
-            var rootObject = LogAndDestructureException(exception);
+            var rootObject = LogAndDestructureException(exception, destructuringOptions);
             Assert_JObjectContainsPropertiesExceptionDetailsWithoutProperty(rootObject, propertyKey);
         }
 
