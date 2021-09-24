@@ -12,7 +12,7 @@ namespace Serilog.Exceptions.Refit.Destructurers
     /// <seealso cref="ExceptionDestructurer" />
     public class ApiExceptionDestructurer : ExceptionDestructurer
     {
-        private readonly bool destructureCommonExceptionProperties = true;
+        private readonly bool destructureCommonExceptionProperties;
         private readonly bool destructureHttpContent;
 
         /// <summary>
