@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="Refit" Version="6.0.15" />
+    <PackageReference Include="Refit" Version="6.0.94" />
   </ItemGroup>
   
 </Project>
