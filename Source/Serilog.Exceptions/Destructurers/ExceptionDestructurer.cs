@@ -71,6 +71,12 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Data.SyntaxErrorException),
                         typeof(System.Data.VersionNotFoundException),
 #endif
+#if NET461 || NET472
+                        typeof(System.Diagnostics.Eventing.Reader.EventLogInvalidDataException),
+                        typeof(System.Diagnostics.Eventing.Reader.EventLogNotFoundException),
+                        typeof(System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException),
+                        typeof(System.Diagnostics.Eventing.Reader.EventLogReadingException),
+#endif
                         typeof(System.Diagnostics.Tracing.EventSourceException),
                         typeof(System.DataMisalignedException),
                         typeof(System.DivideByZeroException),
@@ -105,6 +111,11 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.IO.IsolatedStorage.IsolatedStorageException),
 #endif
                         typeof(System.IO.PathTooLongException),
+#if NET461 || NET472
+                        typeof(System.Management.Instrumentation.InstanceNotFoundException),
+                        typeof(System.Management.Instrumentation.InstrumentationBaseException),
+                        typeof(System.Management.Instrumentation.InstrumentationException),
+#endif
                         typeof(System.MemberAccessException),
                         typeof(System.MethodAccessException),
 #if !NETSTANDARD1_3
@@ -190,16 +201,6 @@ namespace Serilog.Exceptions.Destructurers
                     };
 #pragma warning restore IDE0001 // Simplify Names
 
-#if NET461 || NET472
-                foreach (var dangerousType in GetNotHandledByMonoTypes())
-                {
-                    var type = Type.GetType(dangerousType);
-                    if (type is not null)
-                    {
-                        targetTypes.Add(type);
-                    }
-                }
-#endif
                 return targetTypes.ToArray();
             }
         }
@@ -285,24 +286,5 @@ namespace Serilog.Exceptions.Destructurers
                 propertiesBag.AddProperty(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
             }
         }
-
-#if NET461 || NET472
-        /// <summary>
-        /// Get types that are currently not handled by mono and could raise a LoadTypeException.
-        /// </summary>
-        /// <returns>List of type names.</returns>
-        private static string[] GetNotHandledByMonoTypes() =>
-            new string[]
-            {
-                "System.Diagnostics.Eventing.Reader.EventLogInvalidDataException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Diagnostics.Eventing.Reader.EventLogNotFoundException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Diagnostics.Eventing.Reader.EventLogReadingException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Diagnostics.Tracing.EventSourceException, mscorlib, Version=4.0.0.0, PublicKeyToken=b77a5c561934e089",
-                "System.Management.Instrumentation.InstanceNotFoundException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Management.Instrumentation.InstrumentationBaseException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-                "System.Management.Instrumentation.InstrumentationException, System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
-            };
-#endif
     }
 }
