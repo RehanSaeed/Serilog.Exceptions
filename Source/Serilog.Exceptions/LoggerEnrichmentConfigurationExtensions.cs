@@ -20,10 +20,14 @@ namespace Serilog.Exceptions
         public static LoggerConfiguration WithExceptionDetails(
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(loggerEnrichmentConfiguration);
+#else
             if (loggerEnrichmentConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(loggerEnrichmentConfiguration));
             }
+#endif
 
             var options = new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
@@ -44,10 +48,14 @@ namespace Serilog.Exceptions
             this LoggerEnrichmentConfiguration loggerEnrichmentConfiguration,
             IDestructuringOptions destructuringOptions)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(loggerEnrichmentConfiguration);
+#else
             if (loggerEnrichmentConfiguration is null)
             {
                 throw new ArgumentNullException(nameof(loggerEnrichmentConfiguration));
             }
+#endif
 
             ILogEventEnricher enricher = new ExceptionEnricher(destructuringOptions);
             return loggerEnrichmentConfiguration.With(enricher);

@@ -1,7 +1,7 @@
 namespace Serilog.Exceptions.Reflection
 {
     using System;
-#if NETSTANDARD1_3 || NETSTANDARD1_6
+#if NETSTANDARD1_3
     using System.Reflection;
 #endif
 
@@ -95,10 +95,8 @@ namespace Serilog.Exceptions.Reflection
             }
         }
 
-#pragma warning disable CA1801 // This warning should not occur and is fixed in .NET 6.
         private static bool IsSubTypeOf(Type possibleSubType, Type possibleBaseType) =>
-#pragma warning restore CA1801 // This warning should not occur and is fixed in .NET 6.
-#if NETSTANDARD1_3 || NETSTANDARD1_6
+#if NETSTANDARD1_3
             possibleBaseType.GetTypeInfo().IsSubclassOf(possibleBaseType);
 #else
             possibleSubType.IsSubclassOf(possibleBaseType);

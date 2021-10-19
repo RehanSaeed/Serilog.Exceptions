@@ -40,9 +40,14 @@ namespace Serilog.Exceptions.Refit.Destructurers
             {
                 // Argument checks are usually done in <see cref="ExceptionDestructurer.Destructure"/>
                 // but as we didn't call this method we need to do the checks here.
+#if NET6_0_OR_GREATER
+                ArgumentNullException.ThrowIfNull(exception);
+                ArgumentNullException.ThrowIfNull(propertiesBag);
+                ArgumentNullException.ThrowIfNull(destructureException);
+#else
                 if (exception is null)
                 {
-                    throw new ArgumentNullException(nameof(propertiesBag));
+                    throw new ArgumentNullException(nameof(exception));
                 }
 
                 if (propertiesBag is null)
@@ -54,6 +59,7 @@ namespace Serilog.Exceptions.Refit.Destructurers
                 {
                     throw new ArgumentNullException(nameof(destructureException));
                 }
+#endif
             }
 
 #pragma warning disable CA1062 // Validate arguments of public methods

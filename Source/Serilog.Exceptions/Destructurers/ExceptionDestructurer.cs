@@ -25,26 +25,29 @@ namespace Serilog.Exceptions.Destructurers
 #pragma warning disable IDE0001 // Simplify Names
 #if NET461 || NET472
                         typeof(Microsoft.SqlServer.Server.InvalidUdtException),
+#endif
+#if !NETSTANDARD1_3
                         typeof(System.AccessViolationException),
                         typeof(System.AppDomainUnloadedException),
                         typeof(System.ApplicationException),
-#endif
                         typeof(System.ArithmeticException),
                         typeof(System.ArrayTypeMismatchException),
-#if NET461 || NET472
                         typeof(System.CannotUnloadAppDomainException),
 #endif
                         typeof(System.Collections.Generic.KeyNotFoundException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.ComponentModel.Design.CheckoutException),
                         typeof(System.ComponentModel.InvalidAsynchronousStateException),
                         typeof(System.ComponentModel.InvalidEnumArgumentException),
+#endif
+#if NET461 || NET472
                         typeof(System.Configuration.SettingsPropertyIsReadOnlyException),
                         typeof(System.Configuration.SettingsPropertyNotFoundException),
                         typeof(System.Configuration.SettingsPropertyWrongTypeException),
-                        typeof(System.ContextMarshalException),
 #endif
-#if NET461 || NET472
+#if !NETSTANDARD1_3
+                        typeof(System.ContextMarshalException),
+
                         typeof(System.Data.ConstraintException),
                         typeof(System.Data.DataException),
                         typeof(System.Data.DeletedRowInaccessibleException),
@@ -55,21 +58,24 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Data.InvalidExpressionException),
                         typeof(System.Data.MissingPrimaryKeyException),
                         typeof(System.Data.NoNullAllowedException),
+#endif
+#if NET461 || NET472
                         typeof(System.Data.OperationAbortedException),
+#endif
+#if !NETSTANDARD1_3
                         typeof(System.Data.ReadOnlyException),
                         typeof(System.Data.RowNotInTableException),
                         typeof(System.Data.SqlTypes.SqlAlreadyFilledException),
                         typeof(System.Data.SqlTypes.SqlNotFilledException),
-#endif
-#if NET461 || NET472
                         typeof(System.Data.StrongTypingException),
                         typeof(System.Data.SyntaxErrorException),
                         typeof(System.Data.VersionNotFoundException),
 #endif
+                        typeof(System.Diagnostics.Tracing.EventSourceException),
                         typeof(System.DataMisalignedException),
                         typeof(System.DivideByZeroException),
                         typeof(System.DllNotFoundException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.DuplicateWaitObjectException),
                         typeof(System.EntryPointNotFoundException),
 #endif
@@ -78,7 +84,7 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.FormatException),
                         typeof(System.IndexOutOfRangeException),
                         typeof(System.InsufficientExecutionStackException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.InsufficientMemoryException),
 #endif
                         typeof(System.InvalidCastException),
@@ -86,26 +92,26 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.InvalidProgramException),
                         typeof(System.InvalidTimeZoneException),
                         typeof(System.IO.DirectoryNotFoundException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.IO.DriveNotFoundException),
 #endif
                         typeof(System.IO.EndOfStreamException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.IO.InternalBufferOverflowException),
 #endif
                         typeof(System.IO.InvalidDataException),
                         typeof(System.IO.IOException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.IO.IsolatedStorage.IsolatedStorageException),
 #endif
                         typeof(System.IO.PathTooLongException),
                         typeof(System.MemberAccessException),
                         typeof(System.MethodAccessException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.MulticastNotSupportedException),
 #endif
                         typeof(System.Net.CookieException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.Net.NetworkInformation.PingException),
                         typeof(System.Net.ProtocolViolationException),
 #endif
@@ -117,16 +123,17 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.PlatformNotSupportedException),
                         typeof(System.RankException),
                         typeof(System.Reflection.AmbiguousMatchException),
-#if NET461 || NET472
-                        typeof(System.Reflection.CustomAttributeFormatException),
-#endif
 #if !NETSTANDARD1_3
+                        typeof(System.Reflection.CustomAttributeFormatException),
                         typeof(System.Reflection.InvalidFilterCriteriaException),
                         typeof(System.Reflection.TargetException),
 #endif
                         typeof(System.Reflection.TargetInvocationException),
                         typeof(System.Reflection.TargetParameterCountException),
                         typeof(System.Resources.MissingManifestResourceException),
+#if NET5_0_OR_GREATER || NETSTANDARD2_1
+                        typeof(System.Runtime.AmbiguousImplementationException),
+#endif
                         typeof(System.Runtime.InteropServices.COMException),
                         typeof(System.Runtime.InteropServices.InvalidComObjectException),
                         typeof(System.Runtime.InteropServices.InvalidOleVariantTypeException),
@@ -138,18 +145,24 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Runtime.Remoting.RemotingException),
                         typeof(System.Runtime.Remoting.RemotingTimeoutException),
                         typeof(System.Runtime.Remoting.ServerException),
+#endif
+#if !NETSTANDARD1_3
                         typeof(System.Runtime.Serialization.SerializationException),
                         typeof(System.Security.Authentication.AuthenticationException),
                         typeof(System.Security.Authentication.InvalidCredentialException),
 #endif
                         typeof(System.Security.Cryptography.CryptographicException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.Security.Cryptography.CryptographicUnexpectedOperationException),
+#endif
+#if NET461 || NET472
                         typeof(System.Security.Policy.PolicyException),
 #endif
                         typeof(System.Security.VerificationException),
 #if NET461 || NET472
                         typeof(System.Security.XmlSyntaxException),
+#endif
+#if !NETSTANDARD1_3
                         typeof(System.StackOverflowException),
                         typeof(System.SystemException),
 #endif
@@ -158,18 +171,18 @@ namespace Serilog.Exceptions.Destructurers
                         typeof(System.Threading.SemaphoreFullException),
                         typeof(System.Threading.SynchronizationLockException),
                         typeof(System.Threading.Tasks.TaskSchedulerException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.Threading.ThreadInterruptedException),
                         typeof(System.Threading.ThreadStartException),
                         typeof(System.Threading.ThreadStateException),
 #endif
                         typeof(System.Threading.WaitHandleCannotBeOpenedException),
                         typeof(System.TimeoutException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.TimeZoneNotFoundException),
 #endif
                         typeof(System.TypeAccessException),
-#if NET461 || NET472
+#if !NETSTANDARD1_3
                         typeof(System.TypeUnloadedException),
 #endif
                         typeof(System.UnauthorizedAccessException),
@@ -197,9 +210,14 @@ namespace Serilog.Exceptions.Destructurers
             IExceptionPropertiesBag propertiesBag,
             Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(exception);
+            ArgumentNullException.ThrowIfNull(propertiesBag);
+            ArgumentNullException.ThrowIfNull(destructureException);
+#else
             if (exception is null)
             {
-                throw new ArgumentNullException(nameof(propertiesBag));
+                throw new ArgumentNullException(nameof(exception));
             }
 
             if (propertiesBag is null)
@@ -211,6 +229,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 throw new ArgumentNullException(nameof(destructureException));
             }
+#endif
 
             propertiesBag.AddProperty("Type", exception.GetType().FullName);
 
@@ -254,7 +273,7 @@ namespace Serilog.Exceptions.Destructurers
             propertiesBag.AddProperty(nameof(Exception.Source), exception.Source);
             propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
 
-#if NET461 || NET472
+#if !NETSTANDARD1_3
             if (exception.TargetSite is not null)
             {
                 propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());

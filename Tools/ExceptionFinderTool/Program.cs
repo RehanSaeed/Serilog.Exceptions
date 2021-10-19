@@ -1,6 +1,9 @@
 namespace ExceptionFinderTool
 {
     using System;
+#if NET6_0_OR_GREATER
+    using System.Globalization;
+#endif
     using System.Linq;
     using System.Reflection;
     using System.Text;
@@ -25,7 +28,11 @@ namespace ExceptionFinderTool
                 .Select(x => x.FullName)
                 .OrderBy(x => x))
             {
+#if NET6_0_OR_GREATER
+                stringBuilder.AppendLine(CultureInfo.InvariantCulture, $"typeof({exceptionType}),");
+#else
                 stringBuilder.AppendLine($"typeof({exceptionType}),");
+#endif
             }
 
             var types = stringBuilder.ToString();

@@ -55,9 +55,14 @@ namespace Serilog.Exceptions.Destructurers
             IExceptionPropertiesBag propertiesBag,
             Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(exception);
+            ArgumentNullException.ThrowIfNull(propertiesBag);
+            ArgumentNullException.ThrowIfNull(destructureException);
+#else
             if (exception is null)
             {
-                throw new ArgumentNullException(nameof(propertiesBag));
+                throw new ArgumentNullException(nameof(exception));
             }
 
             if (propertiesBag is null)
@@ -69,6 +74,7 @@ namespace Serilog.Exceptions.Destructurers
             {
                 throw new ArgumentNullException(nameof(destructureException));
             }
+#endif
 
             var nextCyclicRefId = 1;
             var destructuredObjects = new Dictionary<object, IDictionary<string, object?>>();

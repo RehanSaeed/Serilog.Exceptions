@@ -45,10 +45,14 @@ namespace Serilog.Exceptions.Core
         /// <inheritdoc />
         public void AddProperty(string key, object? value)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(key);
+#else
             if (key is null)
             {
                 throw new ArgumentNullException(nameof(key));
             }
+#endif
 
             if (this.resultsCollected)
             {
@@ -78,7 +82,7 @@ namespace Serilog.Exceptions.Core
         /// </summary>
         private void AddPairToProperties(string key, object? value)
         {
-#if NET5_0
+#if NET5_0_OR_GREATER
             var i = 0;
             while (!this.properties.TryAdd(key, value) && i < AcceptableNumberOfSameNameProperties)
             {
@@ -92,7 +96,7 @@ namespace Serilog.Exceptions.Core
 #endif
         }
 
-#if !NET5_0
+#if !NET5_0_OR_GREATER
         private string MakeSureKeyIsUnique(string key)
         {
             var i = 0;
@@ -105,6 +109,5 @@ namespace Serilog.Exceptions.Core
             return key;
         }
 #endif
-
     }
 }

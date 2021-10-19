@@ -70,10 +70,14 @@ namespace Serilog.Exceptions.Test.Destructurers
 
         public static JObject ExtractPropertiesObject(JObject rootObject)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(rootObject);
+#else
             if (rootObject is null)
             {
                 throw new ArgumentNullException(nameof(rootObject));
             }
+#endif
 
             var propertiesProperty = Assert.Single(rootObject.Properties(), x => x.Name == "Properties");
             var propertiesObject = Assert.IsType<JObject>(propertiesProperty.Value);
