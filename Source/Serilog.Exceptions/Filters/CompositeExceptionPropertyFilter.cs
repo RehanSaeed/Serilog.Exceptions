@@ -19,12 +19,14 @@ namespace Serilog.Exceptions.Filters
         /// <exception cref="ArgumentException">filters was empty or filter at index {i} is <c>null</c>.</exception>
         public CompositeExceptionPropertyFilter(params IExceptionPropertyFilter[] filters)
         {
-#pragma warning disable CA1508 // This warning should not occur and is fixed in .NET 6.
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(filters);
+#else
             if (filters is null)
-#pragma warning restore CA1508 // This warning should not occur and is fixed in .NET 6.
             {
                 throw new ArgumentNullException(nameof(filters));
             }
+#endif
 
             if (filters.Length == 0)
             {

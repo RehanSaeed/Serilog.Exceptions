@@ -76,10 +76,14 @@ namespace Serilog.Exceptions.Core
         /// <returns>Options builder for method chaining.</returns>
         public DestructuringOptionsBuilder WithDestructurers(IEnumerable<IExceptionDestructurer> destructurers)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(destructurers);
+#else
             if (destructurers is null)
             {
                 throw new ArgumentNullException(nameof(destructurers));
             }
+#endif
 
             this.destructurers.AddRange(destructurers);
             return this;
@@ -127,10 +131,14 @@ namespace Serilog.Exceptions.Core
         /// <exception cref="ArgumentException">Name cannot be null or empty.</exception>
         public DestructuringOptionsBuilder WithRootName(string rootName)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(rootName);
+#else
             if (rootName is null)
             {
                 throw new ArgumentNullException(nameof(rootName));
             }
+#endif
 
             if (rootName.Length == 0)
             {

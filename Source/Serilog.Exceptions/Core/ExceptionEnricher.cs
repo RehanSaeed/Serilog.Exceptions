@@ -50,6 +50,10 @@ namespace Serilog.Exceptions.Core
         /// <param name="propertyFactory">The property factory.</param>
         public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(logEvent);
+            ArgumentNullException.ThrowIfNull(propertyFactory);
+#else
             if (logEvent is null)
             {
                 throw new ArgumentNullException(nameof(logEvent));
@@ -59,6 +63,7 @@ namespace Serilog.Exceptions.Core
             {
                 throw new ArgumentNullException(nameof(propertyFactory));
             }
+#endif
 
             if (logEvent.Exception is not null)
             {

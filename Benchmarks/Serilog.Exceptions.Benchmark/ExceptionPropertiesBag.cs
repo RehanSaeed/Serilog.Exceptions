@@ -29,10 +29,14 @@ namespace Serilog.Exceptions.Benchmark
 
         public void AddProperty(string key, object? value)
         {
+#if NET6_0_OR_GREATER
+            ArgumentNullException.ThrowIfNull(key);
+#else
             if (key is null)
             {
                 throw new ArgumentNullException(nameof(key));
             }
+#endif
 
             if (this.resultsCollected)
             {

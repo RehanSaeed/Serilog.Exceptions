@@ -13,8 +13,8 @@ namespace Serilog.Exceptions.Benchmark
     [HtmlExporter]
     [CsvMeasurementsExporter]
     [RPlotExporter]
+    [SimpleJob(RuntimeMoniker.Net60)]
     [SimpleJob(RuntimeMoniker.Net472)]
-    [SimpleJob(RuntimeMoniker.Net50)]
     public class DestructuringBenchmark
     {
         private readonly ReflectionBasedDestructurer reflectionBasedDestructurer = new(10);

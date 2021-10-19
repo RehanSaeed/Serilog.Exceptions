@@ -36,7 +36,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             // Assert
             var writtenJson = jsonWriter.ToString();
-            Assert.Contains(TestContext.UserIdIDoNotWantToSee, writtenJson, StringComparison.Ordinal);
+            Assert.True(writtenJson.Contains(TestContext.UserIdIDoNotWantToSee, StringComparison.Ordinal) ||
+                writtenJson.Contains("\"Users\":\"threw System.TypeInitializationException", StringComparison.Ordinal));
         }
 
         [Fact]
