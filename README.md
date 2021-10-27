@@ -262,7 +262,7 @@ Filtering for other scenarios is also supported:
 
 ## Contributions and Thanks
 
-Please view the [contributing guide](https://github.com/RehanSaeed/Serilog.Enrichers.Span/blob/main/.github/CONTRIBUTING.md) for more information.
+Please view the [contributing guide](https://github.com/RehanSaeed/Serilog.Exceptions/blob/main/.github/CONTRIBUTING.md) for more information.
 
 - [304NotModified](https://github.com/304NotModified) - Added Markdown syntax highlighting.
 - [joelweiss](https://github.com/joelweiss) - Added Entity Framework Core destructurers.
