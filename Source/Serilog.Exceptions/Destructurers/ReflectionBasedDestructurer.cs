@@ -109,6 +109,8 @@ namespace Serilog.Exceptions.Destructurers
             return refId;
         }
 
+        private static object DestructureQueryable(IQueryable value) => value.Expression.ToString();
+
         private static object DestructureUri(Uri value) => value.ToString();
 
         private static void AppendTypeIfPossible(IExceptionPropertiesBag propertiesBag, Type valueType)
@@ -204,7 +206,11 @@ namespace Serilog.Exceptions.Destructurers
                 return this.DestructureValueDictionary(dictionary, level, destructuredObjects, ref nextCyclicRefId);
             }
 
-            if (value is IEnumerable enumerable)
+            if (value is IQueryable queryable)
+            {
+                return DestructureQueryable(queryable);
+            }
+            else if (value is IEnumerable enumerable)
             {
                 return this.DestructureValueEnumerable(enumerable, level, destructuredObjects, ref nextCyclicRefId);
             }

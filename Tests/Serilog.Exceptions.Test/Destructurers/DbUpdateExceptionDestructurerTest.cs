@@ -76,6 +76,8 @@ namespace Serilog.Exceptions.Test.Destructurers
 
             public DbSet<User>? Users { get; set; }
 
+            public string CustomData { get; set; } = UserIdIDoNotWantToSee;
+
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseInMemoryDatabase(databaseName: "TestDebUpdateException");
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
