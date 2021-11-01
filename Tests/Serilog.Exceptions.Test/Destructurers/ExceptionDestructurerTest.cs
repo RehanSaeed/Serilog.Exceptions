@@ -4,6 +4,7 @@ namespace Serilog.Exceptions.Test.Destructurers
     using System.Collections.Generic;
     using System.Globalization;
     using FluentAssertions;
+    using Microsoft.EntityFrameworkCore;
     using Moq;
     using Newtonsoft.Json.Linq;
     using Serilog.Exceptions.Core;
@@ -196,6 +197,34 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Which.Name.Should().Be("System.Collections.Generic.List`1[System.Int32]");
         }
 
+        [Fact]
+        public void WhenExceptionContainsDbContext_ShouldNotSerializeDbSets()
+        {
+            // Arrange
+            using var context = new ExceptionDbContext();
+            var exception = new CustomDbContextException("hello world", context);
+
+            // Act
+            var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
+
+            // Assert
+            var exceptionDetails = ExtractExceptionDetails(result).Should().BeOfType<JObject>().Which;
+            var nameProperty = exceptionDetails
+                .Properties().Should().ContainSingle(x => x.Name == nameof(CustomDbContextException.Name)).Which
+                .Should().BeOfType<JProperty>().Which;
+
+            nameProperty.Value.Should().BeOfType<JValue>().Which.Value.Should().Be("hello world");
+
+            var contextProperty = exceptionDetails
+                .Properties().Should().ContainSingle(x => x.Name == nameof(CustomDbContextException.Context)).Which;
+
+            var customerProperty = contextProperty.Value.Should().BeOfType<JObject>().Which
+                .Properties().Should().ContainSingle(x => x.Name == nameof(ExceptionDbContext.Customer)).Which;
+
+            customerProperty.Value.Should().BeOfType<JValue>().Which.Value.Should().BeOfType<string>().Which
+                .Should().NotBeEmpty();
+        }
+
         public class DictNonScalarKeyException : Exception
         {
             public DictNonScalarKeyException() => this.Reference = new Dictionary<IEnumerable<int>, object>();
@@ -209,6 +238,35 @@ namespace Serilog.Exceptions.Test.Destructurers
                 this.Reference = new Dictionary<IEnumerable<int>, object>();
 
             public Dictionary<IEnumerable<int>, object> Reference { get; }
+        }
+
+#pragma warning disable CS3001 // Argument type is not CLS-compliant
+#pragma warning disable CS3003 // Type is not CLS-compliant
+        public class CustomDbContextException : Exception
+        {
+            public CustomDbContextException(string name, DbContext context)
+            {
+                this.Name = name;
+                this.Context = context;
+            }
+
+            public string Name { get; set; }
+
+            public DbContext Context { get; }
+        }
+
+        private class ExceptionDbContext : DbContext
+        {
+            public DbSet<CustomerEntity> Customer => this.Set<CustomerEntity>();
+
+            protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseInMemoryDatabase(databaseName: "TestDebUpdateException");
+
+            public class CustomerEntity
+            {
+                public string? Name { get; set; }
+
+                public int Id { get; set; }
+            }
         }
     }
 }
