@@ -196,6 +196,58 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Which.Name.Should().Be("System.Collections.Generic.List`1[System.Int32]");
         }
 
+        private class DefaultExceptionDestructurer<T> : ExceptionDestructurer
+        {
+            public override Type[] TargetTypes { get; } = { typeof(T) };
+        }
+
+        [Fact]
+        public void GivenException_ContainingProperty_WithCustomDestructuringPolicy_ShouldApplyThePolicy()
+        {
+            // Arrange
+            var options = new DestructuringOptionsBuilder()
+                .WithDefaultDestructurers()
+                .WithDestructurers(new[]
+                {
+                    new DefaultExceptionDestructurer<TokenException>(),
+                });
+            var token = new Token(1, "Don't show me!");
+            var exception = new TokenException();
+            exception.Data["@Token"] = token;
+            static LoggerConfiguration LoggerConf(LoggerConfiguration x) =>
+                x.Destructure.ByTransforming<Token>(x => new { x.Id, Token = new string('*', x.Value.Length) });
+
+            // Act
+            var rootObject = LogAndDestructureException(exception, options, LoggerConf);
+
+            // Assert
+            var exceptionObject = ExtractExceptionDetails(rootObject);
+            var dataObject = exceptionObject.Properties().Should().ContainSingle(x => x.Name == "Data").Which;
+            var tokenObject = dataObject
+                .Should().BeOfType<JProperty>().Which.Value
+                .Should().BeOfType<JObject>()
+                .Which.Properties().Should().ContainSingle(x => x.Name == "@Token").Which;
+            tokenObject.Value.Should().BeOfType<JObject>().Which
+                .Properties().Should().ContainSingle(x => x.Name == "Token").Which
+                .Should().BeOfType<JProperty>().Which.Value
+                .Should().BeOfType<JValue>().Which.Value.Should().Be("**************");
+        }
+
+        private class Token
+        {
+            public Token(int id, string value)
+            {
+                this.Id = id;
+                this.Value = value;
+            }
+
+            public int Id { get; private init; }
+
+            public string Value { get; private init; }
+        }
+
+        class TokenException : Exception { }
+
         public class DictNonScalarKeyException : Exception
         {
             public DictNonScalarKeyException() => this.Reference = new Dictionary<IEnumerable<int>, object>();
