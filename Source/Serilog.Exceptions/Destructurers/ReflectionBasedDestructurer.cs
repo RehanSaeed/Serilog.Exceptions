@@ -22,6 +22,7 @@ namespace Serilog.Exceptions.Destructurers
         private const string IdLabel = "$id";
         private const string RefLabel = "$ref";
         private const string CyclicReferenceMessage = "Cyclic reference";
+        private const string IQueryableDestructureSkippedMessage = "IQueryable skipped";
         private readonly int destructuringDepth;
         private readonly ReflectionInfoExtractor reflectionInfoExtractor = new();
 
@@ -108,8 +109,6 @@ namespace Serilog.Exceptions.Destructurers
 
             return refId;
         }
-
-        private static object DestructureQueryable(IQueryable value) => value.Expression.ToString();
 
         private static object DestructureUri(Uri value) => value.ToString();
 
@@ -208,7 +207,7 @@ namespace Serilog.Exceptions.Destructurers
 
             if (value is IQueryable queryable)
             {
-                return DestructureQueryable(queryable);
+                return IQueryableDestructureSkippedMessage;
             }
             else if (value is IEnumerable enumerable)
             {

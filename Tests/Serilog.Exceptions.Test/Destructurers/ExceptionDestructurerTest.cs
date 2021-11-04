@@ -198,7 +198,7 @@ namespace Serilog.Exceptions.Test.Destructurers
         }
 
         [Fact]
-        public void WhenExceptionContainsDbContext_ShouldNotSerializeDbSets()
+        public void WhenExceptionContainsDbContext_ShouldSkipIQueryableProperties()
         {
             // Arrange
             using var context = new ExceptionDbContext();
@@ -222,7 +222,7 @@ namespace Serilog.Exceptions.Test.Destructurers
                 .Properties().Should().ContainSingle(x => x.Name == nameof(ExceptionDbContext.Customer)).Which;
 
             customerProperty.Value.Should().BeOfType<JValue>().Which.Value.Should().BeOfType<string>().Which
-                .Should().NotBeEmpty();
+                .Should().Be("IQueryable skipped");
         }
 
         public class DictNonScalarKeyException : Exception
