@@ -1,9 +1,8 @@
-namespace Serilog.Exceptions.Benchmark
-{
-    using BenchmarkDotNet.Running;
+namespace Serilog.Exceptions.Benchmark;
 
-    public static class Program
-    {
-        public static void Main() => BenchmarkRunner.Run<DestructuringBenchmark>();
-    }
+using BenchmarkDotNet.Running;
+
+public static class Program
+{
+    public static void Main() => BenchmarkRunner.Run<DestructuringBenchmark>();
 }

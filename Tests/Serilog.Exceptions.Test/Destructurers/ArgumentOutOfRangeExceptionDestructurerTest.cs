@@ -1,27 +1,26 @@
-namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers;
+
+using System;
+using Xunit;
+using static LogJsonOutputUtils;
+
+public class ArgumentOutOfRangeExceptionDestructurerTest
 {
-    using System;
-    using Xunit;
-    using static LogJsonOutputUtils;
-
-    public class ArgumentOutOfRangeExceptionDestructurerTest
+    [Fact]
+    public void ArgumentOfOutRangeException_ParamNameIsAttachedAsProperty()
     {
-        [Fact]
-        public void ArgumentOfOutRangeException_ParamNameIsAttachedAsProperty()
-        {
 #pragma warning disable CA2208 // Instantiate argument exceptions correctly
-            var argumentException = new ArgumentOutOfRangeException("testParamName");
+        var argumentException = new ArgumentOutOfRangeException("testParamName");
 #pragma warning restore CA2208 // Instantiate argument exceptions correctly
-            Test_LoggedExceptionContainsProperty(argumentException, "ParamName", "testParamName");
-        }
+        Test_LoggedExceptionContainsProperty(argumentException, "ParamName", "testParamName");
+    }
 
-        [Fact]
-        public void ArgumentOfOutRangeException_ActualValueIsAttachedAsProperty()
-        {
+    [Fact]
+    public void ArgumentOfOutRangeException_ActualValueIsAttachedAsProperty()
+    {
 #pragma warning disable CA2208 // Instantiate argument exceptions correctly
-            var argumentException = new ArgumentOutOfRangeException("testParamName", "ACTUAL_VALUE", "MSG");
+        var argumentException = new ArgumentOutOfRangeException("testParamName", "ACTUAL_VALUE", "MSG");
 #pragma warning restore CA2208 // Instantiate argument exceptions correctly
-            Test_LoggedExceptionContainsProperty(argumentException, "ActualValue", "ACTUAL_VALUE");
-        }
+        Test_LoggedExceptionContainsProperty(argumentException, "ActualValue", "ACTUAL_VALUE");
     }
 }
