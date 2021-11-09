@@ -1,26 +1,26 @@
-namespace Serilog.Exceptions.Destructurers
-{
-    using System;
-    using System.Collections.Generic;
-    using Serilog.Exceptions.Core;
+namespace Serilog.Exceptions.Destructurers;
 
+using System;
+using System.Collections.Generic;
+using Serilog.Exceptions.Core;
+
+/// <summary>
+/// Base class for more specific destructurers.
+/// It destructures all the standard properties that every <see cref="Exception"/> has.
+/// </summary>
+public class ExceptionDestructurer : IExceptionDestructurer
+{
     /// <summary>
-    /// Base class for more specific destructurers.
-    /// It destructures all the standard properties that every <see cref="Exception"/> has.
+    /// Gets a collection of exceptions types from standard library that do not have any custom property,
+    /// so they can be destructured using generic exception destructurer.
     /// </summary>
-    public class ExceptionDestructurer : IExceptionDestructurer
-    {
-        /// <summary>
-        /// Gets a collection of exceptions types from standard library that do not have any custom property,
-        /// so they can be destructured using generic exception destructurer.
-        /// </summary>
 #pragma warning disable CA1819 // Properties should not return arrays
-        public virtual Type[] TargetTypes
+    public virtual Type[] TargetTypes
 #pragma warning restore CA1819 // Properties should not return arrays
+    {
+        get
         {
-            get
-            {
-                var targetTypes = new List<Type>
+            var targetTypes = new List<Type>
                     {
 #pragma warning disable IDE0001 // Simplify Names
 #if NET461 || NET472
@@ -201,90 +201,89 @@ namespace Serilog.Exceptions.Destructurers
                     };
 #pragma warning restore IDE0001 // Simplify Names
 
-                return targetTypes.ToArray();
-            }
+            return targetTypes.ToArray();
+        }
+    }
+
+    /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
+    public virtual void Destructure(
+        Exception exception,
+        IExceptionPropertiesBag propertiesBag,
+        Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
+    {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(exception);
+        ArgumentNullException.ThrowIfNull(propertiesBag);
+        ArgumentNullException.ThrowIfNull(destructureException);
+#else
+        if (exception is null)
+        {
+            throw new ArgumentNullException(nameof(exception));
         }
 
-        /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
-        public virtual void Destructure(
-            Exception exception,
-            IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
+        if (propertiesBag is null)
         {
-#if NET6_0_OR_GREATER
-            ArgumentNullException.ThrowIfNull(exception);
-            ArgumentNullException.ThrowIfNull(propertiesBag);
-            ArgumentNullException.ThrowIfNull(destructureException);
-#else
-            if (exception is null)
-            {
-                throw new ArgumentNullException(nameof(exception));
-            }
+            throw new ArgumentNullException(nameof(propertiesBag));
+        }
 
-            if (propertiesBag is null)
-            {
-                throw new ArgumentNullException(nameof(propertiesBag));
-            }
-
-            if (destructureException is null)
-            {
-                throw new ArgumentNullException(nameof(destructureException));
-            }
+        if (destructureException is null)
+        {
+            throw new ArgumentNullException(nameof(destructureException));
+        }
 #endif
 
-            propertiesBag.AddProperty("Type", exception.GetType().FullName);
+        propertiesBag.AddProperty("Type", exception.GetType().FullName);
 
-            DestructureCommonExceptionProperties(
-                exception,
-                propertiesBag,
-                destructureException,
-                data => data.ToStringObjectDictionary());
+        DestructureCommonExceptionProperties(
+            exception,
+            propertiesBag,
+            destructureException,
+            data => data.ToStringObjectDictionary());
+    }
+
+    /// <summary>
+    /// Destructures public properties of <see cref="Exception"/>.
+    /// Omits less frequently used ones if they are null.
+    /// </summary>
+    /// <param name="exception">The exception that will be destructured.</param>
+    /// <param name="propertiesBag">The bag when destructured properties will be put.</param>
+    /// <param name="innerDestructure">Function that can be used to destructure inner exceptions if there are any.</param>
+    /// <param name="destructureDataProperty">Injected function for destructuring <see cref="Exception.Data"/>.</param>
+    internal static void DestructureCommonExceptionProperties(
+        Exception exception,
+        IExceptionPropertiesBag propertiesBag,
+        Func<Exception, IReadOnlyDictionary<string, object?>?> innerDestructure,
+        Func<System.Collections.IDictionary, object> destructureDataProperty)
+    {
+        if (exception.Data.Count != 0)
+        {
+            propertiesBag.AddProperty(nameof(Exception.Data), destructureDataProperty(exception.Data));
         }
 
-        /// <summary>
-        /// Destructures public properties of <see cref="Exception"/>.
-        /// Omits less frequently used ones if they are null.
-        /// </summary>
-        /// <param name="exception">The exception that will be destructured.</param>
-        /// <param name="propertiesBag">The bag when destructured properties will be put.</param>
-        /// <param name="innerDestructure">Function that can be used to destructure inner exceptions if there are any.</param>
-        /// <param name="destructureDataProperty">Injected function for destructuring <see cref="Exception.Data"/>.</param>
-        internal static void DestructureCommonExceptionProperties(
-            Exception exception,
-            IExceptionPropertiesBag propertiesBag,
-            Func<Exception, IReadOnlyDictionary<string, object?>?> innerDestructure,
-            Func<System.Collections.IDictionary, object> destructureDataProperty)
+        if (!string.IsNullOrEmpty(exception.HelpLink))
         {
-            if (exception.Data.Count != 0)
-            {
-                propertiesBag.AddProperty(nameof(Exception.Data), destructureDataProperty(exception.Data));
-            }
+            propertiesBag.AddProperty(nameof(Exception.HelpLink), exception.HelpLink);
+        }
 
-            if (!string.IsNullOrEmpty(exception.HelpLink))
-            {
-                propertiesBag.AddProperty(nameof(Exception.HelpLink), exception.HelpLink);
-            }
+        if (exception.HResult != 0)
+        {
+            propertiesBag.AddProperty(nameof(Exception.HResult), exception.HResult);
+        }
 
-            if (exception.HResult != 0)
-            {
-                propertiesBag.AddProperty(nameof(Exception.HResult), exception.HResult);
-            }
-
-            propertiesBag.AddProperty(nameof(Exception.Message), exception.Message);
-            propertiesBag.AddProperty(nameof(Exception.Source), exception.Source);
-            propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
+        propertiesBag.AddProperty(nameof(Exception.Message), exception.Message);
+        propertiesBag.AddProperty(nameof(Exception.Source), exception.Source);
+        propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
 
 #if !NETSTANDARD1_3
-            if (exception.TargetSite is not null)
-            {
-                propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());
-            }
+        if (exception.TargetSite is not null)
+        {
+            propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());
+        }
 #endif
 
-            if (exception.InnerException is not null)
-            {
-                propertiesBag.AddProperty(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
-            }
+        if (exception.InnerException is not null)
+        {
+            propertiesBag.AddProperty(nameof(Exception.InnerException), innerDestructure(exception.InnerException));
         }
     }
 }
