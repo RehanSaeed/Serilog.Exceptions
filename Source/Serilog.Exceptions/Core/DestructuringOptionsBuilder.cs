@@ -21,6 +21,7 @@ namespace Serilog.Exceptions.Core
             new ArgumentExceptionDestructurer(),
             new ArgumentOutOfRangeExceptionDestructurer(),
             new AggregateExceptionDestructurer(),
+            new RegexMatchTimeoutExceptionDestructurer(),
             new ReflectionTypeLoadExceptionDestructurer(),
             new OperationCanceledExceptionDestructurer(),
             new TaskCanceledExceptionDestructurer(),
