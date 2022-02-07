@@ -1,38 +1,37 @@
-namespace Serilog.Exceptions.Test.Destructurers
+namespace Serilog.Exceptions.Test.Destructurers;
+
+using System;
+using System.Threading;
+using Xunit;
+using static LogJsonOutputUtils;
+
+public sealed class OperationCanceledExceptionDestructurerTest : IDisposable
 {
-    using System;
-    using System.Threading;
-    using Xunit;
-    using static LogJsonOutputUtils;
+    private readonly CancellationTokenSource cancellationTokenSource;
 
-    public sealed class OperationCanceledExceptionDestructurerTest : IDisposable
+    public OperationCanceledExceptionDestructurerTest() =>
+        this.cancellationTokenSource = new CancellationTokenSource();
+
+    [Fact]
+    public void OperationCanceledException_CancellationTokenIsAttachedAsProperty()
     {
-        private readonly CancellationTokenSource cancellationTokenSource;
+        this.cancellationTokenSource.Cancel();
 
-        public OperationCanceledExceptionDestructurerTest() =>
-            this.cancellationTokenSource = new CancellationTokenSource();
+        var oce = new OperationCanceledException(this.cancellationTokenSource.Token);
 
-        [Fact]
-        public void OperationCanceledException_CancellationTokenIsAttachedAsProperty()
-        {
-            this.cancellationTokenSource.Cancel();
-
-            var oce = new OperationCanceledException(this.cancellationTokenSource.Token);
-
-            Test_LoggedExceptionContainsProperty(oce, "CancellationToken", "CancellationRequested: true");
-        }
-
-        [Fact]
-        public void OperationCanceledException_DisposedCancellationisAttachedAsProperty()
-        {
-            var token = this.cancellationTokenSource.Token;
-            this.cancellationTokenSource.Dispose();
-
-            var oce = new OperationCanceledException(token);
-
-            Test_LoggedExceptionContainsProperty(oce, "CancellationToken", "CancellationRequested: false");
-        }
-
-        public void Dispose() => this.cancellationTokenSource?.Dispose();
+        Test_LoggedExceptionContainsProperty(oce, "CancellationToken", "CancellationRequested: true");
     }
+
+    [Fact]
+    public void OperationCanceledException_DisposedCancellationisAttachedAsProperty()
+    {
+        var token = this.cancellationTokenSource.Token;
+        this.cancellationTokenSource.Dispose();
+
+        var oce = new OperationCanceledException(token);
+
+        Test_LoggedExceptionContainsProperty(oce, "CancellationToken", "CancellationRequested: false");
+    }
+
+    public void Dispose() => this.cancellationTokenSource?.Dispose();
 }

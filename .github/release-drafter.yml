@@ -1,27 +1,30 @@
-name-template: '$RESOLVED_VERSION'
-tag-template: '$RESOLVED_VERSION'
-change-template: '- $TITLE by @$AUTHOR (#$NUMBER)'
-no-changes-template: '- No changes'
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+change-template: "- $TITLE by @$AUTHOR (#$NUMBER)"
+no-changes-template: "- No changes"
 categories:
-  - title: '🚀 New Features'
+  - title: "📚 Documentation"
     labels:
-      - 'enhancement'
-  - title: '🐛 Bug Fixes'
+      - "documentation"
+  - title: "🚀 New Features"
     labels:
-      - 'bug'
-  - title: '🧰 Maintenance'
+      - "enhancement"
+  - title: "🐛 Bug Fixes"
     labels:
-      - 'maintenance'
+      - "bug"
+  - title: "🧰 Maintenance"
+    labels:
+      - "maintenance"
 version-resolver:
   major:
     labels:
-      - 'major'
+      - "major"
   minor:
     labels:
-      - 'minor'
+      - "minor"
   patch:
     labels:
-      - 'patch'
+      - "patch"
   default: patch
 template: |
   $CHANGES
@@ -29,3 +32,17 @@ template: |
   ## 👨🏼‍💻 Contributors
 
   $CONTRIBUTORS
+autolabeler:
+  - label: "documentation"
+    files:
+      - "**/*.md"
+  - label: "enhancement"
+    files:
+      - "Source/**/*"
+  - label: "maintenance"
+    files:
+      - ".github/**/*"
+      - "Benchmarks/**/*"
+      - "Images/**/*"
+      - "Tests/**/*"
+      - "Tools/**/*"

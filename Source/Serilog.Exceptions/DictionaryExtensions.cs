@@ -1,30 +1,36 @@
-namespace Serilog.Exceptions
+namespace Serilog.Exceptions;
+
+using System.Collections;
+using System.Collections.Generic;
+
+/// <summary>
+/// Helper extension methods for specific dictionary operations.
+/// </summary>
+internal static class DictionaryExtensions
 {
-    using System.Collections;
-    using System.Collections.Generic;
-
     /// <summary>
-    /// Helper extension methods for specific dictionary operations.
+    /// Converts a dictionary to another one with string-ified keys.
     /// </summary>
-    internal static class DictionaryExtensions
+    /// <param name="dictionary">The input dictionary.</param>
+    /// <returns>A dictionary with string-ified keys.</returns>
+    public static Dictionary<string, object?> ToStringObjectDictionary(this IDictionary dictionary)
     {
-        /// <summary>
-        /// Converts a dictionary to another one with string-ified keys.
-        /// </summary>
-        /// <param name="dictionary">The input dictionary.</param>
-        /// <returns>A dictionary with string-ified keys.</returns>
-        public static Dictionary<string, object> ToStringObjectDictionary(this IDictionary dictionary)
-        {
-            var result = new Dictionary<string, object>(dictionary.Count);
+        var result = new Dictionary<string, object?>(dictionary.Count);
 
-            foreach (var key in dictionary.Keys)
+        foreach (var key in dictionary.Keys)
+        {
+            if (key is not null)
             {
+                var keyString = key.ToString();
                 var value = dictionary[key];
 
-                result.Add(key.ToString(), value);
+                if (keyString is not null)
+                {
+                    result.Add(keyString, value);
+                }
             }
-
-            return result;
         }
+
+        return result;
     }
 }
