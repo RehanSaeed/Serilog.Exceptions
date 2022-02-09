@@ -21,6 +21,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
         new ArgumentExceptionDestructurer(),
         new ArgumentOutOfRangeExceptionDestructurer(),
         new AggregateExceptionDestructurer(),
+        new RegexMatchTimeoutExceptionDestructurer(),
         new ReflectionTypeLoadExceptionDestructurer(),
         new OperationCanceledExceptionDestructurer(),
         new TaskCanceledExceptionDestructurer(),
