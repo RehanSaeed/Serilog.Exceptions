@@ -61,7 +61,7 @@ public sealed class TaskCanceledExceptionDestructurerTest : IDisposable
         // Assert
         var tce = ex.Should().BeOfType<TaskCanceledException>().Which;
         var exceptionDetails = ExtractExceptionDetails(LogAndDestructureException(tce));
-        Assert_ContainsPropertyWithValue(exceptionDetails, nameof(TaskCanceledException.Task), "null");
+        Assert_ContainsPropertyWithValue(exceptionDetails, nameof(TaskCanceledException.Task), null);
     }
 
     [Fact]

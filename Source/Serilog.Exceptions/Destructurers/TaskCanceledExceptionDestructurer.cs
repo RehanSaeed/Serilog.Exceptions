@@ -40,13 +40,13 @@ public class TaskCanceledExceptionDestructurer : OperationCanceledExceptionDestr
     /// <param name="task">The task.</param>
     /// <param name="innerDestructure">The inner destructure.</param>
     /// <returns>The destructured task.</returns>
-    internal static object DestructureTask(
+    internal static object? DestructureTask(
         Task? task,
         Func<Exception, IReadOnlyDictionary<string, object?>?> innerDestructure)
     {
         if (task is null)
         {
-            return "null";
+            return null;
         }
 
         var taskStatus = task.Status.ToString("G");
