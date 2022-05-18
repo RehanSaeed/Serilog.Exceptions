@@ -59,6 +59,24 @@ jobs:
           name: ${{matrix.os}}
           path: "./Artefacts"
 
+  publish-test-results:
+    name: "Publish Tests Results"
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3.0.0
+        with:
+          path: "./Artefacts"
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.35
+        with:
+          files: "./Artefacts/*/*.xml"
+
   push-github-packages:
     name: "Push GitHub Packages"
     needs: build
