@@ -73,7 +73,7 @@ jobs:
         with:
           path: "./Artefacts"
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.35
+        uses: EnricoMi/publish-unit-test-result-action@v1.36
         with:
           files: "./Artefacts/*/*.xml"
 
