@@ -29,8 +29,8 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
     /// <summary>
     /// Initializes a new instance of the <see cref="ReflectionBasedDestructurer"/> class.
     /// </summary>
-    /// <param name="destructuringDepth">Maximum depth to which the destructurer will go when destructuring exception
-    /// object graph.</param>
+    /// <param name="destructuringDepth">Maximum depth to which the destructurer will go when destructuring an
+    /// exception object graph.</param>
     public ReflectionBasedDestructurer(int destructuringDepth)
     {
         if (destructuringDepth <= 0)

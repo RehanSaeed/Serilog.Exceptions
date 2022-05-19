@@ -10,10 +10,7 @@ using Serilog.Exceptions.Core;
 /// </summary>
 public class ExceptionDestructurer : IExceptionDestructurer
 {
-    /// <summary>
-    /// Gets a collection of exceptions types from standard library that do not have any custom property,
-    /// so they can be destructured using generic exception destructurer.
-    /// </summary>
+    /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
 #pragma warning disable CA1819 // Properties should not return arrays
     public virtual Type[] TargetTypes
 #pragma warning restore CA1819 // Properties should not return arrays

@@ -11,7 +11,7 @@ using Serilog.Exceptions.Core;
 public interface IExceptionDestructurer
 {
     /// <summary>
-    /// Gets a collection of types of exception that the destructurer can handle.
+    /// Gets a collection of exception types that the destructurer can handle.
     /// </summary>
 #pragma warning disable CA1819 // Properties should not return arrays
     Type[] TargetTypes { get; }
