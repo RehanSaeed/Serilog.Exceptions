@@ -68,14 +68,14 @@ jobs:
       checks: write
       pull-requests: write
     steps:
-      - name: Download Artifacts
+      - name: "Download Artefact"
         uses: actions/download-artifact@v3.0.0
         with:
           path: "./Artefacts"
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.35
+      - name: "Publish Test Summary"
+        uses: test-summary/action@v1
         with:
-          files: "./Artefacts/*/*.xml"
+          paths: "./Artefacts/*/*.xml"
 
   push-github-packages:
     name: "Push GitHub Packages"
