@@ -32,12 +32,13 @@ public class ReflectionBasedDestructurerTest
         Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty", StringComparison.Ordinal));
         Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
 #if NET461 || NET472
-            Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
+        Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
-        Assert.NotEmpty(properties[nameof(TestException.StackTrace)]?.ToString());
+        Assert.NotNull(properties[nameof(TestException.StackTrace)]?.ToString());
+        Assert.NotEmpty(properties[nameof(TestException.StackTrace)]?.ToString()!);
         Assert.Equal("Serilog.Exceptions.Test", properties[nameof(TestException.Source)]);
         Assert.Equal(-2146233088, properties[nameof(TestException.HResult)]);
-        Assert.Contains(typeof(TestException).FullName, properties["Type"]?.ToString(), StringComparison.Ordinal);
+        Assert.Contains(typeof(TestException).FullName!, properties["Type"]?.ToString(), StringComparison.Ordinal);
     }
 
     [Fact]

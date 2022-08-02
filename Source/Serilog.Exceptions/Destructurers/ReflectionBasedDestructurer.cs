@@ -101,9 +101,9 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
     private static string? GetOrGenerateRefId(ref int nextCyclicRefId, IDictionary<string, object?> destructuredObject)
     {
         string? refId;
-        if (destructuredObject.ContainsKey(IdLabel))
+        if (destructuredObject.TryGetValue(IdLabel, out var value))
         {
-            refId = (string?)destructuredObject[IdLabel];
+            refId = (string?)value;
         }
         else
         {
@@ -269,9 +269,8 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         IDictionary<object, IDictionary<string, object?>> destructuredObjects,
         ref int nextCyclicRefId)
     {
-        if (destructuredObjects.ContainsKey(value))
+        if (destructuredObjects.TryGetValue(value, out var destructuredObject))
         {
-            var destructuredObject = destructuredObjects[value];
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
             return new Dictionary<string, object?>
@@ -299,9 +298,8 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         IDictionary<object, IDictionary<string, object?>> destructuredObjects,
         ref int nextCyclicRefId)
     {
-        if (destructuredObjects.ContainsKey(value))
+        if (destructuredObjects.TryGetValue(value, out var destructuredObject))
         {
-            var destructuredObject = destructuredObjects[value];
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
             return new Dictionary<string, object?>()
