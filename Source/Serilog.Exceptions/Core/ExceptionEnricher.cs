@@ -83,11 +83,9 @@ public sealed class ExceptionEnricher : ILogEventEnricher
     {
         var exceptionType = exception.GetType();
 
-        if (this.destructurers.ContainsKey(exceptionType))
+        if (this.destructurers.TryGetValue(exceptionType, out var destructurer))
         {
             var data = new ExceptionPropertiesBag(exception, this.destructuringOptions.Filter);
-
-            var destructurer = this.destructurers[exceptionType];
             destructurer.Destructure(exception, data, this.DestructureException);
 
             return data.GetResultDictionary();

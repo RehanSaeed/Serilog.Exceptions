@@ -55,9 +55,9 @@ internal class ReflectionInfoExtractor
         var groupedByName = new Dictionary<string, List<ReflectionPropertyInfo>>();
         foreach (var propertyInfo in propertyInfos)
         {
-            if (groupedByName.ContainsKey(propertyInfo.Name))
+            if (groupedByName.TryGetValue(propertyInfo.Name, out var value))
             {
-                groupedByName[propertyInfo.Name].Add(propertyInfo);
+                value.Add(propertyInfo);
             }
             else
             {
