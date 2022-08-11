@@ -11,6 +11,7 @@
 
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\..\Source\Serilog.Exceptions.EntityFrameworkCore\Serilog.Exceptions.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\Source\Serilog.Exceptions.Grpc\Serilog.Exceptions.Grpc.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions.Refit\Serilog.Exceptions.Refit.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
