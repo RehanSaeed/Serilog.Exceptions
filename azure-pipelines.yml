@@ -75,7 +75,7 @@ stages:
             inputs:
               testResultsFormat: "VSTest"
               testResultsFiles: "**/*.trx"
-          - task: PublishCodeCoverageResults@2
+          - task: PublishCodeCoverageResults@1
             inputs:
               codeCoverageTool: cobertura
               summaryFileLocation: "**/*.cobertura.xml"
