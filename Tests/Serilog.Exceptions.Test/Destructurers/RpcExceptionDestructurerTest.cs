@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
-using System.Net;
 using global::Grpc.Core;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Grpc.Destructurers;
