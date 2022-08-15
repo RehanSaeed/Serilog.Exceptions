@@ -204,6 +204,24 @@ In addition, the `ApiException.Content` property can be logged with the followin
 
 Be careful with this option as the HTTP body could be very large and/or contain sensitive information.
 
+### Serilog.Exceptions.Grpc
+
+[![Serilog.Exceptions.Grpc NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.Grpc.svg)](https://www.nuget.org/packages/Serilog.Exceptions.Grpc/)  
+[![Serilog.Exceptions.Grpc NuGet Package Downloads](https://img.shields.io/nuget/dt/Serilog.Exceptions.Grpc)](https://www.nuget.org/packages/Serilog.Exceptions.Grpc)
+
+Add the [Serilog.Exceptions.Grpc](https://www.nuget.org/packages/Serilog.Exceptions.Grpc/) NuGet package to your project to avoid the reflection based destructurer for `RpcException` when using [Grpc.Net.Client](https://www.nuget.org/packages/Grpc.Net.Client/):
+
+```
+Install-Package Serilog.Exceptions.Grpc
+```
+
+Add the `RpcExceptionDestructurer` during setup:
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new RpcExceptionDestructurer() }))
+```
+
 ## Custom Exception Destructurers
 
 You may want to add support for destructuring your own exceptions without relying on reflection. To do this, create your own destructuring class implementing `ExceptionDestructurer` (You can take a look at [this](https://github.com/RehanSaeed/Serilog.Exceptions/blob/main/Source/Serilog.Exceptions/Destructurers/ArgumentExceptionDestructurer.cs) for `ArgumentException`), then simply add it like so:
