@@ -13,9 +13,7 @@ public interface IExceptionDestructurer
     /// <summary>
     /// Gets a collection of exception types that the destructurer can handle.
     /// </summary>
-#pragma warning disable CA1819 // Properties should not return arrays
     Type[] TargetTypes { get; }
-#pragma warning restore CA1819 // Properties should not return arrays
 
     /// <summary>
     /// Destructures given <paramref name="exception"/>. It's properties are to be put in

@@ -20,7 +20,7 @@ public class ExceptionDestructurer : IExceptionDestructurer
             var targetTypes = new List<Type>
                     {
 #pragma warning disable IDE0001 // Simplify Names
-#if NET461 || NET472
+#if NET461
                         typeof(Microsoft.SqlServer.Server.InvalidUdtException),
 #endif
 #if !NETSTANDARD1_3
@@ -37,7 +37,7 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.ComponentModel.InvalidAsynchronousStateException),
                         typeof(System.ComponentModel.InvalidEnumArgumentException),
 #endif
-#if NET461 || NET472
+#if NET461
                         typeof(System.Configuration.SettingsPropertyIsReadOnlyException),
                         typeof(System.Configuration.SettingsPropertyNotFoundException),
                         typeof(System.Configuration.SettingsPropertyWrongTypeException),
@@ -56,7 +56,7 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.Data.MissingPrimaryKeyException),
                         typeof(System.Data.NoNullAllowedException),
 #endif
-#if NET461 || NET472
+#if NET461
                         typeof(System.Data.OperationAbortedException),
 #endif
 #if !NETSTANDARD1_3
@@ -68,7 +68,7 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.Data.SyntaxErrorException),
                         typeof(System.Data.VersionNotFoundException),
 #endif
-#if NET461 || NET472
+#if NET461
                         typeof(System.Diagnostics.Eventing.Reader.EventLogInvalidDataException),
                         typeof(System.Diagnostics.Eventing.Reader.EventLogNotFoundException),
                         typeof(System.Diagnostics.Eventing.Reader.EventLogProviderDisabledException),
@@ -108,7 +108,7 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.IO.IsolatedStorage.IsolatedStorageException),
 #endif
                         typeof(System.IO.PathTooLongException),
-#if NET461 || NET472
+#if NET461
                         typeof(System.Management.Instrumentation.InstanceNotFoundException),
                         typeof(System.Management.Instrumentation.InstrumentationBaseException),
                         typeof(System.Management.Instrumentation.InstrumentationException),
@@ -149,7 +149,7 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.Runtime.InteropServices.SafeArrayRankMismatchException),
                         typeof(System.Runtime.InteropServices.SafeArrayTypeMismatchException),
                         typeof(System.Runtime.InteropServices.SEHException),
-#if NET461 || NET472
+#if NET461
                         typeof(System.Runtime.Remoting.RemotingException),
                         typeof(System.Runtime.Remoting.RemotingTimeoutException),
                         typeof(System.Runtime.Remoting.ServerException),
@@ -163,11 +163,11 @@ public class ExceptionDestructurer : IExceptionDestructurer
 #if !NETSTANDARD1_3
                         typeof(System.Security.Cryptography.CryptographicUnexpectedOperationException),
 #endif
-#if NET461 || NET472
+#if NET461
                         typeof(System.Security.Policy.PolicyException),
 #endif
                         typeof(System.Security.VerificationException),
-#if NET461 || NET472
+#if NET461
                         typeof(System.Security.XmlSyntaxException),
 #endif
 #if !NETSTANDARD1_3

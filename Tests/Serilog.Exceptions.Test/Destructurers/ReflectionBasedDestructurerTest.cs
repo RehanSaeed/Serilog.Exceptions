@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
 using Xunit;
@@ -16,14 +15,11 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected()
     {
-        // Arrange
         var exception = ThrowAndCatchException(() => throw new TestException());
         var propertiesBag = new ExceptionPropertiesBag(exception);
 
-        // Act
         CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
-        // Assert
         var properties = propertiesBag.GetResultDictionary();
         Assert.Equal("PublicValue", properties[nameof(TestException.PublicProperty)]);
         Assert.Equal("threw System.Exception: Exception of type 'System.Exception' was thrown.", properties[nameof(TestException.ExceptionProperty)]);
@@ -31,7 +27,7 @@ public class ReflectionBasedDestructurerTest
         Assert.DoesNotContain(properties, x => string.Equals(x.Key, "ProtectedProperty", StringComparison.Ordinal));
         Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty", StringComparison.Ordinal));
         Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
-#if NET461 || NET472
+#if NET461
         Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
         Assert.NotNull(properties[nameof(TestException.StackTrace)]?.ToString());
@@ -101,13 +97,15 @@ public class ReflectionBasedDestructurerTest
         var properties = propertiesBag.GetResultDictionary();
         var destructuredTaskObject = (IDictionary?)properties[nameof(TaskCanceledException.Task)];
         var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
-        destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
-        destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Be(nameof(TaskStatus.Canceled));
-        destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Contain(nameof(TaskCreationOptions.None));
+        Assert.Contains(nameof(Task.Id), destructuredTaskProperties.Keys);
+
+        Assert.Contains(nameof(Task.Status), destructuredTaskProperties.Keys);
+        var value = Assert.IsType<string>(destructuredTaskProperties[nameof(Task.Status)]);
+        Assert.Equal(nameof(TaskStatus.Canceled), value);
+
+        Assert.Contains(nameof(Task.CreationOptions), destructuredTaskProperties.Keys);
+        var value2 = Assert.IsType<string>(destructuredTaskProperties[nameof(Task.CreationOptions)]);
+        Assert.Equal(nameof(TaskCreationOptions.None), value2);
     }
 
     [Fact]
@@ -123,32 +121,35 @@ public class ReflectionBasedDestructurerTest
         var properties = propertiesBag.GetResultDictionary();
         var destructuredTaskObject = (IDictionary?)properties[nameof(TaskCanceledException.Task)];
         var destructuredTaskProperties = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskObject);
-        destructuredTaskProperties.Should().ContainKey(nameof(Task.Id));
-        destructuredTaskProperties.Should().ContainKey(nameof(Task.Status))
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Be(nameof(TaskStatus.Faulted));
-        destructuredTaskProperties.Should().ContainKey(nameof(Task.CreationOptions))
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Be(nameof(TaskCreationOptions.None));
-        var taskFirstLevelExceptionDictionary = destructuredTaskProperties.Should().ContainKey(nameof(Task.Exception))
-            .WhoseValue.Should().BeAssignableTo<IDictionary<string, object>>()
-            .Which;
-        taskFirstLevelExceptionDictionary.Should().ContainKey("Message")
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Contain("One or more errors occurred.", "task's first level exception is aggregate exception");
-        taskFirstLevelExceptionDictionary.Should().ContainKey("InnerExceptions")
-            .WhoseValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
-            .Which.Should().ContainSingle()
-            .Which.Should().BeAssignableTo<IDictionary<string, object>>()
-            .Which.Should().ContainKey("Message")
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Be("INNER EXCEPTION MESSAGE");
+        Assert.Contains(nameof(Task.Id), destructuredTaskProperties.Keys);
+
+        Assert.Contains(nameof(Task.Status), destructuredTaskProperties.Keys);
+        var status = Assert.IsType<string>(destructuredTaskProperties[nameof(Task.Status)]);
+        Assert.Equal(nameof(TaskStatus.Faulted), status);
+
+        Assert.Contains(nameof(Task.CreationOptions), destructuredTaskProperties.Keys);
+        var creationOptions = Assert.IsType<string>(destructuredTaskProperties[nameof(Task.CreationOptions)]);
+        Assert.Equal(nameof(TaskCreationOptions.None), creationOptions);
+
+        Assert.Contains(nameof(Task.Exception), destructuredTaskProperties.Keys);
+        var taskFirstLevelExceptionDictionary = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTaskProperties[nameof(Task.Exception)]);
+        Assert.Equal(nameof(TaskCreationOptions.None), creationOptions);
+
+        Assert.Contains("Message", taskFirstLevelExceptionDictionary.Keys);
+        var message = Assert.IsType<string>(taskFirstLevelExceptionDictionary["Message"]);
+        Assert.Equal("One or more errors occurred. (INNER EXCEPTION MESSAGE)", message);
+
+        Assert.Contains("InnerExceptions", taskFirstLevelExceptionDictionary.Keys);
+        var innerExceptions = Assert.IsAssignableFrom<IReadOnlyCollection<object>>(taskFirstLevelExceptionDictionary["InnerExceptions"]);
+        var innerException = Assert.Single(innerExceptions);
+        var innerExceptionDictionary = Assert.IsAssignableFrom<IDictionary<string, object>>(innerException);
+        Assert.Contains("Message", innerExceptionDictionary.Keys);
+        Assert.Equal("INNER EXCEPTION MESSAGE", innerExceptionDictionary["Message"]);
     }
 
     [Fact]
     public void CanDestructureStructDataItem()
     {
-        // Arrange
         var exception = new Exception("test");
         exception.Data["data"] = new TestStruct()
         {
@@ -157,10 +158,8 @@ public class ReflectionBasedDestructurerTest
         };
         var propertiesBag = new ExceptionPropertiesBag(exception);
 
-        // Act
         CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
-        // Assert
         var properties = propertiesBag.GetResultDictionary();
         var data = (IDictionary?)properties[nameof(Exception.Data)];
         var testStructDataValue = data?["data"];
@@ -170,7 +169,6 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void CanDestructureClassDataItem()
     {
-        // Arrange
         var exception = new Exception("test");
         exception.Data["data"] = new TestClass()
         {
@@ -179,10 +177,8 @@ public class ReflectionBasedDestructurerTest
         };
         var propertiesBag = new ExceptionPropertiesBag(exception);
 
-        // Act
         CreateReflectionBasedDestructurer().Destructure(exception, propertiesBag, EmptyDestructurer());
 
-        // Assert
         var properties = propertiesBag.GetResultDictionary();
         var data = (IDictionary?)properties[nameof(Exception.Data)];
         var testStructDataValue = data?["data"];
@@ -194,7 +190,6 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void DestructuringDepthIsLimitedByConfiguredDepth()
     {
-        // Arrange
         var exception = new RecursiveException()
         {
             Node = new RecursiveNode()
@@ -212,11 +207,9 @@ public class ReflectionBasedDestructurerTest
         };
         var destructurer = new ReflectionBasedDestructurer(1);
 
-        // Act
         var propertiesBag = new ExceptionPropertiesBag(exception);
         destructurer.Destructure(exception, propertiesBag, EmptyDestructurer());
 
-        // Assert
         // Parent is depth 1
         // First child is depth 2
         var properties = propertiesBag.GetResultDictionary();
@@ -235,7 +228,6 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void WhenObjectContainsCyclicReferences_ThenNoStackoverflowExceptionIsThrown()
     {
-        // Arrange
         var exception = new CyclicException
         {
             MyObject = new MyObject(),
@@ -244,14 +236,11 @@ public class ReflectionBasedDestructurerTest
         exception.MyObject.Reference = exception.MyObject;
         exception.MyObject.Reference2 = exception.MyObject;
 
-        // Act
         var result = new ExceptionPropertiesBag(new Exception());
         var destructurer = new ReflectionBasedDestructurer(10);
         destructurer.Destructure(exception, result, EmptyDestructurer());
 
-        // Assert
         var myObject = (Dictionary<string, object?>?)result.GetResultDictionary()["MyObject"];
-
         Assert.Equal("bar", myObject?["Foo"]);
         var reference1 = (Dictionary<string, object?>?)myObject?["Reference"];
         Assert.Equal(myObject?["$id"], reference1?["$ref"]);
@@ -263,7 +252,6 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void WhenObjectContainsCyclicReferencesInList_ThenRecursiveDestructureIsImmediatelyStopped()
     {
-        // Arrange
         var cyclic = new MyObjectCollection
         {
             Foo = "Cyclic",
@@ -276,12 +264,10 @@ public class ReflectionBasedDestructurerTest
         exception.MyObjectCollection.Foo = "bar";
         exception.MyObjectCollection.Reference = cyclic;
 
-        // Act
         var result = new ExceptionPropertiesBag(new Exception());
         var destructurer = new ReflectionBasedDestructurer(10);
         destructurer.Destructure(exception, result, EmptyDestructurer());
 
-        // Assert
         var myObject = (List<object?>?)result.GetResultDictionary()[nameof(Cyclic2Exception.MyObjectCollection)];
 
         // exception.MyObjectCollection[0] is still list
@@ -295,7 +281,6 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void WhenObjectContainsCyclicReferencesInDict_ThenRecursiveDestructureIsImmediatelyStopped()
     {
-        // Arrange
         var cyclic = new MyObjectDict
         {
             Foo = "Cyclic",
@@ -307,12 +292,10 @@ public class ReflectionBasedDestructurerTest
             MyObjectDict = cyclic,
         };
 
-        // Act
         var result = new ExceptionPropertiesBag(new Exception());
         var destructurer = new ReflectionBasedDestructurer(10);
         destructurer.Destructure(exception, result, EmptyDestructurer());
 
-        // Assert
         var myObject = (Dictionary<string, object?>?)result.GetResultDictionary()["MyObjectDict"];
 
         // exception.MyObjectDict["Reference"] is still regular dictionary
@@ -329,39 +312,36 @@ public class ReflectionBasedDestructurerTest
     [Fact]
     public void WhenObjectContainsCyclicReferencesInTask_ThenRecursiveDestructureIsImmediatelyStopped()
     {
-        // Arrange
         var exception = new CyclicTaskException();
         var task = Task.FromException(exception);
         exception.Task = task;
 
-        // Act
         var result = new ExceptionPropertiesBag(exception);
         var destructurer = CreateReflectionBasedDestructurer();
         destructurer.Destructure(exception, result, InnerDestructurer(destructurer));
 
-        // Assert
         var resultsDictionary = result.GetResultDictionary();
-        var destructuredTask = resultsDictionary[nameof(CyclicTaskException.Task)].Should().BeAssignableTo<IDictionary<string, object>>().Which;
-        var destructuredCyclicException = destructuredTask.Should().ContainKey(nameof(Task.Exception))
-            .WhoseValue.Should().BeAssignableTo<IDictionary<string, object>>()
-            .Which.Should().ContainKey(nameof(AggregateException.InnerExceptions))
-            .WhoseValue.Should().BeAssignableTo<IReadOnlyCollection<object>>()
-            .Which.Should().ContainSingle()
-            .Which.Should().BeAssignableTo<IDictionary<string, object>>().Which;
-        destructuredCyclicException.Should().ContainKey(nameof(Exception.Message))
-            .WhoseValue.Should().BeOfType<string>()
-            .Which.Should().Contain(nameof(CyclicTaskException));
-        destructuredCyclicException.Should().ContainKey(nameof(CyclicTaskException.Task))
-            .WhoseValue.Should().BeAssignableTo<IDictionary<string, object>>()
-            .Which.Should().ContainKey("$ref", "task was already destructured, so inner task should just contain ref");
+        var destructuredTask = Assert.IsAssignableFrom<IDictionary<string, object>>(resultsDictionary[nameof(CyclicTaskException.Task)]);
+        Assert.Contains(nameof(Task.Exception), destructuredTask.Keys);
+        var exceptionDictionary = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredTask[nameof(Task.Exception)]);
+        Assert.Contains(nameof(AggregateException.InnerExceptions), exceptionDictionary.Keys);
+        var innerExceptions = Assert.IsAssignableFrom<IReadOnlyCollection<object>>(exceptionDictionary[nameof(AggregateException.InnerExceptions)]);
+        var innerException = Assert.Single(innerExceptions);
+        var destructuredCyclicException = Assert.IsAssignableFrom<IDictionary<string, object>>(innerException);
+
+        Assert.Contains(nameof(Exception.Message), destructuredCyclicException.Keys);
+        var message = Assert.IsType<string>(destructuredCyclicException[nameof(Exception.Message)]);
+        Assert.Contains(nameof(CyclicTaskException), message);
+
+        Assert.Contains(nameof(CyclicTaskException.Task), destructuredCyclicException.Keys);
+        var task2 = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredCyclicException[nameof(CyclicTaskException.Task)]);
+        Assert.Contains("$ref", task2);
     }
 
     [Fact]
     public void WhenDestruringArgumentException_ResultShouldBeEquivalentToArgumentExceptionDestructurer()
     {
-#pragma warning disable CA2208 // Instantiate argument exceptions correctly
         var exception = ThrowAndCatchException(() => throw new ArgumentException("MESSAGE", "paramName"));
-#pragma warning restore CA2208 // Instantiate argument exceptions correctly
         Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(exception, new ArgumentExceptionDestructurer());
     }
 
@@ -420,20 +400,17 @@ public class ReflectionBasedDestructurerTest
         Exception exception,
         IExceptionDestructurer customDestructurer)
     {
-        // Arrange
         var reflectionBasedResult = new ExceptionPropertiesBag(exception);
         var customBasedResult = new ExceptionPropertiesBag(exception);
         var reflectionBasedDestructurer = CreateReflectionBasedDestructurer();
 
-        // Act
         reflectionBasedDestructurer.Destructure(exception, reflectionBasedResult, InnerDestructurer(reflectionBasedDestructurer));
         customDestructurer.Destructure(exception, customBasedResult, InnerDestructurer(new ArgumentExceptionDestructurer()));
 
-        // Assert
         var reflectionBasedDictionary = (Dictionary<string, object>)reflectionBasedResult.GetResultDictionary();
         var customBasedDictionary = (Dictionary<string, object>)customBasedResult.GetResultDictionary();
 
-        reflectionBasedDictionary.Should().BeEquivalentTo(customBasedDictionary);
+        Assert.Equivalent(customBasedDictionary, reflectionBasedDictionary);
     }
 
     private static Func<Exception, IReadOnlyDictionary<string, object?>> EmptyDestructurer() =>
@@ -456,9 +433,7 @@ public class ReflectionBasedDestructurerTest
         {
             throwingAction();
         }
-#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)
-#pragma warning restore CA1031 // Do not catch general exception types
         {
             return ex;
         }

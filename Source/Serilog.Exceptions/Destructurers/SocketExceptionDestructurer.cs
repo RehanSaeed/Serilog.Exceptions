@@ -77,13 +77,11 @@ public class SocketExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
-#pragma warning disable CA1062 // Validate arguments of public methods
         var socketException = (SocketException)exception;
         propertiesBag.AddProperty(nameof(SocketException.SocketErrorCode), socketException.SocketErrorCode);
         if (SocketErrorDocumentationBySocketError.TryGetValue(socketException.SocketErrorCode, out var documentation))
         {
             propertiesBag.AddProperty(nameof(SocketException.SocketErrorCode) + "Message", documentation);
         }
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

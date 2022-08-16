@@ -25,7 +25,6 @@ public class RpcExceptionDestructurer : ExceptionDestructurer
 
         var rpcException = (RpcException)exception;
 
-#pragma warning disable CA1062 // Validate arguments of public methods
         propertiesBag.AddProperty(nameof(RpcException.Status.StatusCode), rpcException.Status.StatusCode);
         propertiesBag.AddProperty(nameof(RpcException.Status.Detail), rpcException.Status.Detail);
 
@@ -38,6 +37,5 @@ public class RpcExceptionDestructurer : ExceptionDestructurer
 
             propertiesBag.AddProperty($"{nameof(RpcException.Trailers)}.{trailer.Key}", trailer.Value);
         }
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }
