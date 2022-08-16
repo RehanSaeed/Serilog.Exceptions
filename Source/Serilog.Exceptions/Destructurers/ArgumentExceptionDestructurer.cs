@@ -24,9 +24,7 @@ public class ArgumentExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
-#pragma warning disable CA1062 // Validate arguments of public methods
         var argumentException = (ArgumentException)exception;
         propertiesBag.AddProperty(nameof(ArgumentException.ParamName), argumentException.ParamName);
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

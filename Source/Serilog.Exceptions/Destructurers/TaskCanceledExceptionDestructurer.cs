@@ -24,14 +24,12 @@ public class TaskCanceledExceptionDestructurer : OperationCanceledExceptionDestr
         IExceptionPropertiesBag propertiesBag,
         Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
     {
-#pragma warning disable CA1062 // Validate arguments of public methods
         base.Destructure(exception, propertiesBag, destructureException);
 
         var taskCancelledException = (TaskCanceledException)exception;
         propertiesBag.AddProperty(
             nameof(TaskCanceledException.Task),
             DestructureTask(taskCancelledException.Task, destructureException));
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 
     /// <summary>

@@ -3,7 +3,6 @@ namespace Serilog.Exceptions.Test.Destructurers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -78,48 +77,40 @@ public class ExceptionDestructurerTest
     [Fact]
     public void PassedFilter_IsCalledWithCorrectArguments()
     {
-        // Arrange
         var exception = new Exception();
         var filterMock = new Mock<IExceptionPropertyFilter>();
 
-        // Act
         LogAndDestructureException(exception, new DestructuringOptionsBuilder().WithFilter(filterMock.Object));
 
-        // Assert
         filterMock.Verify(x => x.ShouldPropertyBeFiltered(exception, "StackTrace", null));
     }
 
     [Fact]
     public void WithoutReflectionBasedDestructurer_CustomExceptionIsNotLogged()
     {
-        // Arrange
         var exception = new DictNonScalarKeyException();
         var options = new DestructuringOptionsBuilder().WithoutReflectionBasedDestructurer();
 
-        // Act
         var rootObject = LogAndDestructureException(exception, options);
 
-        // Assert
-        rootObject.Properties().Should().NotContain(x => x.Name == "Properties");
+        Assert.DoesNotContain(rootObject.Properties(), x => x.Name == "Properties");
     }
 
     [Fact]
     public void WithoutReflectionBasedDestructurerAndCustomRootName_StandardExceptionIsLogged()
     {
-        // Arrange
         var exception = new ArgumentException("ARG", "arg");
         var options = new DestructuringOptionsBuilder()
             .WithDefaultDestructurers()
             .WithoutReflectionBasedDestructurer()
             .WithRootName("CUSTOM-ROOT");
 
-        // Act
         var rootObject = LogAndDestructureException(exception, options);
 
-        // Assert
         var exceptionObject = ExtractExceptionDetails(rootObject, "CUSTOM-ROOT");
-        var paramObject = exceptionObject.Properties().Should().ContainSingle(x => x.Name == "ParamName").Which;
-        paramObject.Value.Should().BeOfType<JValue>().Which.Value.Should().Be("arg");
+        var paramObject = Assert.Single(exceptionObject.Properties(), x => x.Name == "ParamName");
+        var jsonValue = Assert.IsType<JValue>(paramObject.Value);
+        Assert.Equal("arg", jsonValue.Value);
     }
 
     [Fact]
@@ -145,50 +136,42 @@ public class ExceptionDestructurerTest
     [Fact]
     public void WhenExceptionContainsDictionaryWithNonScalarValue_ShouldNotThrow()
     {
-        // Arrange
         var exception = new DictNonScalarKeyException();
         exception.Reference.Add(new List<int>() { 1, 2, 3 }, "VALUE");
 
-        // Act
         var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
 
-        // Assert
         var exceptionDetails = ExtractExceptionDetails(result);
-        var referenceProperty = exceptionDetails.Should().BeOfType<JObject>().Which
-            .Properties().Should().ContainSingle(x => x.Name == "Reference").Which;
+        var referenceProperties = Assert.IsType<JObject>(exceptionDetails);
+        var referenceProperty = Assert.Single(referenceProperties.Properties(), x => x.Name == "Reference");
 
-        var referenceObject = referenceProperty.Value.Should().BeOfType<JObject>().Which;
-        var kvp = referenceObject.Properties().Should().ContainSingle()
-            .Which.Should().BeOfType<JProperty>()
-            .Which.Name.Should().Be("System.Collections.Generic.List`1[System.Int32]");
+        var referenceObject = Assert.IsType<JObject>(referenceProperty.Value);
+        var property = Assert.Single(referenceObject.Properties());
+        Assert.Equal("System.Collections.Generic.List`1[System.Int32]", property.Name);
     }
 
     [Fact]
     public void WhenExceptionContainsDbContext_ShouldSkipIQueryableProperties()
     {
-        // Arrange
         using var context = new ExceptionDbContext();
         var exception = new CustomDbContextException("hello world", context);
 
-        // Act
         var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
 
-        // Assert
-        var exceptionDetails = ExtractExceptionDetails(result).Should().BeOfType<JObject>().Which;
-        var nameProperty = exceptionDetails
-            .Properties().Should().ContainSingle(x => x.Name == nameof(CustomDbContextException.Name)).Which
-            .Should().BeOfType<JProperty>().Which;
+        var exceptionDetails = ExtractExceptionDetails(result);
+        var nameProperty = Assert.Single(exceptionDetails.Properties(), x => x.Name == nameof(CustomDbContextException.Name));
 
-        nameProperty.Value.Should().BeOfType<JValue>().Which.Value.Should().Be("hello world");
+        var jsonValue = Assert.IsType<JValue>(nameProperty.Value);
+        Assert.Equal("hello world", jsonValue.Value);
 
-        var contextProperty = exceptionDetails
-            .Properties().Should().ContainSingle(x => x.Name == nameof(CustomDbContextException.Context)).Which;
+        var contextProperty = Assert.Single(exceptionDetails.Properties(), x => x.Name == nameof(CustomDbContextException.Context));
 
-        var customerProperty = contextProperty.Value.Should().BeOfType<JObject>().Which
-            .Properties().Should().ContainSingle(x => x.Name == nameof(ExceptionDbContext.Customer)).Which;
+        var jsonObject = Assert.IsType<JObject>(contextProperty.Value);
+        var customerProperty = Assert.Single(jsonObject.Properties(), x => x.Name == nameof(ExceptionDbContext.Customer));
 
-        customerProperty.Value.Should().BeOfType<JValue>().Which.Value.Should().BeOfType<string>().Which
-            .Should().Be("IQueryable skipped");
+        var jsonValue2 = Assert.IsType<JValue>(customerProperty.Value);
+        var value = Assert.IsType<string>(jsonValue2.Value);
+        Assert.Equal("IQueryable skipped", value);
     }
 
     public class DictNonScalarKeyException : Exception

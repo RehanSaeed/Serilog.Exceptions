@@ -29,12 +29,10 @@ public class OperationCanceledExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
-#pragma warning disable CA1062 // Validate arguments of public methods
         var operationCancelledException = (OperationCanceledException)exception;
         propertiesBag.AddProperty(
             nameof(OperationCanceledException.CancellationToken),
             DestructureCancellationToken(operationCancelledException.CancellationToken));
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 
     /// <summary>

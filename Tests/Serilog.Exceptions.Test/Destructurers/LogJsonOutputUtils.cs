@@ -2,7 +2,6 @@ namespace Serilog.Exceptions.Test.Destructurers;
 
 using System;
 using System.IO;
-using FluentAssertions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog.Core;
@@ -18,7 +17,6 @@ public static class LogJsonOutputUtils
         Exception exception,
         IDestructuringOptions? destructuringOptions = null)
     {
-        // Arrange
         var jsonWriter = new StringWriter();
         destructuringOptions ??= new DestructuringOptionsBuilder().WithDefaultDestructurers();
         ILogger logger = new LoggerConfiguration()
@@ -26,10 +24,8 @@ public static class LogJsonOutputUtils
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
 
-        // Act
         logger.Error(exception, "EXCEPTION MESSAGE");
 
-        // Assert
         var writtenJson = jsonWriter.ToString();
         var jsonObj = JsonConvert.DeserializeObject<object>(writtenJson);
         var rootObject = Assert.IsType<JObject>(jsonObj);
@@ -93,9 +89,8 @@ public static class LogJsonOutputUtils
         var paramName = Assert.IsType<JValue>(paramNameProperty.Value);
         if (paramName.Value is not null)
         {
-            var paramNameString = paramName.Value.Should()
-                .BeOfType<string>($"{propertyKey} value was expected to a string").Which;
-            propertyValue.Should().Be(paramNameString, $"{propertyKey} value should match expected value");
+            var paramNameString = Assert.IsType<string>(paramName.Value);
+            Assert.Equal(paramNameString, propertyValue);
         }
     }
 
@@ -103,25 +98,30 @@ public static class LogJsonOutputUtils
         JObject jObject,
         string propertyKey)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(jObject);
+#else
         if (jObject is null)
         {
             throw new ArgumentNullException(nameof(jObject));
         }
+#endif
 
-        jObject.Properties().Should()
-            .NotContain(x => x.Name == propertyKey, $"property with name {propertyKey} was not expected");
+        Assert.DoesNotContain(jObject.Properties(), x => x.Name == propertyKey);
     }
 
     public static JProperty ExtractProperty(JObject jObject, string propertyKey)
     {
+#if NET6_0_OR_GREATER
+        ArgumentNullException.ThrowIfNull(jObject);
+#else
         if (jObject is null)
         {
             throw new ArgumentNullException(nameof(jObject));
         }
+#endif
 
-        var paramNameProperty = jObject.Properties().Should()
-            .ContainSingle(x => x.Name == propertyKey, $"property with name {propertyKey} was expected").Which;
-        return paramNameProperty;
+        return Assert.Single(jObject.Properties(), x => x.Name == propertyKey);
     }
 
     public static void Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(

@@ -45,9 +45,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
     }
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-#pragma warning disable CA1819 // Properties should not return arrays
     public Type[] TargetTypes => new[] { typeof(Exception) };
-#pragma warning restore CA1819 // Properties should not return arrays
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public void Destructure(
@@ -168,12 +166,10 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
                     addPropertyAction(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                 }
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception exception)
             {
                 addPropertyAction(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
     }
 
@@ -333,12 +329,10 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
                     values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                 }
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception exception)
             {
                 values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
         return values;
