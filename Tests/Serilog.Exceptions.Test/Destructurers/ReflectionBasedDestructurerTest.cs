@@ -490,16 +490,12 @@ public class ReflectionBasedDestructurerTest
     {
         public string? Foo { get; set; }
 
-#pragma warning disable CA2227 // Collection properties should be read only
         public Dictionary<string, object>? Reference { get; set; }
-#pragma warning restore CA2227 // Collection properties should be read only
     }
 
     public class TypePropertyException : Exception
     {
-#pragma warning disable CA1721 // Property names should not match get methods
         public int? Type { get; set; }
-#pragma warning restore CA1721 // Property names should not match get methods
     }
 
     public class TestException : Exception
@@ -518,11 +514,9 @@ public class ReflectionBasedDestructurerTest
 
         public string PublicProperty { get; set; }
 
-#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
 #pragma warning disable CA1822 // Member does not access instance data and can be marked as static
         public string ExceptionProperty => throw new Exception();
 #pragma warning restore CA1822 // Member does not access instance data and can be marked as static
-#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 
         internal string InternalProperty { get; set; }
 
@@ -532,9 +526,7 @@ public class ReflectionBasedDestructurerTest
         private string PrivateProperty { get; set; }
 #pragma warning restore IDE0052 // Remove unread private members
 
-#pragma warning disable CA1822 // Member does not access instance data and can be marked as static
         public string this[int i] => "IndexerValue";
-#pragma warning restore CA1822 // Member does not access instance data and can be marked as static
     }
 
     public class UriException : Exception
@@ -605,9 +597,7 @@ public class ReflectionBasedDestructurerTest
         public new T? HiddenProperty { get; set; }
     }
 
-#pragma warning disable CA1064 // Exceptions should be public
     internal class HiddenException : Exception
-#pragma warning restore CA1064 // Exceptions should be public
     {
         public HiddenException(string message, object info)
             : base(message) =>
