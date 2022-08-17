@@ -11,7 +11,6 @@ using Serilog.Exceptions.Filters;
 using Xunit;
 using static LogJsonOutputUtils;
 
-#pragma warning disable CA2208 // Instantiate argument exceptions correctly
 public class ExceptionDestructurerTest
 {
     [Fact]
@@ -218,4 +217,3 @@ public class ExceptionDestructurerTest
         }
     }
 }
-#pragma warning restore CA2208 // Instantiate argument exceptions correctly

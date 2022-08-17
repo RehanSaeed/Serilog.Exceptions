@@ -207,7 +207,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
             return this.DestructureValueDictionary(dictionary, level, destructuredObjects, ref nextCyclicRefId);
         }
 
-        if (value is IQueryable queryable)
+        if (value is IQueryable)
         {
             return IQueryableDestructureSkippedMessage;
         }
