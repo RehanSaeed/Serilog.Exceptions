@@ -29,12 +29,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.1.0
         with:
           lfs: true
           fetch-depth: 0
       - name: "Install .NET SDK"
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v3.0.1
         with:
           dotnet-version: |
             3.1.x
@@ -53,7 +53,7 @@ jobs:
         run: dotnet cake --target=Pack
         shell: pwsh
       - name: "Publish Artefacts"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.0
         if: always()
         with:
           name: ${{matrix.os}}
@@ -89,7 +89,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: "Download Artefact"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v3.0.0
         with:
           name: "windows-latest"
       - name: "Dotnet NuGet Add Source"
@@ -109,7 +109,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: "Download Artefact"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v3.0.0
         with:
           name: "windows-latest"
       - name: "Dotnet NuGet Push"
