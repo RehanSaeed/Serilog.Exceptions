@@ -565,9 +565,7 @@ public class ReflectionBasedDestructurerTest
     }
 
     [Serializable]
-#pragma warning disable SA1201 // Elements should appear in the correct order
     internal struct TestStruct
-#pragma warning restore SA1201 // Elements should appear in the correct order
     {
         public int ValueType { get; set; }
 

@@ -202,6 +202,8 @@ public class ExceptionDestructurerTest
 
         public DbContext Context { get; }
     }
+#pragma warning restore CS3003 // Type is not CLS-compliant
+#pragma warning restore CS3001 // Argument type is not CLS-compliant
 
     private class ExceptionDbContext : DbContext
     {
