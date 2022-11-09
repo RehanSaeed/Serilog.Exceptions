@@ -27,7 +27,7 @@ public class ReflectionBasedDestructurerTest
         Assert.DoesNotContain(properties, x => string.Equals(x.Key, "ProtectedProperty", StringComparison.Ordinal));
         Assert.DoesNotContain(properties, x => string.Equals(x.Key, "PrivateProperty", StringComparison.Ordinal));
         Assert.Equal("MessageValue", properties[nameof(TestException.Message)]);
-#if NET461
+#if NET462
         Assert.StartsWith("Void DestructureComplexException_EachTypeOfPropertyIsDestructuredAsExpected(", properties[nameof(TestException.TargetSite)].ToString());
 #endif
         Assert.NotNull(properties[nameof(TestException.StackTrace)]?.ToString());

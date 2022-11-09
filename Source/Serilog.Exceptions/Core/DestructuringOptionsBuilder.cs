@@ -34,7 +34,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
     /// </summary>
     public static readonly IExceptionPropertyFilter IgnoreStackTraceAndTargetSiteExceptionFilter =
 
-#if NET461
+#if NET462
             new IgnorePropertyByNameExceptionFilter(
             nameof(Exception.StackTrace),
             nameof(Exception.TargetSite));
