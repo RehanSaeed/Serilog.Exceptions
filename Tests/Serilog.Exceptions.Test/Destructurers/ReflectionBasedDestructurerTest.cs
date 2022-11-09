@@ -445,6 +445,14 @@ public class ReflectionBasedDestructurerTest
     private static ReflectionBasedDestructurer CreateReflectionBasedDestructurer() =>
         new(10);
 
+    [Serializable]
+    internal struct TestStruct
+    {
+        public int ValueType { get; set; }
+
+        public string ReferenceType { get; set; }
+    }
+
     public class MyObject
     {
         public string? Foo { get; set; }
@@ -562,14 +570,6 @@ public class ReflectionBasedDestructurerTest
     public class RecursiveException : Exception
     {
         public RecursiveNode? Node { get; set; }
-    }
-
-    [Serializable]
-    internal struct TestStruct
-    {
-        public int ValueType { get; set; }
-
-        public string ReferenceType { get; set; }
     }
 
     [Serializable]
