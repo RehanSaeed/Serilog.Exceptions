@@ -24,7 +24,6 @@ public class SqlExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
-#pragma warning disable CA1062 // Validate arguments of public methods
         var sqlException = (SqlException)exception;
         propertiesBag.AddProperty(nameof(SqlException.ClientConnectionId), sqlException.ClientConnectionId);
         propertiesBag.AddProperty(nameof(SqlException.Class), sqlException.Class);
@@ -33,6 +32,5 @@ public class SqlExceptionDestructurer : ExceptionDestructurer
         propertiesBag.AddProperty(nameof(SqlException.Server), sqlException.Server);
         propertiesBag.AddProperty(nameof(SqlException.State), sqlException.State);
         propertiesBag.AddProperty(nameof(SqlException.Errors), sqlException.Errors.Cast<SqlError>().ToArray());
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

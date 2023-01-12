@@ -13,6 +13,7 @@ using Serilog.Exceptions.Destructurers;
 [HtmlExporter]
 [CsvMeasurementsExporter]
 [RPlotExporter]
+[SimpleJob(RuntimeMoniker.Net70)]
 [SimpleJob(RuntimeMoniker.Net60)]
 [SimpleJob(RuntimeMoniker.Net472)]
 public class DestructuringBenchmark

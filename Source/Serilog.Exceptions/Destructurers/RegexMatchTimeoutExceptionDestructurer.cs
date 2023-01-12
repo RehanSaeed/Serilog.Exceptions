@@ -21,11 +21,9 @@ public class RegexMatchTimeoutExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
-#pragma warning disable CA1062 // Validate arguments of public methods
         var typedException = (RegexMatchTimeoutException)exception;
         propertiesBag.AddProperty(nameof(RegexMatchTimeoutException.Input), typedException.Input);
         propertiesBag.AddProperty(nameof(RegexMatchTimeoutException.Pattern), typedException.Pattern);
         propertiesBag.AddProperty(nameof(RegexMatchTimeoutException.MatchTimeout), typedException.MatchTimeout.ToString("c"));
-#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

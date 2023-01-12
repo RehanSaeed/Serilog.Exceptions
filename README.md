@@ -90,6 +90,7 @@ Make sure that the sink's formatter outputs enriched properties. `Serilog.Sinks.
 ### JSON `appSettings.json` configuration
 
 Alternatively to fluent configuration setting can be stored in application configuration using [_Serilog.Settings.Configuration_](https://github.com/serilog/serilog-settings-configuration):
+
 ```json
 {
   "Serilog": {
@@ -114,8 +115,8 @@ This library has custom code to deal with extra properties on most common except
 
 Add the [Serilog.Exceptions.SqlServer](https://www.nuget.org/packages/Serilog.Exceptions.SqlServer/) NuGet package to your project to avoid the reflection based destructurer for `SqlException` when using [System.Data.SqlClient](https://www.nuget.org/packages/System.Data.SqlClient/):
 
-```
-Install-Package Serilog.Exceptions.SqlServer
+```powershell
+dotnet add package Serilog.Exceptions.SqlServer
 ```
 
 Add the `SqlExceptionDestructurer` during setup:
@@ -132,8 +133,8 @@ Add the `SqlExceptionDestructurer` during setup:
 
 Add the [Serilog.Exceptions.MsSqlServer](https://www.nuget.org/packages/Serilog.Exceptions.MsSqlServer/) NuGet package to your project to avoid the reflection based destructurer for `SqlException` when using [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient/):
 
-```
-Install-Package Serilog.Exceptions.MsSqlServer
+```powershell
+dotnet add package Serilog.Exceptions.MsSqlServer
 ```
 
 Add the `SqlExceptionDestructurer` during setup:
@@ -147,12 +148,13 @@ Add the `SqlExceptionDestructurer` during setup:
 
 [![Serilog.Exceptions.EntityFrameworkCore NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) [![Serilog.Exceptions.EntityFrameworkCore package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/ee2cd6f8-4c93-4774-9398-23c49ba41928/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=ee2cd6f8-4c93-4774-9398-23c49ba41928&preferRelease=true) [![Serilog.Exceptions.EntityFrameworkCore NuGet Package Downloads](https://img.shields.io/nuget/dt/Serilog.Exceptions.EntityFrameworkCore)](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore)
 
-> **WARNING**: In versions of Serilog.Exceptions older than [8.0.0](https://github.com/RehanSaeed/Serilog.Exceptions/releases/tag/8.0.0), if you are using EntityFrameworkCore with Serilog.Exceptions you must add this, otherwise in certain cases your entire database will be logged! This is because the exceptions in Entity Framework Core have properties that link to the entire database schema in them (See [#100](https://github.com/RehanSaeed/Serilog.Exceptions/issues/100), [aspnet/EntityFrameworkCore#15214](https://github.com/aspnet/EntityFrameworkCore/issues/15214)). Newer versions of Serilog.Exceptions avoids this issue by preventing the destructure of properties that implement IQueryable preventing their execution.
+> **Warning**
+> If you are using Entity Framework with Serilog.Exceptions you must follow the instuctions below, otherwise in certain cases your entire database will be logged! This is because the exceptions in Entity Framework have properties that link to the entire database schema in them (See [#100](https://github.com/RehanSaeed/Serilog.Exceptions/issues/100), [aspnet/EntityFrameworkCore#15214](https://github.com/aspnet/EntityFrameworkCore/issues/15214)). Version 8 or newer of Serilog.Exceptions reduces the problem by preventing the destructure of properties that implement `IQueryable` but the rest of the `DbContext` object will still get logged.
 
 Add the [Serilog.Exceptions.EntityFrameworkCore](https://www.nuget.org/packages/Serilog.Exceptions.EntityFrameworkCore/) NuGet package to your project when using EntityFrameworkCore in your project
 
-```
-Install-Package Serilog.Exceptions.EntityFrameworkCore
+```powershell
+dotnet add package Serilog.Exceptions.EntityFrameworkCore
 ```
 
 Add the `DbUpdateExceptionDestructurer` during setup:
@@ -164,16 +166,16 @@ Add the `DbUpdateExceptionDestructurer` during setup:
 
 ### Serilog.Exceptions.Refit
 
-[![Serilog.Exceptions.Refit NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.Refit.svg)](https://www.nuget.org/packages/Serilog.Exceptions.Refit/) 
-[![Serilog.Exceptions.Refit package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/dce98084-312a-4939-b879-07bc25734572/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=dce98084-312a-4939-b879-07bc25734572&preferRelease=true) [![Serilog.Exceptions.Refit NuGet Package Downloads](https://img.shields.io/nuget/dt/Serilog.Exceptions.Refit)](https://www.nuget.org/packages/Serilog.Exceptions.Refit)
+[![Serilog.Exceptions.Refit NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.Refit.svg)](https://www.nuget.org/packages/Serilog.Exceptions.Refit/) [![Serilog.Exceptions.Refit package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/8479813c-da6b-4677-b40d-78df8725dc9c/Packages/dce98084-312a-4939-b879-07bc25734572/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_packaging?_a=package&feed=8479813c-da6b-4677-b40d-78df8725dc9c&package=dce98084-312a-4939-b879-07bc25734572&preferRelease=true) [![Serilog.Exceptions.Refit NuGet Package Downloads](https://img.shields.io/nuget/dt/Serilog.Exceptions.Refit)](https://www.nuget.org/packages/Serilog.Exceptions.Refit)
 
 Add the [Serilog.Exceptions.Refit](https://www.nuget.org/packages/Serilog.Exceptions.Refit/) NuGet package to your project to provide detailed logging for the `ApiException` when using [Refit](https://www.nuget.org/packages/Refit/):
 
-```
-Install-Package Serilog.Exceptions.Refit
+```powershell
+dotnet add package Serilog.Exceptions.Refit
 ```
 
 Add the `ApiExceptionDestructurer` during setup:
+
 ```csharp
 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
     .WithDefaultDestructurers()
@@ -203,6 +205,24 @@ In addition, the `ApiException.Content` property can be logged with the followin
 ```
 
 Be careful with this option as the HTTP body could be very large and/or contain sensitive information.
+
+### Serilog.Exceptions.Grpc
+
+[![Serilog.Exceptions.Grpc NuGet Package](https://img.shields.io/nuget/v/Serilog.Exceptions.Grpc.svg)](https://www.nuget.org/packages/Serilog.Exceptions.Grpc/) [![Serilog.Exceptions.Grpc package in serilog-exceptions feed in Azure Artifacts](https://feeds.dev.azure.com/serilog-exceptions/_apis/public/Packaging/Feeds/serilog-exceptions/Packages/abdb2830-e85e-4848-95b3-05fd788f64e5/Badge)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_artifacts/feed/serilog-exceptions/NuGet/Serilog.Exceptions.Grpc?preferRelease=true) [![Serilog.Exceptions.Grpc NuGet Package Downloads](https://img.shields.io/nuget/dt/Serilog.Exceptions.Grpc)](https://www.nuget.org/packages/Serilog.Exceptions.Grpc)
+
+Add the [Serilog.Exceptions.Grpc](https://www.nuget.org/packages/Serilog.Exceptions.Grpc/) NuGet package to your project to avoid the reflection based destructurer for `RpcException` when using [Grpc.Net.Client](https://www.nuget.org/packages/Grpc.Net.Client/):
+
+```powershell
+dotnet add package Serilog.Exceptions.Grpc
+```
+
+Add the `RpcExceptionDestructurer` during setup:
+
+```csharp
+.Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+    .WithDefaultDestructurers()
+    .WithDestructurers(new[] { new RpcExceptionDestructurer() }))
+```
 
 ## Custom Exception Destructurers
 

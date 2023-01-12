@@ -1,7 +1,6 @@
 namespace Serilog.Exceptions.Test.Reflection;
 
 using System.Linq;
-using FluentAssertions;
 using Serilog.Exceptions.Reflection;
 using Xunit;
 
@@ -16,20 +15,20 @@ public class ReflectionInfoExtractorTest
 
         var reflectionInfo = this.reflectionInfoExtractor.GetOrCreateReflectionInfo(typeof(TestObjectWithRedefinedProperty));
 
-        reflectionInfo.Properties.Should().HaveCount(2);
+        Assert.Equal(2, reflectionInfo.Properties.Length);
 
-        var namePropertyInfo = reflectionInfo.Properties.Should().ContainSingle(x => x.Name == "Name").Which;
-        namePropertyInfo.Name.Should().Be(nameof(TestObjectWithRedefinedProperty.Name));
-        namePropertyInfo.DeclaringType.Should().Be(typeof(TestObjectWithRedefinedProperty));
+        var namePropertyInfo = Assert.Single(reflectionInfo.Properties, x => x.Name == "Name");
+        Assert.Equal(nameof(TestObjectWithRedefinedProperty.Name), namePropertyInfo.Name);
+        Assert.Equal(typeof(TestObjectWithRedefinedProperty), namePropertyInfo.DeclaringType);
         var nameGetter = namePropertyInfo.Getter;
         var testObjectName = nameGetter(testObject);
-        testObjectName.Should().BeOfType<int>().Which.Should().Be(123);
+        var integer = Assert.IsType<int>(testObjectName);
+        Assert.Equal(123, integer);
 
-        var baseClassPropertyInfo = reflectionInfo
-            .Properties.Should().ContainSingle(x => x.Name == "TestObject.Name").Which;
+        var baseClassPropertyInfo = Assert.Single(reflectionInfo.Properties, x => x.Name == "TestObject.Name");
         var baseClassNameGetter = baseClassPropertyInfo.Getter;
         var baseClassTestObjectName = baseClassNameGetter(testObject);
-        baseClassTestObjectName.Should().BeNull();
+        Assert.Null(baseClassTestObjectName);
     }
 
     [Fact]
@@ -42,20 +41,22 @@ public class ReflectionInfoExtractorTest
         var propertyNames = reflectionInfo.Properties
             .Select(x => x.Name)
             .ToList();
-        propertyNames.Should().BeEquivalentTo(
+        Assert.Equivalent(
             new[]
             {
-                    "Name",
-                    "TestObjectWithRedefinedProperty.Name",
-                    "TestObject.Name",
+                "Name",
+                "TestObjectWithRedefinedProperty.Name",
+                "TestObject.Name",
             },
-            x => x.WithoutStrictOrdering());
-        var namePropertyInfo = reflectionInfo.Properties.Should().ContainSingle(x => x.Name == "Name").Which;
-        namePropertyInfo.Name.Should().Be(nameof(TestObjectWithDoubleRedefinedProperty.Name));
-        namePropertyInfo.DeclaringType.Should().Be(typeof(TestObjectWithDoubleRedefinedProperty));
+            propertyNames);
+
+        var namePropertyInfo = Assert.Single(reflectionInfo.Properties, x => x.Name == "Name");
+        Assert.Equal(nameof(TestObjectWithDoubleRedefinedProperty.Name), namePropertyInfo.Name);
+        Assert.Equal(typeof(TestObjectWithDoubleRedefinedProperty), namePropertyInfo.DeclaringType);
         var nameGetter = namePropertyInfo.Getter;
         var testObjectName = nameGetter(testObject);
-        testObjectName.Should().BeOfType<double>().Which.Should().Be(456.789);
+        var number = Assert.IsType<double>(testObjectName);
+        Assert.Equal(456.789, number);
     }
 
     public class TestObject

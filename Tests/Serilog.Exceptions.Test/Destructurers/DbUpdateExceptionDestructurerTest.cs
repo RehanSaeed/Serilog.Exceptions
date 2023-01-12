@@ -16,7 +16,6 @@ public class DbUpdateExceptionDestructurerTest
     [Fact]
     public void WithoutDbUpdateExceptionDestructurerShouldLogDbValues()
     {
-        // Arrange
         var jsonWriter = new StringWriter();
         ILogger logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
@@ -31,10 +30,8 @@ public class DbUpdateExceptionDestructurerTest
             UserId = Guid.NewGuid().ToString(),
         });
 
-        // Act
         logger.Error(new TestDbUpdateException("DbUpdate Error", entry), "Error");
 
-        // Assert
         var writtenJson = jsonWriter.ToString();
         Assert.True(writtenJson.Contains(TestContext.UserIdIDoNotWantToSee, StringComparison.Ordinal) ||
             writtenJson.Contains("\"Users\":\"threw System.TypeInitializationException", StringComparison.Ordinal));
@@ -43,7 +40,6 @@ public class DbUpdateExceptionDestructurerTest
     [Fact]
     public void WithDbUpdateExceptionDestructurerShouldNotLogDbValues()
     {
-        // Arrange
         var jsonWriter = new StringWriter();
         ILogger logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new TestDbUpdateExceptionDestructurer() }))
@@ -58,10 +54,8 @@ public class DbUpdateExceptionDestructurerTest
             UserId = Guid.NewGuid().ToString(),
         });
 
-        // Act
         logger.Error(new TestDbUpdateException("DbUpdate Error", entry), "Error");
 
-        // Assert
         var writtenJson = jsonWriter.ToString();
         Assert.DoesNotContain(TestContext.UserIdIDoNotWantToSee, writtenJson, StringComparison.Ordinal);
     }

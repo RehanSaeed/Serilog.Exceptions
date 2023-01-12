@@ -92,6 +92,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.MsSqlSer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Refit", "Source\Serilog.Exceptions.Refit\Serilog.Exceptions.Refit.csproj", "{0EABF22F-F070-4F8D-B165-DD4C4AB62820}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Serilog.Exceptions.Grpc", "Source\Serilog.Exceptions.Grpc\Serilog.Exceptions.Grpc.csproj", "{62CD1306-225F-4FE4-8C2C-45D457E84D36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -130,6 +132,10 @@ Global
 		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EABF22F-F070-4F8D-B165-DD4C4AB62820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62CD1306-225F-4FE4-8C2C-45D457E84D36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62CD1306-225F-4FE4-8C2C-45D457E84D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62CD1306-225F-4FE4-8C2C-45D457E84D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62CD1306-225F-4FE4-8C2C-45D457E84D36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,6 +153,7 @@ Global
 		{4F089B23-3121-4935-B24E-7A9A497BD9FE} = {2C245036-D7F6-4F7C-9BB6-5AFBCCE480F7}
 		{0A21D2AD-024B-4F3D-95F4-BAEFEEE95945} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 		{0EABF22F-F070-4F8D-B165-DD4C4AB62820} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
+		{62CD1306-225F-4FE4-8C2C-45D457E84D36} = {C5508012-7216-4ABE-AB2F-B166ED5FF94F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BE74AFAC-AC6F-4B80-860F-15C22BEE1A38}

@@ -45,9 +45,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
     }
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-#pragma warning disable CA1819 // Properties should not return arrays
     public Type[] TargetTypes => new[] { typeof(Exception) };
-#pragma warning restore CA1819 // Properties should not return arrays
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public void Destructure(
@@ -101,9 +99,9 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
     private static string? GetOrGenerateRefId(ref int nextCyclicRefId, IDictionary<string, object?> destructuredObject)
     {
         string? refId;
-        if (destructuredObject.ContainsKey(IdLabel))
+        if (destructuredObject.TryGetValue(IdLabel, out var value))
         {
-            refId = (string?)destructuredObject[IdLabel];
+            refId = (string?)value;
         }
         else
         {
@@ -168,12 +166,10 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
                     addPropertyAction(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                 }
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception exception)
             {
                 addPropertyAction(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
     }
 
@@ -211,7 +207,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
             return this.DestructureValueDictionary(dictionary, level, destructuredObjects, ref nextCyclicRefId);
         }
 
-        if (value is IQueryable queryable)
+        if (value is IQueryable)
         {
             return IQueryableDestructureSkippedMessage;
         }
@@ -269,9 +265,8 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         IDictionary<object, IDictionary<string, object?>> destructuredObjects,
         ref int nextCyclicRefId)
     {
-        if (destructuredObjects.ContainsKey(value))
+        if (destructuredObjects.TryGetValue(value, out var destructuredObject))
         {
-            var destructuredObject = destructuredObjects[value];
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
             return new Dictionary<string, object?>
@@ -299,9 +294,8 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         IDictionary<object, IDictionary<string, object?>> destructuredObjects,
         ref int nextCyclicRefId)
     {
-        if (destructuredObjects.ContainsKey(value))
+        if (destructuredObjects.TryGetValue(value, out var destructuredObject))
         {
-            var destructuredObject = destructuredObjects[value];
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
             return new Dictionary<string, object?>()
@@ -335,12 +329,10 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
                     values.Add(property.Name, $"threw {innerException.GetType().FullName}: {innerException.Message}");
                 }
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception exception)
             {
                 values.Add(property.Name, $"threw {exception.GetType().FullName}: {exception.Message}");
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
         return values;
