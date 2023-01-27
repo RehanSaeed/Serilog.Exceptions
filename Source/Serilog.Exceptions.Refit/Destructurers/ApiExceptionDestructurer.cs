@@ -62,6 +62,7 @@ public class ApiExceptionDestructurer : ExceptionDestructurer
 #endif
         }
 
+#pragma warning disable CA1062 // Validate arguments of public methods
         var apiException = (ApiException)exception;
         if (this.destructureHttpContent)
         {
@@ -70,5 +71,6 @@ public class ApiExceptionDestructurer : ExceptionDestructurer
 
         propertiesBag.AddProperty(nameof(ApiException.Uri), apiException.Uri);
         propertiesBag.AddProperty(nameof(ApiException.StatusCode), apiException.StatusCode);
+#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

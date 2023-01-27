@@ -24,6 +24,7 @@ public class DbUpdateExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
         var dbUpdateException = (DbUpdateException)exception;
         var entriesValue = dbUpdateException.Entries?
             .Select(
@@ -42,5 +43,6 @@ public class DbUpdateExceptionDestructurer : ExceptionDestructurer
                 })
             .ToList();
         propertiesBag.AddProperty(nameof(DbUpdateException.Entries), entriesValue);
+#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

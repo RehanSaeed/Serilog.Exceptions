@@ -331,7 +331,7 @@ public class ReflectionBasedDestructurerTest
 
         Assert.Contains(nameof(Exception.Message), destructuredCyclicException.Keys);
         var message = Assert.IsType<string>(destructuredCyclicException[nameof(Exception.Message)]);
-        Assert.Contains(nameof(CyclicTaskException), message);
+        Assert.Contains(nameof(CyclicTaskException), message, StringComparison.Ordinal);
 
         Assert.Contains(nameof(CyclicTaskException.Task), destructuredCyclicException.Keys);
         var task2 = Assert.IsAssignableFrom<IDictionary<string, object>>(destructuredCyclicException[nameof(CyclicTaskException.Task)]);
@@ -433,7 +433,9 @@ public class ReflectionBasedDestructurerTest
         {
             throwingAction();
         }
+#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
         {
             return ex;
         }
@@ -498,12 +500,16 @@ public class ReflectionBasedDestructurerTest
     {
         public string? Foo { get; set; }
 
+#pragma warning disable CA2227 // Collection properties should be read only
         public Dictionary<string, object>? Reference { get; set; }
+#pragma warning restore CA2227 // Collection properties should be read only
     }
 
     public class TypePropertyException : Exception
     {
+#pragma warning disable CA1721 // Property names should not match get methods
         public int? Type { get; set; }
+#pragma warning restore CA1721 // Property names should not match get methods
     }
 
     public class TestException : Exception
@@ -523,7 +529,9 @@ public class ReflectionBasedDestructurerTest
         public string PublicProperty { get; set; }
 
 #pragma warning disable CA1822 // Member does not access instance data and can be marked as static
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
         public string ExceptionProperty => throw new Exception();
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
 #pragma warning restore CA1822 // Member does not access instance data and can be marked as static
 
         internal string InternalProperty { get; set; }
@@ -595,7 +603,9 @@ public class ReflectionBasedDestructurerTest
         public new T? HiddenProperty { get; set; }
     }
 
+#pragma warning disable CA1064 // Exceptions should be public
     internal class HiddenException : Exception
+#pragma warning restore CA1064 // Exceptions should be public
     {
         public HiddenException(string message, object info)
             : base(message) =>
