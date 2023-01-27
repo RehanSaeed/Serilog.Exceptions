@@ -11,7 +11,9 @@ using Serilog.Exceptions.Core;
 public class ExceptionDestructurer : IExceptionDestructurer
 {
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
+#pragma warning disable CA1819 // Properties should not return arrays
     public virtual Type[] TargetTypes
+#pragma warning restore CA1819 // Properties should not return arrays
     {
         get
         {

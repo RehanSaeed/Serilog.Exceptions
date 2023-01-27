@@ -22,6 +22,7 @@ public class BenchmarkExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
         var benchmarkException = (BenchmarkException)exception;
         propertiesBag.AddProperty("ParamString", benchmarkException.ParamString);
         propertiesBag.AddProperty("ParamInt", benchmarkException.ParamInt);
@@ -30,5 +31,6 @@ public class BenchmarkExceptionDestructurer : ExceptionDestructurer
                 { "X", benchmarkException.Point?.X },
                 { "Y", benchmarkException.Point?.Y },
             });
+#pragma warning restore CA1062 // Validate arguments of public methods
     }
 }

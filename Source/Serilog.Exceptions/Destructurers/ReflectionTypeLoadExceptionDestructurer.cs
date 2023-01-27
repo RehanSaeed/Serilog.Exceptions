@@ -21,6 +21,7 @@ public class ReflectionTypeLoadExceptionDestructurer : ExceptionDestructurer
     {
         base.Destructure(exception, propertiesBag, destructureException);
 
+#pragma warning disable CA1062 // Validate arguments of public methods
         var reflectionTypeLoadException = (ReflectionTypeLoadException)exception;
         if (reflectionTypeLoadException.LoaderExceptions is not null)
         {
@@ -28,6 +29,7 @@ public class ReflectionTypeLoadExceptionDestructurer : ExceptionDestructurer
                 nameof(ReflectionTypeLoadException.LoaderExceptions),
                 GetLoaderExceptionsValue(reflectionTypeLoadException.LoaderExceptions, destructureException));
         }
+#pragma warning restore CA1062 // Validate arguments of public methods
     }
 
     private static List<IReadOnlyDictionary<string, object?>> GetLoaderExceptionsValue(
