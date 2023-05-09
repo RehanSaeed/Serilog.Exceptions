@@ -62,7 +62,7 @@ The code above logs the following:
 ## Getting Started
 
 **Warning Entity Framework Core Users:**
-If you are using Entity Framework with Serilog.Exceptions you should [read following instructions](#Serilog.Exceptions.EntityFrameworkCore).
+If you are using Entity Framework with Serilog.Exceptions you should read the [following instructions](#Serilog.Exceptions.EntityFrameworkCore).
 
 Add the [Serilog.Exceptions](https://www.nuget.org/packages/Serilog.Exceptions/) NuGet package to your project using the NuGet Package Manager or run the following command in the Package Console Window:
 
