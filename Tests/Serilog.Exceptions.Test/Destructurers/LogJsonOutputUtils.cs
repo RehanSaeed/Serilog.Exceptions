@@ -38,6 +38,12 @@ public static class LogJsonOutputUtils
         Assert_JObjectContainsPropertiesExceptionDetailsWithProperty(rootObject, propertyKey, propertyValue);
     }
 
+    public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string problemDetailPropertyKey, string? propertyValue, IDestructuringOptions? destructuringOptions = null)
+    {
+        var rootObject = LogAndDestructureException(exception, destructuringOptions);
+        Assert_JObjectContainsPropertiesExceptionDetailsWithProblemDetailsProperty(rootObject, propertyKey, problemDetailPropertyKey, propertyValue);
+    }
+
     public static void Test_LoggedExceptionDoesNotContainProperty(Exception exception, string propertyKey, IDestructuringOptions? destructuringOptions = null)
     {
         var rootObject = LogAndDestructureException(exception, destructuringOptions);
@@ -94,6 +100,22 @@ public static class LogJsonOutputUtils
         }
     }
 
+    public static void Assert_ContainsPropertyWithProblemDetailsObject(
+        JObject jObject,
+        string propertyKey,
+        string problemDetailPropertyKey,
+        string? propertyValue)
+    {
+        var paramNameProperty = ExtractProperty(jObject, propertyKey);
+        var objectValue = Assert.IsType<JObject>(paramNameProperty.Value);
+        var problemDetailProperty = ExtractProperty(objectValue, problemDetailPropertyKey);
+
+        if (problemDetailProperty.Value is not null)
+        {
+            Assert.Equal(problemDetailProperty.Value.ToString(), propertyValue);
+        }
+    }
+
     public static void Assert_DoesNotContainProperty(
         JObject jObject,
         string propertyKey)
@@ -131,6 +153,16 @@ public static class LogJsonOutputUtils
     {
         var exceptionDetailValue = ExtractExceptionDetails(jObject);
         Assert_ContainsPropertyWithValue(exceptionDetailValue, propertyKey, propertyValue);
+    }
+
+    public static void Assert_JObjectContainsPropertiesExceptionDetailsWithProblemDetailsProperty(
+        JObject jObject,
+        string propertyKey,
+        string problemDetailPropertyKey,
+        string? propertyValue)
+    {
+        var exceptionDetailValue = ExtractExceptionDetails(jObject);
+        Assert_ContainsPropertyWithProblemDetailsObject(exceptionDetailValue, propertyKey, problemDetailPropertyKey, propertyValue);
     }
 
     public static void Assert_JObjectContainsPropertiesExceptionDetailsWithoutProperty(
