@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="Grpc.Core.Api" Version="2.47.0" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.58.0" />
   </ItemGroup>
 
 </Project>
