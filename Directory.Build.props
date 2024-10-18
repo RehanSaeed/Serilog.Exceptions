@@ -7,7 +7,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <Nullable>enable</Nullable>
-    <!-- TODO: re enable TreatWarningsAsErrors once warnings are fixed-->
+    <!-- TODO: re enable TreatWarningsAsErrors once warnings are fixed -->
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
