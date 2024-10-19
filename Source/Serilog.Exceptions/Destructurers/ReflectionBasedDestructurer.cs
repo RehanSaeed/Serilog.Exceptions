@@ -196,7 +196,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
             return value;
         }
 
-        if (valueType.GetTypeCode() != TypeCode.Object || valueTypeInfo.IsValueType)
+        if (Type.GetTypeCode(valueType) != TypeCode.Object || valueTypeInfo.IsValueType)
         {
             return value;
         }

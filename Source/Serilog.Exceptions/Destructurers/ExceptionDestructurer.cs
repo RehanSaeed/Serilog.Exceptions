@@ -23,26 +23,21 @@ public class ExceptionDestructurer : IExceptionDestructurer
 #if NET462
                         typeof(Microsoft.SqlServer.Server.InvalidUdtException),
 #endif
-#if !NETSTANDARD1_3
                         typeof(System.AccessViolationException),
                         typeof(System.AppDomainUnloadedException),
                         typeof(System.ApplicationException),
                         typeof(System.ArithmeticException),
                         typeof(System.ArrayTypeMismatchException),
                         typeof(System.CannotUnloadAppDomainException),
-#endif
                         typeof(System.Collections.Generic.KeyNotFoundException),
-#if !NETSTANDARD1_3
                         typeof(System.ComponentModel.Design.CheckoutException),
                         typeof(System.ComponentModel.InvalidAsynchronousStateException),
                         typeof(System.ComponentModel.InvalidEnumArgumentException),
-#endif
 #if NET462
                         typeof(System.Configuration.SettingsPropertyIsReadOnlyException),
                         typeof(System.Configuration.SettingsPropertyNotFoundException),
                         typeof(System.Configuration.SettingsPropertyWrongTypeException),
 #endif
-#if !NETSTANDARD1_3
                         typeof(System.ContextMarshalException),
 
                         typeof(System.Data.ConstraintException),
@@ -55,11 +50,9 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.Data.InvalidExpressionException),
                         typeof(System.Data.MissingPrimaryKeyException),
                         typeof(System.Data.NoNullAllowedException),
-#endif
 #if NET462
                         typeof(System.Data.OperationAbortedException),
 #endif
-#if !NETSTANDARD1_3
                         typeof(System.Data.ReadOnlyException),
                         typeof(System.Data.RowNotInTableException),
                         typeof(System.Data.SqlTypes.SqlAlreadyFilledException),
@@ -67,7 +60,6 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.Data.StrongTypingException),
                         typeof(System.Data.SyntaxErrorException),
                         typeof(System.Data.VersionNotFoundException),
-#endif
 #if NET462
                         typeof(System.Diagnostics.Eventing.Reader.EventLogInvalidDataException),
                         typeof(System.Diagnostics.Eventing.Reader.EventLogNotFoundException),
@@ -78,35 +70,25 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.DataMisalignedException),
                         typeof(System.DivideByZeroException),
                         typeof(System.DllNotFoundException),
-#if !NETSTANDARD1_3
                         typeof(System.DuplicateWaitObjectException),
                         typeof(System.EntryPointNotFoundException),
-#endif
                         typeof(System.Exception),
                         typeof(System.FieldAccessException),
                         typeof(System.FormatException),
                         typeof(System.IndexOutOfRangeException),
                         typeof(System.InsufficientExecutionStackException),
-#if !NETSTANDARD1_3
                         typeof(System.InsufficientMemoryException),
-#endif
                         typeof(System.InvalidCastException),
                         typeof(System.InvalidOperationException),
                         typeof(System.InvalidProgramException),
                         typeof(System.InvalidTimeZoneException),
                         typeof(System.IO.DirectoryNotFoundException),
-#if !NETSTANDARD1_3
                         typeof(System.IO.DriveNotFoundException),
-#endif
                         typeof(System.IO.EndOfStreamException),
-#if !NETSTANDARD1_3
                         typeof(System.IO.InternalBufferOverflowException),
-#endif
                         typeof(System.IO.InvalidDataException),
                         typeof(System.IO.IOException),
-#if !NETSTANDARD1_3
                         typeof(System.IO.IsolatedStorage.IsolatedStorageException),
-#endif
                         typeof(System.IO.PathTooLongException),
 #if NET462
                         typeof(System.Management.Instrumentation.InstanceNotFoundException),
@@ -115,14 +97,10 @@ public class ExceptionDestructurer : IExceptionDestructurer
 #endif
                         typeof(System.MemberAccessException),
                         typeof(System.MethodAccessException),
-#if !NETSTANDARD1_3
                         typeof(System.MulticastNotSupportedException),
-#endif
                         typeof(System.Net.CookieException),
-#if !NETSTANDARD1_3
                         typeof(System.Net.NetworkInformation.PingException),
                         typeof(System.Net.ProtocolViolationException),
-#endif
                         typeof(System.NotImplementedException),
                         typeof(System.NotSupportedException),
                         typeof(System.NullReferenceException),
@@ -131,11 +109,9 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.PlatformNotSupportedException),
                         typeof(System.RankException),
                         typeof(System.Reflection.AmbiguousMatchException),
-#if !NETSTANDARD1_3
                         typeof(System.Reflection.CustomAttributeFormatException),
                         typeof(System.Reflection.InvalidFilterCriteriaException),
                         typeof(System.Reflection.TargetException),
-#endif
                         typeof(System.Reflection.TargetInvocationException),
                         typeof(System.Reflection.TargetParameterCountException),
                         typeof(System.Resources.MissingManifestResourceException),
@@ -154,15 +130,11 @@ public class ExceptionDestructurer : IExceptionDestructurer
                         typeof(System.Runtime.Remoting.RemotingTimeoutException),
                         typeof(System.Runtime.Remoting.ServerException),
 #endif
-#if !NETSTANDARD1_3
                         typeof(System.Runtime.Serialization.SerializationException),
                         typeof(System.Security.Authentication.AuthenticationException),
                         typeof(System.Security.Authentication.InvalidCredentialException),
-#endif
                         typeof(System.Security.Cryptography.CryptographicException),
-#if !NETSTANDARD1_3
                         typeof(System.Security.Cryptography.CryptographicUnexpectedOperationException),
-#endif
 #if NET462
                         typeof(System.Security.Policy.PolicyException),
 #endif
@@ -170,29 +142,21 @@ public class ExceptionDestructurer : IExceptionDestructurer
 #if NET462
                         typeof(System.Security.XmlSyntaxException),
 #endif
-#if !NETSTANDARD1_3
                         typeof(System.StackOverflowException),
                         typeof(System.SystemException),
-#endif
                         typeof(System.Threading.BarrierPostPhaseException),
                         typeof(System.Threading.LockRecursionException),
                         typeof(System.Threading.SemaphoreFullException),
                         typeof(System.Threading.SynchronizationLockException),
                         typeof(System.Threading.Tasks.TaskSchedulerException),
-#if !NETSTANDARD1_3
                         typeof(System.Threading.ThreadInterruptedException),
                         typeof(System.Threading.ThreadStartException),
                         typeof(System.Threading.ThreadStateException),
-#endif
                         typeof(System.Threading.WaitHandleCannotBeOpenedException),
                         typeof(System.TimeoutException),
-#if !NETSTANDARD1_3
                         typeof(System.TimeZoneNotFoundException),
-#endif
                         typeof(System.TypeAccessException),
-#if !NETSTANDARD1_3
                         typeof(System.TypeUnloadedException),
-#endif
                         typeof(System.UnauthorizedAccessException),
                         typeof(System.UriFormatException),
                     };
@@ -271,12 +235,10 @@ public class ExceptionDestructurer : IExceptionDestructurer
         propertiesBag.AddProperty(nameof(Exception.Source), exception.Source);
         propertiesBag.AddProperty(nameof(Exception.StackTrace), exception.StackTrace);
 
-#if !NETSTANDARD1_3
         if (exception.TargetSite is not null)
         {
             propertiesBag.AddProperty(nameof(Exception.TargetSite), exception.TargetSite.ToString());
         }
-#endif
 
         if (exception.InnerException is not null)
         {
