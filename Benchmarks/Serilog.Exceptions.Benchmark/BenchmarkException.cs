@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Benchmark;
 
-using System;
 using System.Runtime.Serialization;
 
 [Serializable]

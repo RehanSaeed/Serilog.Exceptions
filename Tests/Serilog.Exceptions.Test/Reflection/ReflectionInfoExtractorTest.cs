@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Reflection;
 
-using System.Linq;
 using Serilog.Exceptions.Reflection;
 using Xunit;
 

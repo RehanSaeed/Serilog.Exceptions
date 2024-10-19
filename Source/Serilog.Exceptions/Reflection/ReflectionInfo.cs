@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Reflection;
 
-using System;
-
 /// <summary>
 /// Contains metadata information about a type
 /// useful for destructuring process.

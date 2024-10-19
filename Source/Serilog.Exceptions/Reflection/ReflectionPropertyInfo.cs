@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Reflection;
 
-using System;
-
 /// <summary>
 /// Class that holds reflection information about a single property.
 /// </summary>

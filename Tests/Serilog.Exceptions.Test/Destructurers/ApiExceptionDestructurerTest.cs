@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;

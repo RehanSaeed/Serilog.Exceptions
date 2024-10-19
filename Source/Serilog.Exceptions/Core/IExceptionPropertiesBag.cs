@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Core;
 
-using System.Collections.Generic;
-
 /// <summary>
 /// Container for all properties of single exception instance. All properties must be added before result
 /// dictionary is requested.

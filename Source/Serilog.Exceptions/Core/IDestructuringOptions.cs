@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Core;
 
-using System.Collections.Generic;
 using Serilog.Exceptions.Destructurers;
 using Serilog.Exceptions.Filters;
 
