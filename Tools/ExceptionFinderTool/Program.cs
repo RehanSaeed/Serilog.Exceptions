@@ -1,10 +1,8 @@
 namespace ExceptionFinderTool;
 
-using System;
 #if NET6_0_OR_GREATER
 using System.Globalization;
 #endif
-using System.Linq;
 using System.Reflection;
 using System.Text;
 

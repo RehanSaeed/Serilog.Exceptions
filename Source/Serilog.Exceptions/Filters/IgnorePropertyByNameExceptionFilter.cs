@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Filters;
 
-using System;
-
 /// <summary>
 /// Filters the exception properties based only on their name. If exception property matches any of provided
 /// property names, exception property is ignored altogether. Comparison method is exact case-sensitive.

@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Core;
 
-using System;
-using System.Collections.Generic;
 using Serilog.Exceptions.Filters;
 
 /// <inheritdoc />

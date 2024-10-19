@@ -1,8 +1,6 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog.Exceptions.Core;
@@ -82,7 +80,7 @@ public class ReflectionBasedDestructurerTest
         TaskCanceledException exception;
         try
         {
-            await Task.Delay(1000, cancellationTokenSource.Token).ConfigureAwait(false);
+            await Task.Delay(1000, cancellationTokenSource.Token)
             Assert.Fail("TaskCanceledException was not thrown.");
             return;
         }

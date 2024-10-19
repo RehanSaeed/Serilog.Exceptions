@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Benchmark;
 
-using System;
-using System.Collections.Generic;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Filters;
 
