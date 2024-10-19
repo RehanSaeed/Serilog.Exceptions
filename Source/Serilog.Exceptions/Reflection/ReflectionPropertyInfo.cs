@@ -1,9 +1,6 @@
 namespace Serilog.Exceptions.Reflection;
 
 using System;
-#if NETSTANDARD1_3
-using System.Reflection;
-#endif
 
 /// <summary>
 /// Class that holds reflection information about a single property.
@@ -96,9 +93,5 @@ internal class ReflectionPropertyInfo
     }
 
     private static bool IsSubTypeOf(Type possibleSubType, Type possibleBaseType) =>
-#if NETSTANDARD1_3
-            possibleBaseType.GetTypeInfo().IsSubclassOf(possibleBaseType);
-#else
             possibleSubType.IsSubclassOf(possibleBaseType);
-#endif
 }
