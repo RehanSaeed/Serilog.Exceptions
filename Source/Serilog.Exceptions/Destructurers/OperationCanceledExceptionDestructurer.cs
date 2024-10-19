@@ -14,9 +14,9 @@ public class OperationCanceledExceptionDestructurer : ExceptionDestructurer
     private const string CancellationTokenFalse = "CancellationRequested: false";
 
     private static readonly Type[] TargetExceptionTypes =
-    {
-        typeof(OperationCanceledException),
-    };
+    [
+        typeof(OperationCanceledException)
+    ];
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
     public override Type[] TargetTypes => TargetExceptionTypes;

@@ -61,7 +61,7 @@ internal class ReflectionInfoExtractor
             }
             else
             {
-                groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> { propertyInfo };
+                groupedByName[propertyInfo.Name] = [propertyInfo];
             }
         }
 

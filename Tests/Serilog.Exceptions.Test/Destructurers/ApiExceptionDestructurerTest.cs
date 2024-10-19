@@ -18,7 +18,7 @@ public class ApiExceptionDestructurerTest
     {
         using var message = new HttpRequestMessage(HttpMethod.Get, new Uri("https://foobar.com"));
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new ApiExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings()).ConfigureAwait(false);
 
         Test_LoggedExceptionContainsProperty(apiException, nameof(ApiException.StatusCode), nameof(HttpStatusCode.InternalServerError), options);
@@ -30,7 +30,7 @@ public class ApiExceptionDestructurerTest
         var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new ApiExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings()).ConfigureAwait(false);
 
         Test_LoggedExceptionContainsProperty(apiException, nameof(ApiException.Uri), requestUri.ToString(), options);
@@ -42,7 +42,7 @@ public class ApiExceptionDestructurerTest
         var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new ApiExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
         response.Content = JsonContent.Create("hello");
 
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings()).ConfigureAwait(false);
@@ -56,7 +56,7 @@ public class ApiExceptionDestructurerTest
         var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new ApiExceptionDestructurer(destructureHttpContent: true) });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureHttpContent: true)]);
         response.Content = JsonContent.Create("hello");
 
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings()).ConfigureAwait(false);
@@ -70,7 +70,7 @@ public class ApiExceptionDestructurerTest
         var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new ApiExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings()).ConfigureAwait(false);
 
         // No need to test all properties, just a handful is sufficient
@@ -85,7 +85,7 @@ public class ApiExceptionDestructurerTest
         var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new ApiExceptionDestructurer(destructureCommonExceptionProperties: false) });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureCommonExceptionProperties: false)]);
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings()).ConfigureAwait(false);
 
         Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.StackTrace), options);

@@ -14,13 +14,13 @@ public class CompositeExceptionPropertyFilterTest
     [Fact]
     public void CreationOfCompositeFilter_ForEmptyFilters_Throws() =>
         Assert.Throws<ArgumentException>(
-            () => new CompositeExceptionPropertyFilter(Array.Empty<IExceptionPropertyFilter>()));
+            () => new CompositeExceptionPropertyFilter([]));
 
     [Fact]
     public void CreationOfCompositeFilter_ForOneNullFilter_Throws()
     {
         var ex = Assert.Throws<ArgumentException>(
-            () => new CompositeExceptionPropertyFilter(new IExceptionPropertyFilter[] { null! }));
+            () => new CompositeExceptionPropertyFilter([null!]));
 
         Assert.Contains("index 0", ex.Message, StringComparison.Ordinal);
     }

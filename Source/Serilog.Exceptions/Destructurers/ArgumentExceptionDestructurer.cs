@@ -10,11 +10,11 @@ using Serilog.Exceptions.Core;
 public class ArgumentExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => new[]
-    {
+    public override Type[] TargetTypes =>
+    [
         typeof(ArgumentException),
-        typeof(ArgumentNullException),
-    };
+        typeof(ArgumentNullException)
+    ];
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public override void Destructure(

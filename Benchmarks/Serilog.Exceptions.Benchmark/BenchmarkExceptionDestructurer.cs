@@ -12,7 +12,7 @@ using Serilog.Exceptions.Destructurers;
 public class BenchmarkExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(BenchmarkException) };
+    public override Type[] TargetTypes => [typeof(BenchmarkException)];
 
     /// <inheritdoc />
     public override void Destructure(

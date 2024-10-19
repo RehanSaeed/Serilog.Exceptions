@@ -46,7 +46,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
 #pragma warning disable CA1819 // Properties should not return arrays
-    public Type[] TargetTypes => new[] { typeof(Exception) };
+    public Type[] TargetTypes => [typeof(Exception)];
 #pragma warning restore CA1819 // Properties should not return arrays
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
