@@ -80,7 +80,7 @@ public class ReflectionBasedDestructurerTest
         TaskCanceledException exception;
         try
         {
-            await Task.Delay(1000, cancellationTokenSource.Token).ConfigureAwait(false);
+            await Task.Delay(1000, cancellationTokenSource.Token);
             Assert.True(false, "TaskCanceledException was not thrown.");
             return;
         }
