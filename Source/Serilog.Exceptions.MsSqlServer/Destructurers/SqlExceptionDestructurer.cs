@@ -14,7 +14,7 @@ using Serilog.Exceptions.Destructurers;
 public class SqlExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(SqlException) };
+    public override Type[] TargetTypes => [typeof(SqlException)];
 
     /// <inheritdoc />
     public override void Destructure(

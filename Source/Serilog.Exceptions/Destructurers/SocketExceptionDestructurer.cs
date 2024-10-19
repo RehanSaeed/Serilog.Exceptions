@@ -64,10 +64,7 @@ public class SocketExceptionDestructurer : ExceptionDestructurer
         };
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => new[]
-    {
-        typeof(SocketException),
-    };
+    public override Type[] TargetTypes => [typeof(SocketException)];
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public override void Destructure(

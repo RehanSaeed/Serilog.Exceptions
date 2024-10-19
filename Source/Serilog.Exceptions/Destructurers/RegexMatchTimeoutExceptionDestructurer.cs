@@ -11,10 +11,7 @@ using Serilog.Exceptions.Core;
 public class RegexMatchTimeoutExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => new Type[]
-    {
-            typeof(RegexMatchTimeoutException),
-    };
+    public override Type[] TargetTypes => [typeof(RegexMatchTimeoutException)];
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public override void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)

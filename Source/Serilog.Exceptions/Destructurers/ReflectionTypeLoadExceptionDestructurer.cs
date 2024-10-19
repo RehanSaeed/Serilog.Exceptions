@@ -11,7 +11,7 @@ using Serilog.Exceptions.Core;
 public class ReflectionTypeLoadExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => new[] { typeof(ReflectionTypeLoadException) };
+    public override Type[] TargetTypes => [typeof(ReflectionTypeLoadException)];
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public override void Destructure(

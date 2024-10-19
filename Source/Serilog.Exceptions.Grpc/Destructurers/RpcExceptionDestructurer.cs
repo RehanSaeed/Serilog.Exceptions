@@ -13,7 +13,7 @@ using Serilog.Exceptions.Destructurers;
 public class RpcExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(RpcException) };
+    public override Type[] TargetTypes => [typeof(RpcException)];
 
     /// <inheritdoc />
     public override void Destructure(

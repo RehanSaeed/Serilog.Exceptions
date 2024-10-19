@@ -15,10 +15,9 @@ public class RegexMatchTimeoutExceptionDestructurerTests
         var exception = new RegexMatchTimeoutException("input", "pattern", TimeSpan.FromSeconds(1));
 
         var optionsBuilder = new DestructuringOptionsBuilder()
-            .WithDestructurers(new IExceptionDestructurer[]
-            {
-                new RegexMatchTimeoutExceptionDestructurer(),
-            });
+            .WithDestructurers([
+                new RegexMatchTimeoutExceptionDestructurer()
+            ]);
 
         var loggedExceptionDetails = ExtractExceptionDetails(LogAndDestructureException(exception, optionsBuilder));
 

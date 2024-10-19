@@ -16,7 +16,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
     /// Default set of destructurers. Destructurers cover all of the exceptions from standard library.
     /// </summary>
     public static readonly IExceptionDestructurer[] DefaultDestructurers =
-    {
+    [
         new ExceptionDestructurer(),
         new ArgumentExceptionDestructurer(),
         new ArgumentOutOfRangeExceptionDestructurer(),
@@ -25,8 +25,8 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
         new ReflectionTypeLoadExceptionDestructurer(),
         new OperationCanceledExceptionDestructurer(),
         new TaskCanceledExceptionDestructurer(),
-        new SocketExceptionDestructurer(),
-    };
+        new SocketExceptionDestructurer()
+    ];
 
     /// <summary>
     /// Filter that ignores <see cref="Exception.StackTrace"/> and Exception.TargetSite properties.

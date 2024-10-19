@@ -42,7 +42,7 @@ public class DbUpdateExceptionDestructurerTest
     {
         var jsonWriter = new StringWriter();
         ILogger logger = new LoggerConfiguration()
-            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new TestDbUpdateExceptionDestructurer() }))
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers([new TestDbUpdateExceptionDestructurer()]))
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
         using var ctx = new TestContext();
@@ -105,6 +105,6 @@ public class DbUpdateExceptionDestructurerTest
 
     internal class TestDbUpdateExceptionDestructurer : DbUpdateExceptionDestructurer
     {
-        public override Type[] TargetTypes => new[] { typeof(TestDbUpdateException) };
+        public override Type[] TargetTypes => [typeof(TestDbUpdateException)];
     }
 }

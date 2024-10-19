@@ -56,7 +56,7 @@ public class ExceptionPropertiesBagTest
     {
         var properties = new ExceptionPropertiesBag(
             new Exception(),
-            new IgnorePropertyByNameExceptionFilter(new[] { "key" }));
+            new IgnorePropertyByNameExceptionFilter(["key"]));
 
         properties.AddProperty("key", "value");
 
@@ -69,7 +69,7 @@ public class ExceptionPropertiesBagTest
     {
         var properties = new ExceptionPropertiesBag(
             new Exception(),
-            new IgnorePropertyByNameExceptionFilter(new[] { "not key" }));
+            new IgnorePropertyByNameExceptionFilter(["not key"]));
 
         properties.AddProperty("key", "value");
 

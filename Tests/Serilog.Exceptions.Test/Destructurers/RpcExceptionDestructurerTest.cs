@@ -11,7 +11,7 @@ public class RpcExceptionDestructurerTest
     [Fact]
     public void RpcException_StatusCodeIsLoggedAsProperty()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new RpcExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new RpcExceptionDestructurer()]);
         var rpcException = new RpcException(new Status(StatusCode.Aborted, string.Empty));
 
         Test_LoggedExceptionContainsProperty(rpcException, nameof(RpcException.Status.StatusCode), nameof(StatusCode.Aborted), options);
@@ -20,7 +20,7 @@ public class RpcExceptionDestructurerTest
     [Fact]
     public void RpcException_StatusDetailIsLoggedAsProperty()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new RpcExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new RpcExceptionDestructurer()]);
         var testDetail = "details";
         var rpcException = new RpcException(new Status(StatusCode.Aborted, testDetail));
 
@@ -30,7 +30,7 @@ public class RpcExceptionDestructurerTest
     [Fact]
     public void RpcException_TrailersAreLoggedAsProperty()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new RpcExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new RpcExceptionDestructurer()]);
         const string stringTrailerKey1 = "key1";
         const string stringTrailerValue1 = "stringTrailerValue1";
         const string stringTrailerKey2 = "key2";
@@ -46,9 +46,9 @@ public class RpcExceptionDestructurerTest
     [Fact]
     public void RpcException_BinaryTrailersAreNotLoggedAsProperty()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers(new[] { new RpcExceptionDestructurer() });
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new RpcExceptionDestructurer()]);
         const string stringTrailerKey1 = "key-bin";
-        var metadata = new Metadata { { stringTrailerKey1, new byte[] { 1 } } };
+        var metadata = new Metadata { { stringTrailerKey1, [1]} };
 
         var rpcException = new RpcException(new Status(StatusCode.Aborted, string.Empty), metadata);
 

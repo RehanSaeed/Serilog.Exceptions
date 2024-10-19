@@ -10,10 +10,10 @@ using Serilog.Exceptions.Core;
 public class ArgumentOutOfRangeExceptionDestructurer : ArgumentExceptionDestructurer
 {
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => new[]
-    {
-        typeof(ArgumentOutOfRangeException),
-    };
+    public override Type[] TargetTypes =>
+    [
+        typeof(ArgumentOutOfRangeException)
+    ];
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public override void Destructure(

@@ -14,7 +14,7 @@ using Serilog.Exceptions.Destructurers;
 public class DbUpdateExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(DbUpdateException), typeof(DbUpdateConcurrencyException) };
+    public override Type[] TargetTypes => [typeof(DbUpdateException), typeof(DbUpdateConcurrencyException)];
 
     /// <inheritdoc />
     public override void Destructure(
