@@ -20,9 +20,9 @@ public class ApiExceptionDestructurerTest
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
+        var exception = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
 
-        Test_LoggedExceptionContainsProperty(apiException, nameof(ApiException.StatusCode), nameof(HttpStatusCode.InternalServerError), options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.StatusCode), nameof(HttpStatusCode.InternalServerError), options);
     }
 
     [Fact]
@@ -31,9 +31,9 @@ public class ApiExceptionDestructurerTest
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
+        var exception = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
 
-        Test_LoggedExceptionContainsProperty(apiException, nameof(ApiException.Uri), requestUri.ToString(), options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Uri), requestUri.ToString(), options);
     }
 
     [Fact]
@@ -44,9 +44,9 @@ public class ApiExceptionDestructurerTest
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
         response.Content = JsonContent.Create("hello");
 
-        var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
+        var exception = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
 
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(ApiException.Content), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(ApiException.Content), options);
     }
 
     [Fact]
@@ -57,9 +57,9 @@ public class ApiExceptionDestructurerTest
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureHttpContent: true)]);
         response.Content = JsonContent.Create("hello");
 
-        var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
+        var exception = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
 
-        Test_LoggedExceptionContainsProperty(apiException, nameof(ApiException.Content), "\"hello\"", options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Content), "\"hello\"", options);
     }
 
     [Fact]
@@ -68,28 +68,33 @@ public class ApiExceptionDestructurerTest
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
+        var exception = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
 
         // No need to test all properties, just a handful is sufficient
-        Test_LoggedExceptionContainsProperty(apiException, nameof(Exception.StackTrace), apiException.StackTrace, options);
-        Test_LoggedExceptionContainsProperty(apiException, nameof(Exception.Message), apiException.Message, options);
-        Test_LoggedExceptionContainsProperty(apiException, nameof(Type), apiException.GetType().ToString(), options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(Exception.StackTrace), exception.StackTrace, options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(Exception.Message), exception.Message, options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(Type), exception.GetType().ToString(), options);
     }
 
     [Fact]
     public async Task ApiException_WhenSpecifiedCommonPropertiesNotLoggedAsPropertiesAsync()
     {
+        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureCommonExceptionProperties: false)]);
+        var exception = await BuildException();
+
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.StackTrace), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.Message), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.InnerException), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.HelpLink), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.Data), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.HResult), options);
+        Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Type), options);
+    }
+
+    private static async Task<ApiException> BuildException()
+    {
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureCommonExceptionProperties: false)]);
-        var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
-
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.StackTrace), options);
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.Message), options);
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.InnerException), options);
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.HelpLink), options);
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.Data), options);
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Exception.HResult), options);
-        Test_LoggedExceptionDoesNotContainProperty(apiException, nameof(Type), options);
+        return await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
     }
 }
