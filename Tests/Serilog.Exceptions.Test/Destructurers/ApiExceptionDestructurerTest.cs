@@ -17,7 +17,7 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_HttpStatusCodeIsLoggedAsPropertyAsync()
     {
-        using var message = new HttpRequestMessage(HttpMethod.Get, new Uri("https://foobar.com"));
+        using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
         var apiException = await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
