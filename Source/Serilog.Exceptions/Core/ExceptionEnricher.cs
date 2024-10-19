@@ -30,7 +30,7 @@ public sealed class ExceptionEnricher : ILogEventEnricher
         this.destructuringOptions = destructuringOptions ?? throw new ArgumentNullException(nameof(destructuringOptions));
         this.reflectionBasedDestructurer = new ReflectionBasedDestructurer(destructuringOptions.DestructuringDepth);
 
-        this.destructurers = new Dictionary<Type, IExceptionDestructurer>();
+        this.destructurers = [];
         foreach (var destructurer in this.destructuringOptions.Destructurers)
         {
             foreach (var targetType in destructurer.TargetTypes)

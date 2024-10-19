@@ -14,7 +14,7 @@ internal class ExceptionPropertiesBag : IExceptionPropertiesBag
     private const int AcceptableNumberOfSameNameProperties = 5;
     private readonly Exception exception;
     private readonly IExceptionPropertyFilter? filter;
-    private readonly Dictionary<string, object?> properties = new();
+    private readonly Dictionary<string, object?> properties = [];
 
     /// <summary>
     /// We keep a note on whether the results were collected to be sure that after that there are no changes. This

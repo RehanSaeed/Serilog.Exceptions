@@ -75,17 +75,11 @@ public class DbUpdateExceptionDestructurerTest
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var users = new List<User>
-                {
-                    new User
-                    {
-                        UserId = "FirstUser",
-                    },
-                    new User
-                    {
-                        UserId = UserIdIDoNotWantToSee,
-                    },
-                };
+            List<User> users =
+            [
+                new() { UserId = "FirstUser" },
+                new() { UserId = UserIdIDoNotWantToSee }
+            ];
 
             modelBuilder.Entity<User>().HasData(users);
         }

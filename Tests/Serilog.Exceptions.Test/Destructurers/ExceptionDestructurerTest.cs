@@ -134,7 +134,7 @@ public class ExceptionDestructurerTest
     public void WhenExceptionContainsDictionaryWithNonScalarValue_ShouldNotThrow()
     {
         var exception = new DictNonScalarKeyException();
-        exception.Reference.Add(new List<int>() { 1, 2, 3 }, "VALUE");
+        exception.Reference.Add([1, 2, 3], "VALUE");
 
         var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
 
@@ -173,15 +173,15 @@ public class ExceptionDestructurerTest
 
     public class DictNonScalarKeyException : Exception
     {
-        public DictNonScalarKeyException() => this.Reference = new Dictionary<IEnumerable<int>, object>();
+        public DictNonScalarKeyException() => this.Reference = [];
 
         public DictNonScalarKeyException(string message)
             : base(message) =>
-            this.Reference = new Dictionary<IEnumerable<int>, object>();
+            this.Reference = [];
 
         public DictNonScalarKeyException(string message, Exception innerException)
             : base(message, innerException) =>
-            this.Reference = new Dictionary<IEnumerable<int>, object>();
+            this.Reference = [];
 
         public Dictionary<IEnumerable<int>, object> Reference { get; }
     }
