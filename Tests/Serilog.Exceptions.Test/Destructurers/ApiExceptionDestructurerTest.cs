@@ -12,6 +12,8 @@ using static LogJsonOutputUtils;
 
 public class ApiExceptionDestructurerTest
 {
+    private static Uri requestUri = new("https://foobar.com");
+
     [Fact]
     public async Task ApiException_HttpStatusCodeIsLoggedAsPropertyAsync()
     {
@@ -26,7 +28,6 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_UriIsLoggedAsPropertyAsync()
     {
-        var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
@@ -38,7 +39,6 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_ByDefaultContentIsNotLoggedAsPropertyAsync()
     {
-        var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
@@ -52,7 +52,6 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_WhenSpecifiedContentIsLoggedAsPropertyAsync()
     {
-        var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureHttpContent: true)]);
@@ -66,7 +65,6 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_ByDefaultCommonPropertiesLoggedAsPropertiesAsync()
     {
-        var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
@@ -81,7 +79,6 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_WhenSpecifiedCommonPropertiesNotLoggedAsPropertiesAsync()
     {
-        var requestUri = new Uri("https://foobar.com");
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureCommonExceptionProperties: false)]);
