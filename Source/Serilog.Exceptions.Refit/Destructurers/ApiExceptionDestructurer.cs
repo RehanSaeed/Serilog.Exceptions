@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Refit.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using global::Refit;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;

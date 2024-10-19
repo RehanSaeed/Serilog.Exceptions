@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Filters;
 
-using System;
-
 /// <summary>
 /// Interface used for filtering exception properties. Filtering process is global, each property of every
 /// exception will go through a configured exception property filter.

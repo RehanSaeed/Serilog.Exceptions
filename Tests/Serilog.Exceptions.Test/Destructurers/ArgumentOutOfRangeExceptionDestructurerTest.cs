@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using Xunit;
 using static LogJsonOutputUtils;
 

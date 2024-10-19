@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using Serilog.Exceptions.Core;
 

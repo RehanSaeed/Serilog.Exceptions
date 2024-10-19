@@ -1,7 +1,6 @@
 namespace Serilog.Exceptions;
 
 using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// Helper extension methods for specific dictionary operations.

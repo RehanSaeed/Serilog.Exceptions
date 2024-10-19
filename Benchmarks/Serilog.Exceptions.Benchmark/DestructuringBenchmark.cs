@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Benchmark;
 
-using System;
-using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using Serilog.Exceptions.Destructurers;

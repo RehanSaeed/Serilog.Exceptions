@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Grpc.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using global::Grpc.Core;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;

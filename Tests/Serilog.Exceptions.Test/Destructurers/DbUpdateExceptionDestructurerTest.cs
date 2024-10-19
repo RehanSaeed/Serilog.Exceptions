@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

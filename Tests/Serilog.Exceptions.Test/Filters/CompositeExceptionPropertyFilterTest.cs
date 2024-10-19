@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Filters;
 
-using System;
 using Serilog.Exceptions.Filters;
 using Xunit;
 
