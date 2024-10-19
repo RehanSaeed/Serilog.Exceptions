@@ -83,7 +83,7 @@ public class ReflectionBasedDestructurerTest
         try
         {
             await Task.Delay(1000, cancellationTokenSource.Token).ConfigureAwait(false);
-            Assert.True(false, "TaskCanceledException was not thrown.");
+            Assert.Fail("TaskCanceledException was not thrown.");
             return;
         }
         catch (TaskCanceledException taskCancelledException)
@@ -440,7 +440,7 @@ public class ReflectionBasedDestructurerTest
             return ex;
         }
 
-        Assert.True(false, $"{nameof(throwingAction)} did not throw");
+        Assert.Fail($"{nameof(throwingAction)} did not throw");
         return null!; // We should never reach this line.
     }
 
