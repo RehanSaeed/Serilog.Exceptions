@@ -71,6 +71,8 @@ indent_style = tab
 [*.{cs,csx,cake,vb,vbx}]
 # Default Severity for all .NET Code Style rules below
 dotnet_analyzer_diagnostic.severity = warning
+# Remove the GenerateDocumentationFile noise https://github.com/dotnet/aspnetcore/issues/47912
+dotnet_diagnostic.IDE0005.severity = none
 
 ##########################################
 # Language Rules
