@@ -16,9 +16,9 @@ public static class LogJsonOutputUtils
         Exception exception,
         IDestructuringOptions? destructuringOptions = null)
     {
-        var jsonWriter = new StringWriter();
+        using var jsonWriter = new StringWriter();
         destructuringOptions ??= new DestructuringOptionsBuilder().WithDefaultDestructurers();
-        ILogger logger = new LoggerConfiguration()
+        var logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(destructuringOptions)
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
@@ -27,8 +27,7 @@ public static class LogJsonOutputUtils
 
         var writtenJson = jsonWriter.ToString();
         var jsonObj = JsonConvert.DeserializeObject<object>(writtenJson);
-        var rootObject = Assert.IsType<JObject>(jsonObj);
-        return rootObject;
+        return Assert.IsType<JObject>(jsonObj);
     }
 
     public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string? propertyValue, IDestructuringOptions? destructuringOptions = null)

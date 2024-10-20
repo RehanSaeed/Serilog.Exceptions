@@ -48,7 +48,7 @@ public class RpcExceptionDestructurerTest
     {
         var options = new DestructuringOptionsBuilder().WithDestructurers([new RpcExceptionDestructurer()]);
         const string stringTrailerKey1 = "key-bin";
-        var metadata = new Metadata { { stringTrailerKey1, [1]} };
+        var metadata = new Metadata { { stringTrailerKey1, [1] } };
 
         var rpcException = new RpcException(new Status(StatusCode.Aborted, string.Empty), metadata);
 

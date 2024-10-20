@@ -396,7 +396,7 @@ public class ReflectionBasedDestructurerTest
 
     private static void Test_ResultOfReflectionDestructurerShouldBeEquivalentToCustomOne(
         Exception exception,
-        IExceptionDestructurer customDestructurer)
+        ArgumentExceptionDestructurer customDestructurer)
     {
         var reflectionBasedResult = new ExceptionPropertiesBag(exception);
         var customBasedResult = new ExceptionPropertiesBag(exception);
@@ -596,13 +596,10 @@ public class ReflectionBasedDestructurerTest
     }
 
 #pragma warning disable CA1064 // Exceptions should be public
-    internal class HiddenException : Exception
+    internal class HiddenException(string message, object info) :
+        Exception(message)
 #pragma warning restore CA1064 // Exceptions should be public
     {
-        public HiddenException(string message, object info)
-            : base(message) =>
-            this.Info = info;
-
-        public object Info { get; set; }
+        public object Info { get; set; } = info;
     }
 }
