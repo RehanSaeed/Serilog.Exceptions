@@ -105,7 +105,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
     {
         if (this.Filter is not null)
         {
-            #pragma warning CA1863 //Cache a 'CompositeFormat' for repeated use in this formatting operation
+#pragma warning disable CA1863 //Cache a 'CompositeFormat' for repeated use in this formatting operation
             throw new InvalidOperationException(
                 string.Format(CultureInfo.InvariantCulture, Resources.FilterAlreadySet, nameof(CompositeExceptionPropertyFilter)));
         }
