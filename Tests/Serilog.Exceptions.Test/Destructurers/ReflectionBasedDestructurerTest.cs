@@ -135,11 +135,11 @@ public class ReflectionBasedDestructurerTest
 
         Assert.Contains("Message", taskFirstLevelExceptionDictionary.Keys);
         var message = Assert.IsType<string>(taskFirstLevelExceptionDictionary["Message"]);
-        #if NET481
+#if NET481
         Assert.Equal("One or more errors occurred.", message);
-        #else
+#else
         Assert.Equal("One or more errors occurred. (INNER EXCEPTION MESSAGE)", message);
-        #endif
+#endif
 
         Assert.Contains("InnerExceptions", taskFirstLevelExceptionDictionary.Keys);
         var innerExceptions = Assert.IsAssignableFrom<IReadOnlyCollection<object>>(taskFirstLevelExceptionDictionary["InnerExceptions"]);
