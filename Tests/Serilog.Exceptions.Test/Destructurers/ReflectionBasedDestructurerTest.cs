@@ -286,7 +286,7 @@ public class ReflectionBasedDestructurerTest
         var cyclic = new MyObjectDict
         {
             Foo = "Cyclic",
-            Reference = new Dictionary<string, object>(),
+            Reference = [],
         };
         cyclic.Reference["x"] = cyclic.Reference;
         var exception = new CyclicDictException
