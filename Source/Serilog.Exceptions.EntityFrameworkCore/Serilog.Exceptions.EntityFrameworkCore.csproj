@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
-    <TargetFrameworks>net7.0;net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Label="Package">
@@ -12,6 +12,10 @@
 
   <ItemGroup Label="Project References">
     <ProjectReference Include="..\Serilog.Exceptions\Serilog.Exceptions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Package References (.NET 8)" Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup Label="Package References (.NET 7)" Condition="'$(TargetFramework)' == 'net7.0'">
