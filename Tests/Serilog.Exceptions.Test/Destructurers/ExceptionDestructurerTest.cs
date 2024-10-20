@@ -188,17 +188,12 @@ public class ExceptionDestructurerTest
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
 #pragma warning disable CS3003 // Type is not CLS-compliant
-    public class CustomDbContextException : Exception
+    public class CustomDbContextException(string name, DbContext context) :
+        Exception
     {
-        public CustomDbContextException(string name, DbContext context)
-        {
-            this.Name = name;
-            this.Context = context;
-        }
+        public string Name { get; set; } = name;
 
-        public string Name { get; set; }
-
-        public DbContext Context { get; }
+        public DbContext Context { get; } = context;
     }
 #pragma warning restore CS3003 // Type is not CLS-compliant
 #pragma warning restore CS3001 // Argument type is not CLS-compliant
