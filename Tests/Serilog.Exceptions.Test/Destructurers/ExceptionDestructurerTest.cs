@@ -134,7 +134,8 @@ public class ExceptionDestructurerTest
     public void WhenExceptionContainsDictionaryWithNonScalarValue_ShouldNotThrow()
     {
         var exception = new DictNonScalarKeyException();
-        exception.Reference.Add([1, 2, 3], "VALUE");
+        var list = new List<int> { 1, 2, 3 };
+        exception.Reference.Add(list, "VALUE");
 
         var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
 
