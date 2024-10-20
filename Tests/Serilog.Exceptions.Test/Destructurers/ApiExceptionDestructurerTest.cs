@@ -3,6 +3,7 @@ namespace Serilog.Exceptions.Test.Destructurers;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 using global::Refit;
 using Serilog.Exceptions.Core;
@@ -17,8 +18,9 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_HttpStatusCodeIsLoggedAsPropertyAsync()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var exception = await BuildException();
+        var destructurer = new ApiExceptionDestructurer();
+        var options = BuildOptions(destructurer);
+        var exception = await BuildApiException();
 
         Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.StatusCode), nameof(HttpStatusCode.InternalServerError), options);
     }
@@ -26,24 +28,27 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_UriIsLoggedAsPropertyAsync()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var exception = await BuildException();
+        var destructurer = new ApiExceptionDestructurer();
+        var options = BuildOptions(destructurer);
+        var exception = await BuildApiException();
         Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Uri), requestUri.ToString(), options);
     }
 
     [Fact]
     public async Task ApiException_ByDefaultContentIsNotLoggedAsPropertyAsync()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var exception = await BuildException("hello");
+        var destructurer = new ApiExceptionDestructurer();
+        var options = BuildOptions(destructurer);
+        var exception = await BuildApiException("hello");
         Test_LoggedExceptionDoesNotContainProperty(exception, nameof(ApiException.Content), options);
     }
 
     [Fact]
     public async Task ApiException_WhenSpecifiedContentIsLoggedAsPropertyAsync()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureHttpContent: true)]);
-        var exception = await BuildException("hello");
+        var destructurer = new ApiExceptionDestructurer(destructureHttpContent: true);
+        var options = BuildOptions(destructurer);
+        var exception = await BuildApiException("hello");
 
         Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Content), "\"hello\"", options);
     }
@@ -51,8 +56,9 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_ByDefaultCommonPropertiesLoggedAsPropertiesAsync()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer()]);
-        var exception = await BuildException();
+        var destructurer = new ApiExceptionDestructurer();
+        var options = BuildOptions(destructurer);
+        var exception = await BuildApiException();
 
         // No need to test all properties, just a handful is sufficient
         Test_LoggedExceptionContainsProperty(exception, nameof(Exception.StackTrace), exception.StackTrace, options);
@@ -63,8 +69,9 @@ public class ApiExceptionDestructurerTest
     [Fact]
     public async Task ApiException_WhenSpecifiedCommonPropertiesNotLoggedAsPropertiesAsync()
     {
-        var options = new DestructuringOptionsBuilder().WithDestructurers([new ApiExceptionDestructurer(destructureCommonExceptionProperties: false)]);
-        var exception = await BuildException();
+        var destructurer = new ApiExceptionDestructurer(destructureCommonExceptionProperties: false);
+        var options = BuildOptions(destructurer);
+        var exception = await BuildApiException();
 
         Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.StackTrace), options);
         Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Exception.Message), options);
@@ -75,7 +82,10 @@ public class ApiExceptionDestructurerTest
         Test_LoggedExceptionDoesNotContainProperty(exception, nameof(Type), options);
     }
 
-    private static async Task<ApiException> BuildException(string? content = null)
+    private static DestructuringOptionsBuilder BuildOptions(ApiExceptionDestructurer destructurer) => new DestructuringOptionsBuilder()
+        .WithDestructurers([destructurer]);
+
+    private static async Task<ApiException> BuildApiException(string? content = null)
     {
         using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
@@ -85,5 +95,17 @@ public class ApiExceptionDestructurerTest
         }
 
         return await ApiException.Create(message, HttpMethod.Get, response, new RefitSettings());
+    }
+
+    private static async Task<ApiException> BuildValidationApiException(ProblemDetails? details = null)
+    {
+        string? content = null;
+        if (details != null)
+        {
+            content = JsonSerializer.Serialize(details);
+        }
+
+        var apiException = await BuildApiException(content);
+        return ValidationApiException.Create(apiException);
     }
 }
