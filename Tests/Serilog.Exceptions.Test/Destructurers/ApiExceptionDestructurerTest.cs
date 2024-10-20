@@ -13,7 +13,7 @@ using static LogJsonOutputUtils;
 
 public class ApiExceptionDestructurerTest
 {
-    private static Uri requestUri = new("https://foobar.com");
+    private static readonly Uri RequestUri = new("https://foobar.com");
 
     [Fact]
     public async Task ApiException_HttpStatusCodeIsLoggedAsPropertyAsync()
@@ -41,7 +41,7 @@ public class ApiExceptionDestructurerTest
         var destructurer = new ApiExceptionDestructurer();
         var options = BuildOptions(destructurer);
         var exception = await BuildApiException();
-        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Uri), requestUri.ToString(), options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Uri), RequestUri.ToString(), options);
     }
 
     [Fact]
@@ -50,7 +50,7 @@ public class ApiExceptionDestructurerTest
         var destructurer = new ApiExceptionDestructurer();
         var options = BuildOptions(destructurer);
         var exception = await BuildValidationApiException();
-        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Uri), requestUri.ToString(), options);
+        Test_LoggedExceptionContainsProperty(exception, nameof(ApiException.Uri), RequestUri.ToString(), options);
     }
 
     [Fact]
@@ -158,7 +158,7 @@ public class ApiExceptionDestructurerTest
 
     private static async Task<ApiException> BuildApiException(string? content = null)
     {
-        using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
+        using var message = new HttpRequestMessage(HttpMethod.Get, RequestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         if (content != null)
         {
@@ -176,7 +176,7 @@ public class ApiExceptionDestructurerTest
                 Title = "title",
             });
 
-        using var message = new HttpRequestMessage(HttpMethod.Get, requestUri);
+        using var message = new HttpRequestMessage(HttpMethod.Get, RequestUri);
         using var response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
         response.Content = new StringContent(content);
 

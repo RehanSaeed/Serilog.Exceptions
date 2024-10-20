@@ -22,7 +22,7 @@ public class ExceptionPropertiesBagTest
         properties.AddProperty("key", "value");
 
         var results = properties.GetResultDictionary();
-        Assert.Equal(1, results.Count);
+        Assert.Single(results);
         Assert.Contains("key", results.Keys);
         var value = results["key"];
         Assert.Equal("value", value);
@@ -60,7 +60,7 @@ public class ExceptionPropertiesBagTest
         properties.AddProperty("key", "value");
 
         var results = properties.GetResultDictionary();
-        Assert.Equal(0, results.Count);
+        Assert.Empty(results);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ExceptionPropertiesBagTest
         properties.AddProperty("key", "value");
 
         var results = properties.GetResultDictionary();
-        Assert.Equal(1, results.Count);
+        Assert.Single(results);
         Assert.Contains("key", results.Keys);
         var value = results["key"];
         Assert.Equal("value", value);

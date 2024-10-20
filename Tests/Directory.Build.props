@@ -1,4 +1,11 @@
 <Project>
+  <PropertyGroup>
+    <!--
+     CA2007: Consider calling ConfigureAwait
+     CA1861: Prefer 'static readonly' fields over constant array arguments
+     -->
+    <NoWarn>CA2007;CA1861</NoWarn>
+  </PropertyGroup>
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 

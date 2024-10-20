@@ -14,8 +14,8 @@ public class DbUpdateExceptionDestructurerTest
     [Fact]
     public void WithoutDbUpdateExceptionDestructurerShouldLogDbValues()
     {
-        var jsonWriter = new StringWriter();
-        ILogger logger = new LoggerConfiguration()
+        using var jsonWriter = new StringWriter();
+        var logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
@@ -38,8 +38,8 @@ public class DbUpdateExceptionDestructurerTest
     [Fact]
     public void WithDbUpdateExceptionDestructurerShouldNotLogDbValues()
     {
-        var jsonWriter = new StringWriter();
-        ILogger logger = new LoggerConfiguration()
+        using var jsonWriter = new StringWriter();
+        var logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers([new TestDbUpdateExceptionDestructurer()]))
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
