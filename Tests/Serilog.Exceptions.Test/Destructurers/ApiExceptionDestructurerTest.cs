@@ -91,7 +91,7 @@ public class ApiExceptionDestructurerTest
         Test_LoggedExceptionContainsProperty(
             exception,
             nameof(ApiException.Content),
-            "{\"Errors\" : { },\n  \"Type\" : \"about:blank\",\n  \"Title\" : \"title\",\n  \"Status\" : 0,\n  \"Detail\" : null,\n  \"Instance\" : null\n}",
+            "{\"Errors\":{},\"Type\":\"about:blank\",\"Title\":\"title\",\"Status\":0,\"Detail\":null,\"Instance\":null}",
             options);
     }
 
