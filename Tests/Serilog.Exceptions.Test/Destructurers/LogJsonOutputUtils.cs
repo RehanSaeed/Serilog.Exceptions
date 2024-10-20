@@ -89,7 +89,7 @@ public static class LogJsonOutputUtils
         if (paramName.Value is not null)
         {
             var paramNameString = Assert.IsType<string>(paramName.Value);
-            Assert.Equal(paramNameString, propertyValue);
+            Assert.Equal(propertyValue, paramNameString);
         }
     }
 
