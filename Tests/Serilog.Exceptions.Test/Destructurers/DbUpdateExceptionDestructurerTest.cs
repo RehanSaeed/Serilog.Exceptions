@@ -31,8 +31,8 @@ public class DbUpdateExceptionDestructurerTest
         logger.Error(new TestDbUpdateException("DbUpdate Error", entry), "Error");
 
         var writtenJson = jsonWriter.ToString();
-        Assert.True(writtenJson.Contains(TestContext.UserIdIDoNotWantToSee, StringComparison.Ordinal) ||
-            writtenJson.Contains("\"Users\":\"threw System.TypeInitializationException", StringComparison.Ordinal));
+        Assert.True(writtenJson.Contains(TestContext.UserIdIDoNotWantToSee) ||
+            writtenJson.Contains("\"Users\":\"threw System.TypeInitializationException"));
     }
 
     [Fact]
