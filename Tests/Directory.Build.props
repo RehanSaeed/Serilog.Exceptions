@@ -1,9 +1,4 @@
 <Project>
-  <PropertyGroup>
-    <!-- VSTHRD111, CA2007: ConfigureAwait is not recomended for xunit -->
-    <!-- VSTHRD200: Await suffice is redundant for test -->
-    <NoWarn>VSTHRD111;CA2007;VSTHRD200</NoWarn>
-  </PropertyGroup>
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
