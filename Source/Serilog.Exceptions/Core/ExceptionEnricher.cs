@@ -9,7 +9,7 @@ using Serilog.Exceptions.Destructurers;
 /// </summary>
 public sealed class ExceptionEnricher : ILogEventEnricher
 {
-    private readonly IExceptionDestructurer reflectionBasedDestructurer;
+    private readonly ReflectionBasedDestructurer reflectionBasedDestructurer;
     private readonly Dictionary<Type, IExceptionDestructurer> destructurers;
     private readonly IDestructuringOptions destructuringOptions;
 

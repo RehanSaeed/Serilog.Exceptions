@@ -113,7 +113,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         return refId;
     }
 
-    private static object DestructureUri(Uri value) => value.ToString();
+    private static string DestructureUri(Uri value) => value.ToString();
 
     private static void AppendTypeIfPossible(IExceptionPropertiesBag propertiesBag, Type valueType)
     {
@@ -260,7 +260,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         return resultList;
     }
 
-    private object DestructureValueDictionary(
+    private Dictionary<string, object?> DestructureValueDictionary(
         IDictionary value,
         int level,
         IDictionary<object, IDictionary<string, object?>> destructuredObjects,
@@ -270,10 +270,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         {
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
-            return new Dictionary<string, object?>
-                {
-                    { RefLabel, refId },
-                };
+            return new() { { RefLabel, refId }, };
         }
 
         var destructuredDictionary = value.ToStringObjectDictionary();
@@ -288,7 +285,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         return destructuredDictionary;
     }
 
-    private IDictionary<string, object?> DestructureObject(
+    private Dictionary<string, object?> DestructureObject(
         object value,
         Type valueType,
         int level,
@@ -299,10 +296,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         {
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredObject);
 
-            return new Dictionary<string, object?>()
-                {
-                    { RefLabel, refId },
-                };
+            return new Dictionary<string, object?> { { RefLabel, refId }, };
         }
 
         var values = new Dictionary<string, object?>();
@@ -341,7 +335,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         return values;
     }
 
-    private object DestructureTask(
+    private SortedList<string, object?> DestructureTask(
         Task task,
         int level,
         IDictionary<object, IDictionary<string, object?>> destructuredObjects,
@@ -351,10 +345,7 @@ public class ReflectionBasedDestructurer : IExceptionDestructurer
         {
             var refId = GetOrGenerateRefId(ref nextCyclicRefId, destructuredTask);
 
-            return new SortedList<string, object?>()
-                {
-                    { RefLabel, refId },
-                };
+            return new() { { RefLabel, refId }, };
         }
 
         var values = new SortedList<string, object?>();

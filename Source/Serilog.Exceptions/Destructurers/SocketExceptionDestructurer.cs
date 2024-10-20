@@ -9,8 +9,8 @@ using Serilog.Exceptions.Core;
 public class SocketExceptionDestructurer : ExceptionDestructurer
 {
     // obtained from https://docs.microsoft.com/en-us/dotnet/api/system.net.sockets.socketerror
-    private static readonly IReadOnlyDictionary<SocketError, string> SocketErrorDocumentationBySocketError =
-        new Dictionary<SocketError, string>
+    private static readonly Dictionary<SocketError, string> SocketErrorDocumentationBySocketError =
+        new()
         {
             { SocketError.AccessDenied, "An attempt was made to access a Socket in a way that is forbidden by its access permissions." },
             { SocketError.AddressAlreadyInUse, "Only one use of an address is normally permitted." },

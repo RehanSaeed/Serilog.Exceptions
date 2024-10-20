@@ -7,7 +7,7 @@ internal class ExceptionPropertiesBag(Exception exception, IExceptionPropertyFil
     : IExceptionPropertiesBag
 {
     private readonly Exception exception = exception ?? throw new ArgumentNullException(nameof(exception));
-    private readonly Dictionary<string, object?> properties = new();
+    private readonly Dictionary<string, object?> properties = [];
 
     // We keep a note on whether the results were collected to be sure that
     // after that there are no changes. This is the application of fail-fast principle.
