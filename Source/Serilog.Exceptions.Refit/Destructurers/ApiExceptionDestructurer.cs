@@ -8,29 +8,21 @@ using Serilog.Exceptions.Destructurers;
 /// A destructurer for the Refit <see cref="ApiException"/>.
 /// </summary>
 /// <seealso cref="ExceptionDestructurer" />
-public class ApiExceptionDestructurer : ExceptionDestructurer
+/// <remarks>
+/// Initializes a new instance of the <see cref="ApiExceptionDestructurer"/> class.
+/// </remarks>
+/// <param name="destructureCommonExceptionProperties">Destructure common public Exception properties or not.</param>
+/// <param name="destructureHttpContent">Destructure the HTTP body. This is left optional due to possible security and log size concerns.</param>
+public class ApiExceptionDestructurer(bool destructureCommonExceptionProperties = true, bool destructureHttpContent = false) :
+    ExceptionDestructurer
 {
-    private readonly bool destructureCommonExceptionProperties;
-    private readonly bool destructureHttpContent;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ApiExceptionDestructurer"/> class.
-    /// </summary>
-    /// <param name="destructureCommonExceptionProperties">Destructure common public Exception properties or not.</param>
-    /// <param name="destructureHttpContent">Destructure the HTTP body. This is left optional due to possible security and log size concerns.</param>
-    public ApiExceptionDestructurer(bool destructureCommonExceptionProperties = true, bool destructureHttpContent = false)
-    {
-        this.destructureCommonExceptionProperties = destructureCommonExceptionProperties;
-        this.destructureHttpContent = destructureHttpContent;
-    }
-
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => [typeof(ApiException)];
+    public override Type[] TargetTypes => [typeof(ApiException), typeof(ValidationApiException)];
 
     /// <inheritdoc />
     public override void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
     {
-        if (this.destructureCommonExceptionProperties)
+        if (destructureCommonExceptionProperties)
         {
             base.Destructure(exception, propertiesBag, destructureException);
         }
@@ -62,7 +54,7 @@ public class ApiExceptionDestructurer : ExceptionDestructurer
 
 #pragma warning disable CA1062 // Validate arguments of public methods
         var apiException = (ApiException)exception;
-        if (this.destructureHttpContent)
+        if (destructureHttpContent)
         {
             propertiesBag.AddProperty(nameof(ApiException.Content), apiException.Content);
         }
