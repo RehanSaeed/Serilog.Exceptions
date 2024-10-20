@@ -14,7 +14,7 @@
     <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
   </ItemGroup>
 
-  <ItemGroup Label="Package References (.NET)" Condition="$(TargetFrameworkIdentifier) == '.NETFramework'">
+  <ItemGroup Label="Package References (.NET)" Condition="$(TargetFrameworkIdentifier) != '.NETFramework'">
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
