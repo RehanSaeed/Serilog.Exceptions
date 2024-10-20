@@ -140,21 +140,15 @@ public static class LogJsonOutputUtils
         Assert_DoesNotContainProperty(exceptionDetailValue, propertyKey);
     }
 
-    internal class TestTextWriterSink : ILogEventSink
+    internal class TestTextWriterSink(TextWriter textWriter, ITextFormatter textFormatter) :
+        ILogEventSink
     {
-        private readonly TextWriter textWriter;
-        private readonly ITextFormatter textFormatter;
-
-        public TestTextWriterSink(TextWriter textWriter, ITextFormatter textFormatter)
-        {
-            this.textWriter = textWriter;
-            this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
-        }
+        private readonly ITextFormatter textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
 
         public void Emit(LogEvent logEvent)
         {
-            this.textFormatter.Format(logEvent, this.textWriter);
-            this.textWriter.Flush();
+            this.textFormatter.Format(logEvent, textWriter);
+            textWriter.Flush();
         }
     }
 }

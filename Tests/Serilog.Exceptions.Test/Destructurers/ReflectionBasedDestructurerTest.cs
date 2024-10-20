@@ -543,22 +543,16 @@ public class ReflectionBasedDestructurerTest
         public string this[int i] => "IndexerValue";
     }
 
-    public class UriException : Exception
+    public class UriException(string message, Uri uri) :
+        Exception(message)
     {
-        public UriException(string message, Uri uri)
-            : base(message) =>
-            this.Uri = uri;
-
-        public Uri Uri { get; }
+        public Uri Uri { get; } = uri;
     }
 
-    public class TaskException : Exception
+    public class TaskException(string message, Task task) :
+        Exception(message)
     {
-        public TaskException(string message, Task task)
-            : base(message) =>
-            this.Task = task;
-
-        public Task Task { get; }
+        public Task Task { get; } = task;
     }
 
     public class RecursiveNode

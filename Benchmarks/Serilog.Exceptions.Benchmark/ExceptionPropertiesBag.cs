@@ -3,21 +3,15 @@ namespace Serilog.Exceptions.Benchmark;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Filters;
 
-internal class ExceptionPropertiesBag : IExceptionPropertiesBag
+internal class ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter? filter = null)
+    : IExceptionPropertiesBag
 {
-    private readonly Exception exception;
-    private readonly IExceptionPropertyFilter? filter;
+    private readonly Exception exception = exception ?? throw new ArgumentNullException(nameof(exception));
     private readonly Dictionary<string, object?> properties = new();
 
     // We keep a note on whether the results were collected to be sure that
     // after that there are no changes. This is the application of fail-fast principle.
     private bool resultsCollected;
-
-    public ExceptionPropertiesBag(Exception exception, IExceptionPropertyFilter? filter = null)
-    {
-        this.exception = exception ?? throw new ArgumentNullException(nameof(exception));
-        this.filter = filter;
-    }
 
     public IReadOnlyDictionary<string, object?> GetResultDictionary()
     {
@@ -42,9 +36,9 @@ internal class ExceptionPropertiesBag : IExceptionPropertiesBag
                 $"Cannot add exception property '{key}' to bag, after results were already collected");
         }
 
-        if (this.filter is not null)
+        if (filter is not null)
         {
-            if (this.filter.ShouldPropertyBeFiltered(this.exception, key, value))
+            if (filter.ShouldPropertyBeFiltered(this.exception, key, value))
             {
                 return;
             }
