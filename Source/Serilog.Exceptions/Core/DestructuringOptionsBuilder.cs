@@ -41,7 +41,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
             nameof(Exception.StackTrace));
 #endif
 
-    private readonly List<IExceptionDestructurer> destructurers = new();
+    private readonly List<IExceptionDestructurer> destructurers = [];
 
     /// <summary>
     /// Gets the name of the property which value will be filled with destructured exception.
