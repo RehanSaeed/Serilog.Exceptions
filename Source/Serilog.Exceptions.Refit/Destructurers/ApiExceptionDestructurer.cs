@@ -25,7 +25,7 @@ public class ApiExceptionDestructurer : ExceptionDestructurer
     }
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => [typeof(ApiException)];
+    public override Type[] TargetTypes => [typeof(ApiException), typeof(ValidationApiException)];
 
     /// <inheritdoc />
     public override void Destructure(Exception exception, IExceptionPropertiesBag propertiesBag, Func<Exception, IReadOnlyDictionary<string, object?>?> destructureException)
