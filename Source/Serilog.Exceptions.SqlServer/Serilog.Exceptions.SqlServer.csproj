@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References (.NET)" Condition="$(TargetFrameworkIdentifier) != '.NETFramework'">
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
 
 </Project>
