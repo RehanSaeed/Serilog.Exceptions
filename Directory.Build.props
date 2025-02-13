@@ -23,6 +23,7 @@
     <RepositoryUrl>https://github.com/RehanSaeed/Serilog.Exceptions.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://github.com/RehanSaeed/Serilog.Exceptions/releases</PackageReleaseNotes>
+    <NoWarn>NETSDK1138;CA1515</NoWarn>
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
