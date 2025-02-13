@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;

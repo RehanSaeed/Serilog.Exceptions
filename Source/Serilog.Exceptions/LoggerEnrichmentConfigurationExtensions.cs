@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions;
 
-using System;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Exceptions.Core;

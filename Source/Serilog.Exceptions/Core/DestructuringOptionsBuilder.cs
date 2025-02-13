@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Core;
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Serilog.Events;
 using Serilog.Exceptions.Destructurers;
@@ -16,7 +14,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
     /// Default set of destructurers. Destructurers cover all of the exceptions from standard library.
     /// </summary>
     public static readonly IExceptionDestructurer[] DefaultDestructurers =
-    {
+    [
         new ExceptionDestructurer(),
         new ArgumentExceptionDestructurer(),
         new ArgumentOutOfRangeExceptionDestructurer(),
@@ -25,8 +23,8 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
         new ReflectionTypeLoadExceptionDestructurer(),
         new OperationCanceledExceptionDestructurer(),
         new TaskCanceledExceptionDestructurer(),
-        new SocketExceptionDestructurer(),
-    };
+        new SocketExceptionDestructurer()
+    ];
 
     /// <summary>
     /// Filter that ignores <see cref="Exception.StackTrace"/> and Exception.TargetSite properties.
@@ -43,7 +41,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
             nameof(Exception.StackTrace));
 #endif
 
-    private readonly List<IExceptionDestructurer> destructurers = new();
+    private readonly List<IExceptionDestructurer> destructurers = [];
 
     /// <summary>
     /// Gets the name of the property which value will be filled with destructured exception.
@@ -107,6 +105,7 @@ public class DestructuringOptionsBuilder : IDestructuringOptions
     {
         if (this.Filter is not null)
         {
+#pragma warning disable CA1863 //Cache a 'CompositeFormat' for repeated use in this formatting operation
             throw new InvalidOperationException(
                 string.Format(CultureInfo.InvariantCulture, Resources.FilterAlreadySet, nameof(CompositeExceptionPropertyFilter)));
         }

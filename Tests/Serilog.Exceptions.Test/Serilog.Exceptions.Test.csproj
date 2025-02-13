@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Build">
-    <TargetFrameworks>net7.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0;net7.0;net6.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);CA1861;CA2007</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="Signing">
@@ -14,6 +15,14 @@
     <ProjectReference Include="..\..\Source\Serilog.Exceptions.Grpc\Serilog.Exceptions.Grpc.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions.Refit\Serilog.Exceptions.Refit.csproj" />
     <ProjectReference Include="..\..\Source\Serilog.Exceptions\Serilog.Exceptions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Label="Package References (.NET 8)" Condition="'$(TargetFramework)' == 'net9.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Label="Package References (.NET 8)" Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup Label="Package References (.NET 7)" Condition="'$(TargetFramework)' == 'net7.0'">

@@ -1,8 +1,5 @@
 namespace Serilog.Exceptions.Destructurers;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Serilog.Exceptions.Core;
 
 /// <summary>
@@ -11,7 +8,7 @@ using Serilog.Exceptions.Core;
 public class AggregateExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
-    public override Type[] TargetTypes => new[] { typeof(AggregateException) };
+    public override Type[] TargetTypes => [typeof(AggregateException)];
 
     /// <inheritdoc cref="IExceptionDestructurer.Destructure"/>
     public override void Destructure(

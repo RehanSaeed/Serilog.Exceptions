@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Benchmark;
 
-using System;
-using System.Collections.Generic;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
 
@@ -12,7 +10,7 @@ using Serilog.Exceptions.Destructurers;
 public class BenchmarkExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(BenchmarkException) };
+    public override Type[] TargetTypes => [typeof(BenchmarkException)];
 
     /// <inheritdoc />
     public override void Destructure(

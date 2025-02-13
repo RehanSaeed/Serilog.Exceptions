@@ -1,9 +1,6 @@
 namespace Serilog.Exceptions.SqlServer.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
 
@@ -14,7 +11,7 @@ using Serilog.Exceptions.Destructurers;
 public class SqlExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(SqlException) };
+    public override Type[] TargetTypes => [typeof(SqlException)];
 
     /// <inheritdoc />
     public override void Destructure(

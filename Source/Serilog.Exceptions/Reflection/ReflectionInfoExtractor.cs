@@ -1,9 +1,6 @@
 namespace Serilog.Exceptions.Reflection;
 
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -61,7 +58,7 @@ internal class ReflectionInfoExtractor
             }
             else
             {
-                groupedByName[propertyInfo.Name] = new List<ReflectionPropertyInfo> { propertyInfo };
+                groupedByName[propertyInfo.Name] = [propertyInfo];
             }
         }
 

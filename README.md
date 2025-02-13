@@ -274,14 +274,14 @@ Filtering for other scenarios is also supported:
 
 ## Continuous Integration
 
-| Name            | Operating System      | Status | History |
-| :---            | :---                  | :---   | :---    |
+| Name            | Operating System      | Status |
+| :---            | :---                  | :---   |
 | Azure Pipelines | Ubuntu                | [![Azure Pipelines Ubuntu Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=main&stageName=Build&jobName=Build&configuration=Build%20Linux)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=main) |
 | Azure Pipelines | Mac                   | [![Azure Pipelines Mac Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=main&stageName=Build&jobName=Build&configuration=Build%20Mac)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=main) |
 | Azure Pipelines | Windows               | [![Azure Pipelines Windows Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=main&stageName=Build&jobName=Build&configuration=Build%20Windows)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=main) |
-| Azure Pipelines | Overall               | [![Azure Pipelines Overall Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=main)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=main) | [![Azure DevOps Build History](https://buildstats.info/azurepipelines/chart/serilog-exceptions/Serilog.Exceptions/1?branch=main&includeBuildsFromPullRequest=false)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=main) |
-| GitHub Actions  | Ubuntu, Mac & Windows | [![GitHub Actions Status](https://github.com/RehanSaeed/Serilog.Exceptions/workflows/Build/badge.svg?branch=main)](https://github.com/RehanSaeed/Serilog.Exceptions/actions) | [![GitHub Actions Build History](https://buildstats.info/github/chart/RehanSaeed/Serilog.Exceptions?branch=main&includeBuildsFromPullRequest=false)](https://github.com/RehanSaeed/Serilog.Exceptions/actions) |
-| AppVeyor        | Ubuntu, Mac & Windows | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6/branch/main?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions/branch/main) | [![AppVeyor Build History](https://buildstats.info/appveyor/chart/RehanSaeed/serilog-exceptions?branch=main&includeBuildsFromPullRequest=false)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions) |
+| Azure Pipelines | Overall               | [![Azure Pipelines Overall Build Status](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_apis/build/status/RehanSaeed.Serilog.Exceptions?branchName=main)](https://dev.azure.com/serilog-exceptions/Serilog.Exceptions/_build/latest?definitionId=1&branchName=main) |
+| GitHub Actions  | Ubuntu, Mac & Windows | [![GitHub Actions Status](https://github.com/RehanSaeed/Serilog.Exceptions/workflows/Build/badge.svg?branch=main)](https://github.com/RehanSaeed/Serilog.Exceptions/actions) |
+| AppVeyor        | Ubuntu, Mac & Windows | [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/7ijbthe6iig9phn6/branch/main?svg=true)](https://ci.appveyor.com/project/RehanSaeed/serilog-exceptions/branch/main) |
 
 ## Contributions and Thanks
 

@@ -1,9 +1,7 @@
 namespace Serilog.Exceptions.Test;
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using Xunit;
 
 public class DictionaryExtensionsTest

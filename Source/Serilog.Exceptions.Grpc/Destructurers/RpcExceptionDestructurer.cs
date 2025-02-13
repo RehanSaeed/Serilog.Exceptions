@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Grpc.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using global::Grpc.Core;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
@@ -13,7 +11,7 @@ using Serilog.Exceptions.Destructurers;
 public class RpcExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(RpcException) };
+    public override Type[] TargetTypes => [typeof(RpcException)];
 
     /// <inheritdoc />
     public override void Destructure(

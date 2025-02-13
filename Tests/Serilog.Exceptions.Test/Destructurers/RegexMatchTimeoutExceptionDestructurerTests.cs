@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using System.Text.RegularExpressions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
@@ -15,10 +14,9 @@ public class RegexMatchTimeoutExceptionDestructurerTests
         var exception = new RegexMatchTimeoutException("input", "pattern", TimeSpan.FromSeconds(1));
 
         var optionsBuilder = new DestructuringOptionsBuilder()
-            .WithDestructurers(new IExceptionDestructurer[]
-            {
-                new RegexMatchTimeoutExceptionDestructurer(),
-            });
+            .WithDestructurers([
+                new RegexMatchTimeoutExceptionDestructurer()
+            ]);
 
         var loggedExceptionDetails = ExtractExceptionDetails(LogAndDestructureException(exception, optionsBuilder));
 

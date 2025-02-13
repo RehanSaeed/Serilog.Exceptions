@@ -1,8 +1,5 @@
 namespace Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Destructurers;
@@ -14,7 +11,7 @@ using Serilog.Exceptions.Destructurers;
 public class DbUpdateExceptionDestructurer : ExceptionDestructurer
 {
     /// <inheritdoc />
-    public override Type[] TargetTypes => new[] { typeof(DbUpdateException), typeof(DbUpdateConcurrencyException) };
+    public override Type[] TargetTypes => [typeof(DbUpdateException), typeof(DbUpdateConcurrencyException)];
 
     /// <inheritdoc />
     public override void Destructure(

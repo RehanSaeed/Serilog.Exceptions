@@ -7,6 +7,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
@@ -22,12 +23,11 @@
     <RepositoryUrl>https://github.com/RehanSaeed/Serilog.Exceptions.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>https://github.com/RehanSaeed/Serilog.Exceptions/releases</PackageReleaseNotes>
+    <NoWarn>NETSDK1138;CA1515</NoWarn>
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" PrivateAssets="All" Version="17.7.30" />
-    <PackageReference Include="MinVer" PrivateAssets="All" Version="4.3.0" />
-    <PackageReference Include="StyleCop.Analyzers" PrivateAssets="All" Version="1.2.0-beta.507" />
+    <PackageReference Include="MinVer" PrivateAssets="All" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

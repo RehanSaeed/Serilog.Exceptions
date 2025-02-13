@@ -1,9 +1,5 @@
 namespace Serilog.Exceptions.Benchmark;
 
-using System;
-using System.Runtime.Serialization;
-
-[Serializable]
 public class BenchmarkException : Exception
 {
     public BenchmarkException()
@@ -17,13 +13,6 @@ public class BenchmarkException : Exception
 
     public BenchmarkException(string message, Exception inner)
         : base(message, inner)
-    {
-    }
-
-    protected BenchmarkException(
-      SerializationInfo info,
-      StreamingContext context)
-        : base(info, context)
     {
     }
 

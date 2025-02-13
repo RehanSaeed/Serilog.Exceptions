@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.Filters;
 using Xunit;
@@ -23,7 +22,7 @@ public class ExceptionPropertiesBagTest
         properties.AddProperty("key", "value");
 
         var results = properties.GetResultDictionary();
-        Assert.Equal(1, results.Count);
+        Assert.Single(results);
         Assert.Contains("key", results.Keys);
         var value = results["key"];
         Assert.Equal("value", value);
@@ -56,12 +55,12 @@ public class ExceptionPropertiesBagTest
     {
         var properties = new ExceptionPropertiesBag(
             new Exception(),
-            new IgnorePropertyByNameExceptionFilter(new[] { "key" }));
+            new IgnorePropertyByNameExceptionFilter(["key"]));
 
         properties.AddProperty("key", "value");
 
         var results = properties.GetResultDictionary();
-        Assert.Equal(0, results.Count);
+        Assert.Empty(results);
     }
 
     [Fact]
@@ -69,12 +68,12 @@ public class ExceptionPropertiesBagTest
     {
         var properties = new ExceptionPropertiesBag(
             new Exception(),
-            new IgnorePropertyByNameExceptionFilter(new[] { "not key" }));
+            new IgnorePropertyByNameExceptionFilter(["not key"]));
 
         properties.AddProperty("key", "value");
 
         var results = properties.GetResultDictionary();
-        Assert.Equal(1, results.Count);
+        Assert.Single(results);
         Assert.Contains("key", results.Keys);
         var value = results["key"];
         Assert.Equal("value", value);

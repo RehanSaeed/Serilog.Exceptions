@@ -1,14 +1,15 @@
 namespace Serilog.Exceptions.Reflection;
 
-using System;
-#if NETSTANDARD1_3
-using System.Reflection;
-#endif
-
 /// <summary>
 /// Class that holds reflection information about a single property.
 /// </summary>
-internal class ReflectionPropertyInfo
+/// <remarks>
+/// Initializes a new instance of the <see cref="ReflectionPropertyInfo"/> class.
+/// </remarks>
+/// <param name="name">The of the property without type name.</param>
+/// <param name="declaringType">The type which declares the property.</param>
+/// <param name="getter">Runtime function that can extract value of the property from object.</param>
+internal class ReflectionPropertyInfo(string name, Type? declaringType, Func<object, object> getter)
 {
     /// <summary>
     /// Marker that represents a decision whether to extend property name
@@ -17,33 +18,20 @@ internal class ReflectionPropertyInfo
     private bool markedWithTypeName;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ReflectionPropertyInfo"/> class.
-    /// </summary>
-    /// <param name="name">The of the property without type name.</param>
-    /// <param name="declaringType">The type which declares the property.</param>
-    /// <param name="getter">Runtime function that can extract value of the property from object.</param>
-    public ReflectionPropertyInfo(string name, Type? declaringType, Func<object, object> getter)
-    {
-        this.Name = name;
-        this.DeclaringType = declaringType;
-        this.Getter = getter;
-    }
-
-    /// <summary>
     /// Gets name of the property.
     /// It includes type name if name conflicts with other property of derived class.
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; private set; } = name;
 
     /// <summary>
     /// Gets the type that declared the property.
     /// </summary>
-    public Type? DeclaringType { get; }
+    public Type? DeclaringType { get; } = declaringType;
 
     /// <summary>
     /// Gets a function that extracts value of the property from an object.
     /// </summary>
-    public Func<object, object> Getter { get; }
+    public Func<object, object> Getter { get; } = getter;
 
     /// <summary>
     /// Idempotent action that extends property name with a type name
@@ -96,9 +84,5 @@ internal class ReflectionPropertyInfo
     }
 
     private static bool IsSubTypeOf(Type possibleSubType, Type possibleBaseType) =>
-#if NETSTANDARD1_3
-            possibleBaseType.GetTypeInfo().IsSubclassOf(possibleBaseType);
-#else
-            possibleSubType.IsSubclassOf(possibleBaseType);
-#endif
+        possibleSubType.IsSubclassOf(possibleBaseType);
 }

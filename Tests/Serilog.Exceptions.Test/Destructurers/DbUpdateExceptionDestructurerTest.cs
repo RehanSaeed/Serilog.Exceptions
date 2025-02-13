@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -16,8 +14,8 @@ public class DbUpdateExceptionDestructurerTest
     [Fact]
     public void WithoutDbUpdateExceptionDestructurerShouldLogDbValues()
     {
-        var jsonWriter = new StringWriter();
-        ILogger logger = new LoggerConfiguration()
+        using var jsonWriter = new StringWriter();
+        var logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
@@ -40,9 +38,9 @@ public class DbUpdateExceptionDestructurerTest
     [Fact]
     public void WithDbUpdateExceptionDestructurerShouldNotLogDbValues()
     {
-        var jsonWriter = new StringWriter();
-        ILogger logger = new LoggerConfiguration()
-            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers(new[] { new TestDbUpdateExceptionDestructurer() }))
+        using var jsonWriter = new StringWriter();
+        var logger = new LoggerConfiguration()
+            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers().WithDestructurers([new TestDbUpdateExceptionDestructurer()]))
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
         using var ctx = new TestContext();
@@ -77,17 +75,11 @@ public class DbUpdateExceptionDestructurerTest
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var users = new List<User>
-                {
-                    new User
-                    {
-                        UserId = "FirstUser",
-                    },
-                    new User
-                    {
-                        UserId = UserIdIDoNotWantToSee,
-                    },
-                };
+            List<User> users =
+            [
+                new() { UserId = "FirstUser" },
+                new() { UserId = UserIdIDoNotWantToSee }
+            ];
 
             modelBuilder.Entity<User>().HasData(users);
         }
@@ -105,6 +97,6 @@ public class DbUpdateExceptionDestructurerTest
 
     internal class TestDbUpdateExceptionDestructurer : DbUpdateExceptionDestructurer
     {
-        public override Type[] TargetTypes => new[] { typeof(TestDbUpdateException) };
+        public override Type[] TargetTypes => [typeof(TestDbUpdateException)];
     }
 }

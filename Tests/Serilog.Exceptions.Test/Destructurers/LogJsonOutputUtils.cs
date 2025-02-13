@@ -1,6 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,9 +16,9 @@ public static class LogJsonOutputUtils
         Exception exception,
         IDestructuringOptions? destructuringOptions = null)
     {
-        var jsonWriter = new StringWriter();
+        using var jsonWriter = new StringWriter();
         destructuringOptions ??= new DestructuringOptionsBuilder().WithDefaultDestructurers();
-        ILogger logger = new LoggerConfiguration()
+        var logger = new LoggerConfiguration()
             .Enrich.WithExceptionDetails(destructuringOptions)
             .WriteTo.Sink(new TestTextWriterSink(jsonWriter, new JsonFormatter()))
             .CreateLogger();
@@ -28,8 +27,7 @@ public static class LogJsonOutputUtils
 
         var writtenJson = jsonWriter.ToString();
         var jsonObj = JsonConvert.DeserializeObject<object>(writtenJson);
-        var rootObject = Assert.IsType<JObject>(jsonObj);
-        return rootObject;
+        return Assert.IsType<JObject>(jsonObj);
     }
 
     public static void Test_LoggedExceptionContainsProperty(Exception exception, string propertyKey, string? propertyValue, IDestructuringOptions? destructuringOptions = null)
@@ -90,7 +88,7 @@ public static class LogJsonOutputUtils
         if (paramName.Value is not null)
         {
             var paramNameString = Assert.IsType<string>(paramName.Value);
-            Assert.Equal(paramNameString, propertyValue);
+            Assert.Equal(propertyValue, paramNameString);
         }
     }
 
@@ -141,21 +139,15 @@ public static class LogJsonOutputUtils
         Assert_DoesNotContainProperty(exceptionDetailValue, propertyKey);
     }
 
-    internal class TestTextWriterSink : ILogEventSink
+    internal class TestTextWriterSink(TextWriter textWriter, ITextFormatter textFormatter) :
+        ILogEventSink
     {
-        private readonly TextWriter textWriter;
-        private readonly ITextFormatter textFormatter;
-
-        public TestTextWriterSink(TextWriter textWriter, ITextFormatter textFormatter)
-        {
-            this.textWriter = textWriter;
-            this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
-        }
+        private readonly ITextFormatter textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
 
         public void Emit(LogEvent logEvent)
         {
-            this.textFormatter.Format(logEvent, this.textWriter);
-            this.textWriter.Flush();
+            this.textFormatter.Format(logEvent, textWriter);
+            textWriter.Flush();
         }
     }
 }

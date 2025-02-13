@@ -2,7 +2,7 @@
 
   <PropertyGroup Label="Build">
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net7.0;net6.0;net472</TargetFrameworks>
+    <TargetFrameworks>net9.0;net472</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -11,19 +11,8 @@
   </ItemGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.8" />
-    <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
-    <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
-    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup Label="Package References (.NET)" Condition="'$(TargetFramework)' == 'net7.0' OR '$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0" />
-  </ItemGroup>
-
-  <ItemGroup Label="References (.NET Framework)" Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="Microsoft.CSharp" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="9.0.2" />
   </ItemGroup>
 
 </Project>

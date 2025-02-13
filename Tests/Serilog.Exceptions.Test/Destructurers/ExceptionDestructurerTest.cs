@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Test.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Moq;
@@ -136,7 +134,8 @@ public class ExceptionDestructurerTest
     public void WhenExceptionContainsDictionaryWithNonScalarValue_ShouldNotThrow()
     {
         var exception = new DictNonScalarKeyException();
-        exception.Reference.Add(new List<int>() { 1, 2, 3 }, "VALUE");
+        var list = new List<int> { 1, 2, 3 };
+        exception.Reference.Add(list, "VALUE");
 
         var result = LogAndDestructureException(exception, new DestructuringOptionsBuilder());
 
@@ -175,32 +174,27 @@ public class ExceptionDestructurerTest
 
     public class DictNonScalarKeyException : Exception
     {
-        public DictNonScalarKeyException() => this.Reference = new Dictionary<IEnumerable<int>, object>();
+        public DictNonScalarKeyException() => this.Reference = [];
 
         public DictNonScalarKeyException(string message)
             : base(message) =>
-            this.Reference = new Dictionary<IEnumerable<int>, object>();
+            this.Reference = [];
 
         public DictNonScalarKeyException(string message, Exception innerException)
             : base(message, innerException) =>
-            this.Reference = new Dictionary<IEnumerable<int>, object>();
+            this.Reference = [];
 
         public Dictionary<IEnumerable<int>, object> Reference { get; }
     }
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
 #pragma warning disable CS3003 // Type is not CLS-compliant
-    public class CustomDbContextException : Exception
+    public class CustomDbContextException(string name, DbContext context) :
+        Exception
     {
-        public CustomDbContextException(string name, DbContext context)
-        {
-            this.Name = name;
-            this.Context = context;
-        }
+        public string Name { get; set; } = name;
 
-        public string Name { get; set; }
-
-        public DbContext Context { get; }
+        public DbContext Context { get; } = context;
     }
 #pragma warning restore CS3003 // Type is not CLS-compliant
 #pragma warning restore CS3001 // Argument type is not CLS-compliant

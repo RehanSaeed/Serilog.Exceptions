@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Destructurers;
 
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Serilog.Exceptions.Core;
 
@@ -11,9 +9,9 @@ using Serilog.Exceptions.Core;
 public class TaskCanceledExceptionDestructurer : OperationCanceledExceptionDestructurer
 {
     private static readonly Type[] TargetExceptionTypes =
-    {
-        typeof(TaskCanceledException),
-    };
+    [
+        typeof(TaskCanceledException)
+    ];
 
     /// <inheritdoc cref="IExceptionDestructurer.TargetTypes"/>
     public override Type[] TargetTypes => TargetExceptionTypes;

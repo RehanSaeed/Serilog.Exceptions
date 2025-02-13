@@ -1,7 +1,5 @@
 namespace Serilog.Exceptions.Filters;
 
-using System;
-
 /// <summary>
 /// Abstraction over collection of filters that filters property is any of given filters alone would filter it.
 /// This is equivalent to OR over a set of booleans. Executes filters in the order they were passed to a
