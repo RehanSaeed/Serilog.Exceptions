@@ -1,3 +1,5 @@
+#if NETCOREAPP
+#pragma warning disable CA1307
 namespace Serilog.Exceptions.Test.Destructurers;
 
 using System.IO;
@@ -31,8 +33,8 @@ public class DbUpdateExceptionDestructurerTest
         logger.Error(new TestDbUpdateException("DbUpdate Error", entry), "Error");
 
         var writtenJson = jsonWriter.ToString();
-        Assert.True(writtenJson.Contains(TestContext.UserIdIDoNotWantToSee, StringComparison.Ordinal) ||
-            writtenJson.Contains("\"Users\":\"threw System.TypeInitializationException", StringComparison.Ordinal));
+        Assert.True(writtenJson.Contains(TestContext.UserIdIDoNotWantToSee) ||
+            writtenJson.Contains("\"Users\":\"threw System.TypeInitializationException"));
     }
 
     [Fact]
@@ -100,3 +102,5 @@ public class DbUpdateExceptionDestructurerTest
         public override Type[] TargetTypes => [typeof(TestDbUpdateException)];
     }
 }
+
+#endif

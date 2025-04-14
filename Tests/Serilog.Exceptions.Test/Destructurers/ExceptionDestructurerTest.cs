@@ -148,6 +148,22 @@ public class ExceptionDestructurerTest
         Assert.Equal("System.Collections.Generic.List`1[System.Int32]", property.Name);
     }
 
+    public class DictNonScalarKeyException : Exception
+    {
+        public DictNonScalarKeyException() => this.Reference = [];
+
+        public DictNonScalarKeyException(string message)
+            : base(message) =>
+            this.Reference = [];
+
+        public DictNonScalarKeyException(string message, Exception innerException)
+            : base(message, innerException) =>
+            this.Reference = [];
+
+        public Dictionary<IEnumerable<int>, object> Reference { get; }
+    }
+
+#if NETCOREAPP
     [Fact]
     public void WhenExceptionContainsDbContext_ShouldSkipIQueryableProperties()
     {
@@ -170,21 +186,6 @@ public class ExceptionDestructurerTest
         var jsonValue2 = Assert.IsType<JValue>(customerProperty.Value);
         var value = Assert.IsType<string>(jsonValue2.Value);
         Assert.Equal("IQueryable skipped", value);
-    }
-
-    public class DictNonScalarKeyException : Exception
-    {
-        public DictNonScalarKeyException() => this.Reference = [];
-
-        public DictNonScalarKeyException(string message)
-            : base(message) =>
-            this.Reference = [];
-
-        public DictNonScalarKeyException(string message, Exception innerException)
-            : base(message, innerException) =>
-            this.Reference = [];
-
-        public Dictionary<IEnumerable<int>, object> Reference { get; }
     }
 
 #pragma warning disable CS3001 // Argument type is not CLS-compliant
@@ -212,4 +213,6 @@ public class ExceptionDestructurerTest
             public int Id { get; set; }
         }
     }
+
+#endif
 }
