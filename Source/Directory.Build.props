@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup Label="Package References">
-    <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="all" Version="1.2.25" />
+    <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="all" Version="1.2.39" />
   </ItemGroup>
 
   <ItemGroup Label="Files">
