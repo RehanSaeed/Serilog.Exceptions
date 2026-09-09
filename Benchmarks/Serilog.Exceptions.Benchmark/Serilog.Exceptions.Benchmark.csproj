@@ -12,7 +12,7 @@
 
   <ItemGroup Label="Package References">
     <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
-    <PackageReference Include="System.Reflection.Metadata" Version="9.0.2" />
+    <PackageReference Include="System.Reflection.Metadata" Version="9.0.20" />
   </ItemGroup>
 
 </Project>
